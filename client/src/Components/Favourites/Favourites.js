@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
-import Navbardb from "./Navbar/Navbardb";
-import Favcards from "./Card/FavCard";
+import Navbardb from "../Navbar/Navbardb";
+import Favcards from "../Card/FavCard";
 
 export default function Favourites() {
   const [data, setData] = useState([]);

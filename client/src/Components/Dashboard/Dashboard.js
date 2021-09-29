@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
-import Navbardb from "./Navbar/Navbardb";
-import Cards from "./Card/Cards";
+import Navbardb from "../Navbar/Navbardb";
+import Cards from "../Card/Cards";
 
 export default function Dashboard() {
   const [data, setData] = useState([]);

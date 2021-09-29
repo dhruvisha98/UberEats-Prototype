@@ -5,10 +5,10 @@ import Profiles from "./Customer/Profiles";
 import RSignup from "./Restaurant/RSignup";
 import Adddish from "./Restaurant/Add_dish";
 import RLogin from "./Restaurant/RLogin";
-import Dashboard from "./Dashboard";
+import Dashboard from "./Dashboard/Dashboard";
 import Home from "./Navbar/Home";
-import Favourites from "./Favourites";
-import RDashboard from "./RDashboard";
+import Favourites from "./Favourites/Favourites";
+import RDashboard from "./Dashboard/RDashboard";
 
 export default function Main() {
   return (
