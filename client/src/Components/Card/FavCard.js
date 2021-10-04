@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -6,29 +6,21 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
 import image from "./food.jpeg";
-import food from "./taco.jpeg";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import Axios from "axios";
+// import Axios from "axios";
 
-const fav = (resID) => {
-  Axios.post("http://localhost:5000/favourites", {
-    Restaurant_ID: resID,
-  }).then((response) => {
-    console.log(response);
-  });
-};
+// const fav = (resID) => {
+//   Axios.post("http://localhost:5000/favourites", {
+//     Restaurant_ID: resID,
+//   }).then((response) => {
+//     console.log(response);
+//   });
+// };
 
 export default function Favcards({ favourites }) {
   const cardStyle = {
     display: "block",
     width: "500px",
     height: "400px",
-    margin: "20px",
-  };
-  const cardStyles = {
-    display: "block",
-    width: "500px",
-    height: "250x",
     margin: "20px",
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,9 +9,7 @@ import image from "./food.jpeg";
 import food from "./taco.jpeg";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Axios from "axios";
-
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import axios from "axios";
 
 const fav = (resID) => {
   Axios.post("http://localhost:5000/favourites", {

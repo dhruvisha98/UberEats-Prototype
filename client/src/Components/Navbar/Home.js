@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,7 +11,6 @@ import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
 import logo from "../Images/logo.svg";
 import image from "../Images/ubereats.png";
-import Profiles from "../Customer/Profiles";
 
 export default function Home() {
   const history = useHistory();
@@ -33,9 +32,9 @@ export default function Home() {
     history.push("/");
   };
 
-  const handledashboard = () => {
-    history.push("/dashboard");
-  };
+  // const handledashboard = () => {
+  //   history.push("/dashboard");
+  // };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -124,7 +123,7 @@ export default function Home() {
       </Box>
 
       <div>
-        <img src={image} alt="Logo" height="910" width="1680" />
+        <img src={image} alt="Logo" height="910" width="1870" />
       </div>
     </div>
   );

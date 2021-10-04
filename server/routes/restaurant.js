@@ -181,7 +181,7 @@ router.post("/rlogin", (req, res) => {
             if (response) {
               //console.log(JSON.stringify(response));
               // console.log(result);
-              res.send({ message: "Success" });
+              res.send({ message: "Success", result });
             } else {
               res.send({ message: "Wrong Combination" });
             }

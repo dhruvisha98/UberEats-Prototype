@@ -6,15 +6,13 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useHistory } from "react-router-dom";
 import logo from "../Images/logo.svg";
@@ -92,17 +90,17 @@ export default function PrimarySearchAppBar(props) {
     history.push("/dashboard");
   };
 
-  const handleRoute = () => {
-    history.push("/login");
-  };
+  // const handleRoute = () => {
+  //   history.push("/login");
+  // };
 
   const handleProfile = () => {
     history.push("/profile");
   };
 
-  const handleRSignup = () => {
-    history.push("/rsignup");
-  };
+  // const handleRSignup = () => {
+  //   history.push("/rsignup");
+  // };
 
   const handleFav = () => {
     history.push("/favourites");
@@ -216,6 +214,14 @@ export default function PrimarySearchAppBar(props) {
                 onClick={handleFav}
               >
                 <FavoriteBorderIcon />
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="cart"
+                color="inherit"
+                // onClick={handleFav}
+              >
+                <ShoppingCartIcon />
               </IconButton>
 
               <IconButton

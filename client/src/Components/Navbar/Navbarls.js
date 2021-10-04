@@ -18,9 +18,9 @@ export default function Navbarls() {
     history.push("/login");
   };
 
-  const openRSignup = () => {
-    history.push("/rsignup");
-  };
+  // const openRSignup = () => {
+  //   history.push("/rsignup");
+  // };
 
   const handleHome = () => {
     history.push("/");
