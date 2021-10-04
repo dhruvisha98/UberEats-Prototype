@@ -6,7 +6,11 @@ import Cards from "../Card/Cards";
 export default function Dashboard() {
   const [data, setData] = useState([]);
   const [datas, setDatas] = useState([]);
+  const [searchData, setSearchData] = useState([]);
 
+  const handleSearch = (search_data) => {
+    setData(search_data.data.hits);
+  };
   useEffect(() => {
     fetch("http://localhost:5000/restaurant", { method: "GET" })
       .then((res) => res.json())
@@ -26,7 +30,7 @@ export default function Dashboard() {
   if (localStorage.getItem("user")) {
     return (
       <div>
-        <Navbardb />
+        <Navbardb search={searchData} setSearch={handleSearch} />
         <div>
           <container>
             <Grid container>

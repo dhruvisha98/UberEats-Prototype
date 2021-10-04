@@ -28,6 +28,9 @@ export default function Login() {
       password: password,
     })
       .then((response) => {
+        console.log("\n\n\n\n\n");
+        console.log(response);
+        console.log("\n\n\n\n\n");
         if (response.data.message === "Success") {
           console.log("Empty");
           history.push("/dashboard");

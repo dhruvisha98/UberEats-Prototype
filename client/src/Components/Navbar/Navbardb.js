@@ -19,6 +19,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useHistory } from "react-router-dom";
 import logo from "../Images/logo.svg";
 import { Button } from "@mui/material";
+import axios from "axios";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,16 +61,32 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const [searchTxt, setSearchTxt] = React.useState("");
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const history = useHistory();
   const handleHome = () => {
     history.push("/");
     localStorage.removeItem("user");
+  };
+
+  const handleChange = (txt) => {
+    let text = txt.target.value;
+    setSearchTxt(text);
+    axios
+      .post("http://localhost:5000/restaurant/searchResult", { Search: text })
+      .then((res) => {
+        //console.log(res);
+        props.setSearch(res);
+        console.log(props);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    //CAll API
   };
   const handleDashboard = () => {
     history.push("/dashboard");
@@ -184,6 +201,8 @@ export default function PrimarySearchAppBar() {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
+                value={searchTxt}
+                onChange={handleChange}
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />

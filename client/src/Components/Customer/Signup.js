@@ -18,11 +18,13 @@ const theme = createTheme();
 export default function SignUp() {
   const [usernameReg, setUsernameReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
+  const [nameReg, setNameReg] = useState("");
 
   const signup = () => {
     Axios.post("http://localhost:5000/users", {
       username: usernameReg,
       password: passwordReg,
+      name: nameReg,
     }).then((response) => {
       console.log(response);
     });
@@ -81,6 +83,9 @@ export default function SignUp() {
                   id="name"
                   label="Name"
                   autoFocus
+                  onChange={(e) => {
+                    setNameReg(e.target.value);
+                  }}
                 />
               </Grid>
 

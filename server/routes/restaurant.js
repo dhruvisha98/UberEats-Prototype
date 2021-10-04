@@ -5,7 +5,7 @@ var constants = require("../config.json");
 var mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-
+let { Restaurant_Search } = require("../search.js");
 var connection = mysql.createPool({
   host: constants.DB.host,
   user: constants.DB.username,
@@ -92,7 +92,6 @@ router.put("/", async function (req, res) {
     }
   });
 });
-
 // router.post("/", async function (req, res) {
 //   var body = req.body;
 //   console.log(req.body);
@@ -195,31 +194,35 @@ router.post("/rlogin", (req, res) => {
   );
 });
 
-router.get("/searchResult", async function (req, res) {
+router.post("/searchResult", async function (req, res) {
   var search_res = req.body.Search;
   console.log(search_res);
-  await connection.query(
-    "SELECT RESTAURANT_DETAILS.Restaurant_Name FROM RESTAURANT_DETAILS,RESTAURANT_MENU WHERE (RESTAURANT_DETAILS.Restaurant_Location='" +
-      search_res +
-      "' OR RESTAURANT_DETAILS.Restaurant_Delivery_Mode='" +
-      search_res +
-      "'OR RESTAURANT_MENU.Dish_Name='" +
-      search_res +
-      "') AND RESTAURANT_DETAILS.Restaurant_ID = RESTAURANT_MENU.Restaurant_ID",
-    async function (error, results) {
-      if (error) {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(error.code);
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(results));
-      }
-    }
-  );
+  console.log(Restaurant_Search);
+  Restaurant_Search.search(search_res).then((ans) => {
+    res.send(ans);
+  });
+  // await connection.query(
+  //   "SELECT RESTAURANT_DETAILS.Restaurant_Name FROM RESTAURANT_DETAILS,RESTAURANT_MENU WHERE (RESTAURANT_DETAILS.Restaurant_Location='" +
+  //     search_res +
+  //     "' OR RESTAURANT_DETAILS.Restaurant_Delivery_Mode='" +
+  //     search_res +
+  //     "'OR RESTAURANT_MENU.Dish_Name='" +
+  //     search_res +
+  //     "') AND RESTAURANT_DETAILS.Restaurant_ID = RESTAURANT_MENU.Restaurant_ID",
+  //   async function (error, results) {
+  //     if (error) {
+  //       res.writeHead(200, {
+  //         "Content-Type": "text/plain",
+  //       });
+  //       res.end(error.code);
+  //     } else {
+  //       res.writeHead(200, {
+  //         "Content-Type": "text/plain",
+  //       });
+  //       res.end(JSON.stringify(results));
+  //     }
+  //   }
+  // );
 });
 
 // app.put("/addDish", async function (req, res) {
