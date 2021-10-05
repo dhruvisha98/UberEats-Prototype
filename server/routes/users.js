@@ -48,7 +48,7 @@ router.post("/login", (req, res) => {
           if (response) {
             //console.log(JSON.stringify(response));
             console.log(result);
-            const token = res.send({ message: "Success", result });
+            const token = res.send({ message: "Success", result: result[0] });
           } else {
             res.send({ message: "Wrong Combination" });
           }

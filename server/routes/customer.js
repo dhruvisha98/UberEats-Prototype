@@ -23,6 +23,7 @@ router.get("/", async function (req, res) {
         res.writeHead(200, {
           "Content-Type": "text/plain",
         });
+        res.send({ results });
         res.end(JSON.stringify(results));
       }
     }
@@ -30,6 +31,8 @@ router.get("/", async function (req, res) {
 });
 
 router.put("/", async function (req, res) {
+  console.log("Hellp");
+  console.log(req.body.Cust_Name);
   await connection.query(
     "UPDATE CUSTOMER_DETAILS SET Cust_Name='" +
       req.body.Cust_Name +
@@ -47,7 +50,7 @@ router.put("/", async function (req, res) {
       req.body.Cust_Email +
       "',Cust_Phone='" +
       req.body.Cust_Phone +
-      "'WHERE Cust_Id='" +
+      "'WHERE Cust_ID='" +
       req.body.Cust_ID +
       "'",
     async function (error, results) {
