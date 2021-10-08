@@ -18,6 +18,7 @@ import { useHistory } from "react-router-dom";
 import logo from "../Images/logo.svg";
 import { Button } from "@mui/material";
 import axios from "axios";
+import Cart from "../Cart/Cart";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -63,9 +64,12 @@ export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [searchTxt, setSearchTxt] = React.useState("");
+  const [openCart, setOpenCart] = React.useState(false);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const history = useHistory();
+
+  const [cartData, setCartData] = React.useState([]);
   const handleHome = () => {
     history.push("/");
     localStorage.removeItem("user");
@@ -125,6 +129,19 @@ export default function PrimarySearchAppBar(props) {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleOpenCart = () => {
+    axios
+      .get("http://localhost:5000/cart/get")
+      .then((res) => {
+        console.log(res.data);
+        setCartData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setOpenCart(true);
   };
 
   const menuId = "primary-search-account-menu";
@@ -219,10 +236,14 @@ export default function PrimarySearchAppBar(props) {
                 size="large"
                 aria-label="cart"
                 color="inherit"
-                // onClick={handleFav}
+                onClick={(e) => {
+                  handleOpenCart(true);
+                }}
               >
                 <ShoppingCartIcon />
               </IconButton>
+
+              <Cart open={openCart} setOpen={setOpenCart} data={cartData} />
 
               <IconButton
                 size="large"

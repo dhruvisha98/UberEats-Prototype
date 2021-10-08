@@ -13,14 +13,38 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 
-router.post("/", async function (req, res) {
+// router.post("/", async function (req, res) {
+//   var body = req.body;
+//   console.log(req.body);
+//   const sqlput = "INSERT INTO CART_DETAILS (Cust_ID, Cart_State) VALUES (?,?)";
+//   var values = [body.Cust_ID, "Current"];
+
+//   connection.query(sqlput, values, async function (error, results) {
+//     if (error) {
+//       res.writeHead(400, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(error.code);
+//     } else {
+//       res.writeHead(200, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(JSON.stringify(results));
+//     }
+//   });
+// });
+
+//Get API
+router.get("/get", async function (req, res) {
   var body = req.body;
   console.log(req.body);
-  const sqlput = "INSERT INTO CART_DETAILS (Cust_ID, Cart_State) VALUES (?,?)";
-  var values = [body.Cust_ID, "Current"];
+  const sqlput =
+    "SELECT RESTAURANT_MENU.DISH_ID,RESTAURANT_MENU.DISH_Name,RESTAURANT_MENU.Dish_Price FROM CART JOIN RESTAURANT_MENU ON CART.Dish_ID = RESTAURANT_MENU.Dish_ID WHERE CART.Cust_ID = 1";
+  var values = [1];
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {
+      console.log("Hello-World!!!!");
       res.writeHead(400, {
         "Content-Type": "text/plain",
       });
@@ -33,16 +57,16 @@ router.post("/", async function (req, res) {
     }
   });
 });
-
 //Add API
-router.post("/addtocart", async function (req, res) {
+router.post("/add", async function (req, res) {
   var body = req.body;
   console.log(req.body);
-  const sqlput = "INSERT INTO CART (Cart_ID, Dish_ID VALUES (?,?)";
-  var values = [body.Cart_ID, body.Dish_ID];
+  const sqlput = "INSERT INTO CART (Cust_ID, Dish_ID, Status) VALUES (?,?,?)";
+  var values = [1, body.Dish_ID, "current"];
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {
+      console.log("Hello-World!!!!");
       res.writeHead(400, {
         "Content-Type": "text/plain",
       });
@@ -51,12 +75,48 @@ router.post("/addtocart", async function (req, res) {
       res.writeHead(200, {
         "Content-Type": "text/plain",
       });
-      res.end(JSON.stringify(results));
+      res.end("added");
     }
   });
 });
 
 //Order
+router.post("/order", async function (req, res) {
+  var body = req.body;
+  console.log(req.body);
+
+  const sqlput = "SELECT * FROM CART WHERE Cust_ID = ? and Status= ?";
+  var values = [body.Cust_ID, "current"];
+
+  connection.query(sqlput, values, async function (error, results) {
+    if (error) {
+      res.writeHead(400, {
+        "Content-Type": "text/plain",
+      });
+      res.end(error.code);
+    } else {
+      results.map((r) => {
+        let insert_query =
+          "INSERT INTO ORDER_DETAILS(Cust_ID, Dish_ID,Delivery_Status,Order_Status) VALUES (?,?,?,?)";
+
+        var values = [r.Cust_ID, r.Dish_ID, "pending", "ordered"];
+        connection.query(insert_query, values, async function (error, results) {
+          if (error) {
+            res.writeHead(400, {
+              "Content-Type": "text/plain",
+            });
+            res.end(error.code);
+          } else {
+            res.writeHead(200, {
+              "Content-Type": "text/plain",
+            });
+            res.end(JSON.stringify(results));
+          }
+        });
+      });
+    }
+  });
+});
 
 module.exports = router;
 

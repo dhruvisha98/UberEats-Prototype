@@ -73,6 +73,9 @@ app.use("/orderstatus", orderstatus);
 var users = require("./routes/users");
 app.use("/users", users);
 
+var cart = require("./routes/cart");
+app.use("/cart", cart);
+
 const images = require("./routes/images");
 app.use("/images", images);
 
