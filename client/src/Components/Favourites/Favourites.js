@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Navbardb from "../Navbar/Navbardb";
 import Favcards from "../Card/FavCard";
+import { Config } from "../../config";
 
 export default function Favourites() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/favourites", { method: "GET" })
+    fetch(Config.url + "/favourites", { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
         setData(data);

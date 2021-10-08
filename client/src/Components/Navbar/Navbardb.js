@@ -19,6 +19,7 @@ import logo from "../Images/logo.svg";
 import { Button } from "@mui/material";
 import axios from "axios";
 import Cart from "../Cart/Cart";
+import { Config } from "../../config";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -79,7 +80,7 @@ export default function PrimarySearchAppBar(props) {
     let text = txt.target.value;
     setSearchTxt(text);
     axios
-      .post("http://localhost:5000/restaurant/searchResult", { Search: text })
+      .post(Config.url + "/restaurant/searchResult", { Search: text })
       .then((res) => {
         //console.log(res);
         props.setSearch(res);
@@ -133,7 +134,7 @@ export default function PrimarySearchAppBar(props) {
 
   const handleOpenCart = () => {
     axios
-      .get("http://localhost:5000/cart/get")
+      .get(Config.url + "/cart/get")
       .then((res) => {
         console.log(res.data);
         setCartData(res.data);

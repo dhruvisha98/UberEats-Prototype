@@ -12,6 +12,7 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import image from "../Images/profileimage.jpeg";
 import Axios from "axios";
+import { Config } from "../../config";
 
 export default function Profiles() {
   let customer = null;
@@ -31,7 +32,7 @@ export default function Profiles() {
   );
 
   const handleSubmit = () => {
-    Axios.put("http://localhost:5000/customer", {
+    Axios.put(Config.url + "/customer", {
       Cust_Name: name,
       Cust_Nickname: nickname,
       Cust_Email: email,

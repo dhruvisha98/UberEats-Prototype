@@ -10,9 +10,9 @@ import food from "./taco.jpeg";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Axios from "axios";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-
+import { Config } from "../../config";
 const fav = (resID) => {
-  Axios.post("http://localhost:5000/favourites", {
+  Axios.post(Config.url + "/favourites", {
     Restaurant_ID: resID,
   }).then((response) => {
     console.log(response);

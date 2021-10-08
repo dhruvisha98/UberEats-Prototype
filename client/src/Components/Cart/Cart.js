@@ -43,12 +43,13 @@ export default function Cart(props) {
           <input type="checkbox" />
         </ListItem>
         <ListItem>
-          <input type="text" value="Add Notes" />
+          <input type="text" label="Add Notes" />
         </ListItem>
         {props.data.map((d) => (
           <ListItem>
-            <Typography> {d.DISH_Name}</Typography>
-            <Typography> {d.Dish_Price}</Typography>
+            <Typography> {d.DISH_Name} </Typography>
+            &nbsp;
+            <Typography> ${d.Dish_Price} </Typography>
           </ListItem>
         ))}
       </List>

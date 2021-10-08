@@ -11,6 +11,7 @@ import Navbardb from "../Navbar/Navbardb";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
 import $ from "jquery";
+import { Config } from "../../config";
 
 const theme = createTheme();
 
@@ -25,7 +26,7 @@ export default function Adddish() {
   const [trial, setTrial] = useState("Hello");
 
   const add = () => {
-    Axios.post("http://localhost:5000/restaurant", {
+    Axios.post(Config.url + "/restaurant", {
       Dish_Name: dishReg,
       Dish_Price: priceReg,
       Ingredients: ingredientsReg,
@@ -44,7 +45,7 @@ export default function Adddish() {
       console.log(selectedFile);
       data.append("profileImage", selectedFile, selectedFile.name);
 
-      Axios.post("http://localhost:5000/Images/upload", data, {
+      Axios.post(Config + "/Images/upload", data, {
         headers: {
           accept: "application/json",
           "Accept-Language": "en-US,en;q=0.8",

@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
+import { Config } from "../../config";
 
 const theme = createTheme();
 
@@ -31,7 +32,7 @@ export default function Login() {
 
   const login = () => {
     console.log("going!!");
-    Axios.post("http://localhost:5000/restaurant/rlogin", {
+    Axios.post(Config.url + "/restaurant/rlogin", {
       Restaurant_Email: email,
       Restaurant_Password: password,
     })

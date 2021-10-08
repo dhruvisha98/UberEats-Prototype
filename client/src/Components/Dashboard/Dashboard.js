@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import Navbardb from "../Navbar/Navbardb";
 import Cards from "../Card/Cards";
 import Cart from "../Cart/Cart";
+import { Config } from "../../config";
 
 export default function Dashboard() {
   const [data, setData] = useState([]);
@@ -13,14 +14,14 @@ export default function Dashboard() {
     setData(search_data.data.hits);
   };
   useEffect(() => {
-    fetch("http://localhost:5000/restaurant", { method: "GET" })
+    fetch(Config.url + "/restaurant", { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
         setData(data);
       });
   }, []);
   useEffect(() => {
-    fetch("http://localhost:5000/menu", { method: "GET" })
+    fetch(Config.url + "/menu", { method: "GET" })
       .then((res) => res.json())
       .then((datas) => {
         setDatas(datas);

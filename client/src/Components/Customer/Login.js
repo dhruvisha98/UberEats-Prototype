@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import { useHistory } from "react-router-dom";
 import Axios from "axios";
+import { Config } from "../../config";
 
 const theme = createTheme();
 
@@ -22,8 +23,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const login = () => {
-    console.log("going!!");
-    Axios.post("http://localhost:5000/users/login", {
+    Axios.post(Config.url + "/users/login", {
       username: username,
       password: password,
     })

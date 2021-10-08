@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import Axios from "axios";
+import { Config } from "../../config";
 
 const theme = createTheme();
 
@@ -20,7 +21,7 @@ export default function SignUp() {
   const [nameReg, setNameReg] = useState("");
 
   const signup = () => {
-    Axios.post("http://localhost:5000/users", {
+    Axios.post(Config.url + "/users", {
       username: usernameReg,
       password: passwordReg,
       name: nameReg,

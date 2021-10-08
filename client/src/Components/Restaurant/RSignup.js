@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import Axios from "axios";
+import { Config } from "../../config";
 
 const theme = createTheme();
 
@@ -26,7 +27,7 @@ export default function RSignUp() {
   const [dayReg, setDayReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const rsignup = () => {
-    Axios.post("http://localhost:5000/restaurant", {
+    Axios.post(Config.url + "/restaurant", {
       Restaurant_Name: nameReg,
       Restaurant_Email: emailReg,
       Restaurant_Description: descriptionReg,
