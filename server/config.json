@@ -6,6 +6,6 @@
     "port": "3306",
     "database": "ubereatsapp"
   },
-  "secret": "cmpe_273_secure_string",
+  "secret": "SHH_DONT_TELL",
   "frontEnd": "http://http://localhost:3000/"
 }

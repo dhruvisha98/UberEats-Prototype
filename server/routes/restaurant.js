@@ -4,6 +4,8 @@ var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
 const bcrypt = require("bcrypt");
+const verify_token = require("../verifyToken").module;
+
 const saltRounds = 10;
 let { Restaurant_Search } = require("../search.js");
 var connection = mysql.createPool({
@@ -13,8 +15,8 @@ var connection = mysql.createPool({
   port: constants.DB.port,
   database: constants.DB.database,
 });
-
-router.get("/", async function (req, res) {
+console.log(verify_token);
+router.get("/", verify_token, async function (req, res) {
   //console.log(req)
   //console.log(res)
   await connection.query(

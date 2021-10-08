@@ -4,6 +4,8 @@ import Navbardb from "../Navbar/Navbardb";
 import Cards from "../Card/Cards";
 import Cart from "../Cart/Cart";
 import { Config } from "../../config";
+import axios from "axios";
+import Axios from "axios";
 
 export default function Dashboard() {
   const [data, setData] = useState([]);
@@ -14,10 +16,13 @@ export default function Dashboard() {
     setData(search_data.data.hits);
   };
   useEffect(() => {
-    fetch(Config.url + "/restaurant", { method: "GET" })
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
+    Axios.defaults.headers.common["Authorization"] = localStorage["jwt"];
+    Axios.get(Config.url + "/restaurant")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
   useEffect(() => {

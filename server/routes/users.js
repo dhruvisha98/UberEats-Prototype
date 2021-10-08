@@ -46,9 +46,11 @@ router.post("/login", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (error, response) => {
           if (response) {
-            //console.log(JSON.stringify(response));
-            console.log(result);
-            const token = res.send({ message: "Success", result: result[0] });
+            let token = jwt.sign(
+              { id: result[0].Cust_ID, email: result[0].Cust_Email },
+              constants.secret
+            );
+            res.send({ message: "Success", result: result[0], token });
           } else {
             res.send({ message: "Wrong Combination" });
           }
