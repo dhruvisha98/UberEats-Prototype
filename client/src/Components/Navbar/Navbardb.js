@@ -74,6 +74,8 @@ export default function PrimarySearchAppBar(props) {
   const handleHome = () => {
     history.push("/");
     localStorage.removeItem("user");
+    localStorage.removeItem("jwt");
+    localStorage.removeItem(["customer"]);
   };
 
   const handleChange = (txt) => {
@@ -91,7 +93,11 @@ export default function PrimarySearchAppBar(props) {
     //CAll API
   };
   const handleDashboard = () => {
-    history.push("/dashboard");
+    if (localStorage.getItem("user")) {
+      history.push("/dashboard");
+    } else {
+      history.push("/rdashboard");
+    }
   };
 
   // const handleRoute = () => {
@@ -99,7 +105,11 @@ export default function PrimarySearchAppBar(props) {
   // };
 
   const handleProfile = () => {
-    history.push("/profile");
+    if (localStorage.getItem("user")) {
+      history.push("/profile");
+    } else {
+      history.push("/rprofile");
+    }
   };
 
   // const handleRSignup = () => {

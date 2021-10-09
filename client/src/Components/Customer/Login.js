@@ -11,9 +11,9 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import { useHistory } from "react-router-dom";
-import { Axios, AddJWT } from "../../axios";
+import { Axios } from "../../axios";
 import { Config } from "../../config";
-import { config } from "aws-sdk";
+// import { config } from "aws-sdk";
 
 const theme = createTheme();
 

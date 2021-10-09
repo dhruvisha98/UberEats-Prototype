@@ -107,7 +107,9 @@ router.get("/order", verify_token, async function (req, res) {
   //console.log(req)
   //console.log(res)
   await connection.query(
-    "SELECT * FROM ORDER_DETAILS WHERE Cust_ID ='" + req.body.Cust_ID + "'",
+    "SELECT * FROM ORDER_DETAILS WHERE Cust_ID ='" +
+      req.body.auth_user.id +
+      "'",
     async function (error, results) {
       if (error) {
         res.writeHead(200, {

@@ -68,7 +68,7 @@ export default function Home() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleHome}>Home</MenuItem>
-      <MenuItem onClick={handleRoute}>Sign In</MenuItem>
+      {/* <MenuItem onClick={handleRoute}>Sign In</MenuItem> */}
       {/* <MenuItem onClick={handleRSignup}>Add Restuarant</MenuItem> */}
     </Menu>
   );

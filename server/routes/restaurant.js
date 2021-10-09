@@ -60,40 +60,80 @@ router.get("/", verify_token, async function (req, res) {
 // });
 
 router.put("/", verify_token, async function (req, res) {
-  console.log(req.body);
-  var body = req.body;
-  const sqlput =
-    "UPDATE  RESTAURANT_DETAILS SET Restaurant_Name=?,Restaurant_Description=?,Restaurant_Contact=?, Restaurant_Type=?, Restaurant_Time_From=?, Restaurant_Time_To=?, Restaurant_Delivery_Mode=?, Restaurant_Cuisine=?, Restaurant_Day_From=?, Restaurant_Day_To=? WHERE Restaurant_ID=?";
-  var values = [
-    body.Restaurant_Name,
-    body.Restaurant_Description,
-    body.Restaurant_Contact,
-    body.Restaurant_Type,
-    body.Restaurant_Time_From,
-    body.Restaurant_Time_To,
-    body.Restaurant_Delivery_Mode,
-    body.Restaurant_Cuisine,
-    body.Restaurant_Day_From,
-    body.Restaurant_Day_To,
-    body.Restaurant_ID,
-  ];
-  console.log(values);
-
-  connection.query(sqlput, values, async function (error, results) {
-    console.log(query.toString);
-    if (error) {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(error.code);
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(results));
+  console.log("Hello");
+  // console.log(req.body.Cust_Name);
+  await connection.query(
+    "UPDATE RESTAURANT_DETAILS SET Retaurant_Name='" +
+      req.body.Restaurant_Name +
+      "',Restaurant_Email='" +
+      req.body.Restaurant_Email +
+      "',Restaurant_Description='" +
+      req.body.Restaurant_Description +
+      "',Restaurant_Contact='" +
+      req.body.Restaurant_Contact +
+      "',Restaurant_Type='" +
+      req.body.Restaurant_Type +
+      "',Restaurant_Time='" +
+      req.body.Restaurant_Time +
+      "',Restaurant_Delivery_Mode='" +
+      req.body.Restaurant_Delivery_Mode +
+      "',Restaurant_Day='" +
+      req.body.Restaurant_Day +
+      +"',Restaurant_Location='" +
+      req.body.Restaurant_Location +
+      "'WHERE Restaurant_ID='" +
+      req.body.Restaurant_ID +
+      "'",
+    async function (error, results) {
+      if (error) {
+        res.writeHead(200, {
+          "Content-Type": "text/plain",
+        });
+        res.end(error.code);
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "text/plain",
+        });
+        res.end(JSON.stringify(results));
+      }
     }
-  });
+  );
 });
+
+// router.put("/", verify_token, async function (req, res) {
+//   console.log(req.body);
+//   var body = req.body;
+//   const sqlput =
+//     "UPDATE  RESTAURANT_DETAILS SET Restaurant_Name=?,Restaurant_Email=?,Restaurant_Description=?,Restaurant_Contact=?, Restaurant_Type=?, Restaurant_Time=?,  Restaurant_Delivery_Mode=?,  Restaurant_Day=?,Restaurant_Location=? WHERE Restaurant_ID=?";
+//   var values = [
+//     body.Restaurant_Name,
+//     body.Restaurant_Email,
+//     body.Restaurant_Description,
+//     body.Restaurant_Contact,
+//     body.Restaurant_Type,
+//     body.Restaurant_Time,
+//     body.Restaurant_Delivery_Mode,
+//     body.Restaurant_Day,
+//     body.Restaurant_Location,
+//     body.Restaurant_ID,
+//   ];
+//   console.log(values);
+
+//   connection.query(sqlput, values, async function (error, results) {
+//     console.log(query.toString);
+//     if (error) {
+//       res.writeHead(200, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(error.code);
+//     } else {
+//       res.writeHead(200, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(JSON.stringify(results));
+//     }
+//   });
+// });
 // router.post("/", async function (req, res) {
 //   var body = req.body;
 //   console.log(req.body);
@@ -196,7 +236,7 @@ router.post("/rlogin", (req, res) => {
   );
 });
 
-router.post("/searchResult",verify_token, async function (req, res) {
+router.post("/searchResult", verify_token, async function (req, res) {
   var search_res = req.body.Search;
   console.log(search_res);
   console.log(Restaurant_Search);

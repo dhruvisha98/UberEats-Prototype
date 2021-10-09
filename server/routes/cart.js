@@ -41,7 +41,8 @@ router.get("/get", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput =
-    "SELECT RESTAURANT_MENU.DISH_ID,RESTAURANT_MENU.DISH_Name,RESTAURANT_MENU.Dish_Price FROM CART JOIN RESTAURANT_MENU ON CART.Dish_ID = RESTAURANT_MENU.Dish_ID WHERE CART.Cust_ID = 1";
+    "SELECT RESTAURANT_MENU.DISH_ID,RESTAURANT_MENU.DISH_Name,RESTAURANT_MENU.Dish_Price FROM CART JOIN RESTAURANT_MENU ON CART.Dish_ID = RESTAURANT_MENU.Dish_ID WHERE CART.Cust_ID = " +
+    req.body.auth_user.id;
   var values = [1];
 
   connection.query(sqlput, values, async function (error, results) {
@@ -64,7 +65,7 @@ router.post("/add", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput = "INSERT INTO CART (Cust_ID, Dish_ID, Status) VALUES (?,?,?)";
-  var values = [1, body.Dish_ID, "current"];
+  var values = [req.body.auth_user.id, body.Dish_ID, "current"];
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {
@@ -87,8 +88,8 @@ router.post("/order", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
 
-  const sqlput = "SELECT * FROM CART WHERE Cust_ID = ? and Status= ?";
-  var values = [body.Cust_ID, "current"];
+  const sqlput = "SELECT * FROM CART WHERE  = ? and Status= ?";
+  var values = [req.body.auth_user.id, "current"];
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {

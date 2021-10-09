@@ -39,9 +39,10 @@ export default function Login() {
       .then((response) => {
         if (response.data.message === "Success") {
           console.log("Empty");
-          history.push("/dashboard");
+          history.push("/rdashboard");
         }
-        console.log(JSON.stringify(response.data));
+        localStorage["restaurant"] = JSON.stringify(response.data.result);
+        // console.log(JSON.stringify(response.data));
       })
       .catch((err) => {
         console.log(err);

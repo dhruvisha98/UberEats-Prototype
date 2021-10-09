@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Navbardb from "../Navbar/Navbardb";
 import Cards from "../Card/Cards";
-import Cart from "../Cart/Cart";
 import { Config } from "../../config";
 import { Axios } from "../../axios";
 

@@ -15,5 +15,15 @@ Axios.interceptors.request.use(
     return Promise.reject(err);
   }
 );
+Axios.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  (err) => {
+    if (err.response.status === 401)
+      window.location.href = "http://localhost:3000";
+    return Promise.reject(err);
+  }
+);
 
 export { Axios };

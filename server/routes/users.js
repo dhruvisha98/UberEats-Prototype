@@ -17,6 +17,7 @@ var connection = mysql.createPool({
 router.post("/", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const dob = req.body.dob;
   const name = req.body.name;
   const city = req.body.city;
   const state = req.body.state;

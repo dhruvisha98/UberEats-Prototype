@@ -12,14 +12,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import { Axios } from "../../axios";
 import { Config } from "../../config";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 
 const theme = createTheme();
 
 export default function SignUp() {
-  const [selectedDate, handleDateChange] = useState(new Date());
-
   const [usernameReg, setUsernameReg] = useState("");
+  const [dobReg, setDobReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [nameReg, setNameReg] = useState("");
   const [cityReg, setCityReg] = useState("");
@@ -33,6 +31,7 @@ export default function SignUp() {
       username: usernameReg,
       password: passwordReg,
       name: nameReg,
+      dob: dobReg,
       city: cityReg,
       state: stateReg,
       country: countryReg,
@@ -82,7 +81,6 @@ export default function SignUp() {
 
           <Box
             component="form"
-            noValidate
             // onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
@@ -101,7 +99,20 @@ export default function SignUp() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}></Grid>
+              <Grid item xs={12}>
+                {/* <TextField
+                  type="date"
+                  fullWidth
+                  autoComplete="dob"
+                  name="dob"
+                  id="dob"
+                  autoFocus
+                  onChange={(e) => {
+                    setDobReg(e.target.value);
+                  }}
+                /> */}
+              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -169,7 +180,6 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  type="number"
                   required
                   fullWidth
                   id="phone"

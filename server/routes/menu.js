@@ -38,14 +38,15 @@ router.post("/", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput =
-    "INSERT INTO RESTAURANT_MENU (Dish_Name,Dish_Price, Ingredients, Dish_Description, Dish_Category, Restaurant_ID) VALUES (?,?,?,?,?,?)";
+    "INSERT INTO RESTAURANT_MENU (Dish_Name,Dish_Price, Ingredients, Dish_Description, Dish_Category, Restaurant_ID,Dish_Iamge) VALUES (?,?,?,?,?,?,?)";
   var values = [
     body.Dish_Name,
+    body.Dish_Price,
     body.Ingredients,
-    body.Dish_Category,
     body.Dish_Description,
-    body.Dish_Cost,
-    body.Restaurant_Name,
+    body.Dish_Category,
+    1,
+    body.Dish_image,
   ];
 
   connection.query(sqlput, values, async function (error, results) {

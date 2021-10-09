@@ -9,7 +9,6 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbardb from "../Navbar/Navbardb";
 import { Axios } from "../../axios";
-import { useHistory } from "react-router-dom";
 import $ from "jquery";
 import { Config } from "../../config";
 
@@ -226,7 +225,7 @@ export default function Adddish() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              //   onClick={rsignup}
+              onSubmit={add}
             >
               Add
             </Button>

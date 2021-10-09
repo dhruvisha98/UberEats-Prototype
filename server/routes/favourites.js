@@ -42,7 +42,9 @@ var connection = mysql.createPool({
 router.get("/", verify_token, (req, res) => {
   console.log("GEEEEEeeeee");
   var Cust_ID = req.body.Cust_ID;
-  let sql = "SELECT Restaurant_ID FROM FAVOURITE_RESTAURANT WHERE Cust_ID ='1'";
+  let sql =
+    "SELECT Restaurant_ID FROM FAVOURITE_RESTAURANT WHERE Cust_ID = " +
+    req.body.auth_user.id;
   connection.query(sql, async (err, result) => {
     if (err) {
       console.log(err);
@@ -77,15 +79,14 @@ router.get("/", verify_token, (req, res) => {
 
 router.post("/", verify_token, async function (req, res) {
   var body = req.body;
+  var id = req.body.auth_user.id;
   console.log(req.body);
   const sqlput =
-    "INSERT INTO FAVOURITE_RESTAURANT (Cust_ID,Restaurant_ID) VALUES (1," +
-    body.Restaurant_ID +
-    ");";
+    "INSERT INTO FAVOURITE_RESTAURANT (Cust_ID,Restaurant_ID) VALUES (?,?)";
 
-  var values = [1, body.Restaurant_ID];
-  console.log(sqlput);
-  connection.query(sqlput, async function (error, results) {
+  var values = [id, body.Restaurant_ID];
+  // console.log(sqlput);
+  connection.query(sqlput, values, async function (error, results) {
     if (error) {
       console.log(error);
       res.writeHead(200, {
