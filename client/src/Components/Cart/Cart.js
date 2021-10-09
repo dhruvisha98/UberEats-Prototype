@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Box from "@mui/material/Box";
 import ListItemText from "@mui/material/ListItemText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
@@ -16,10 +16,15 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export default function Cart(props) {
   let emails = ["a", "b", "c"];
+  const cardStyles = {
+    border: 5,
+    borderColor: "#b26a00",
+  };
 
   return (
-    <Dialog open={props.open}>
+    <Dialog style={{ border: 3 }} open={props.open}>
       <CloseIcon
+        sx={{ m: 0, p: 2 }}
         onClick={(e) => {
           props.setOpen(false);
         }}

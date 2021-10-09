@@ -16,15 +16,27 @@ import { Config } from "../../config";
 const theme = createTheme();
 
 export default function SignUp() {
+  const [selectedDate, handleDateChange] = useState(new Date());
+
   const [usernameReg, setUsernameReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
   const [nameReg, setNameReg] = useState("");
+  const [cityReg, setCityReg] = useState("");
+  const [stateReg, setStateReg] = useState("");
+  const [countryReg, setCountryReg] = useState("");
+  const [nicknameReg, setNicknameReg] = useState("");
+  const [phoneReg, setPhoneReg] = useState("");
 
   const signup = () => {
     Axios.post(Config.url + "/users", {
       username: usernameReg,
       password: passwordReg,
       name: nameReg,
+      city: cityReg,
+      state: stateReg,
+      country: countryReg,
+      nickname: nicknameReg,
+      phone: phoneReg,
     }).then((response) => {
       console.log(response);
     });
@@ -93,6 +105,58 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
+                  id="city"
+                  label="City"
+                  name="city"
+                  autoComplete="city"
+                  onChange={(e) => {
+                    setCityReg(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="state"
+                  label="State"
+                  name="state"
+                  autoComplete="state"
+                  onChange={(e) => {
+                    setStateReg(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="country"
+                  label="Country"
+                  name="country"
+                  autoComplete="country"
+                  onChange={(e) => {
+                    setCountryReg(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="nickname"
+                  label="Nickname"
+                  name="nickname"
+                  autoComplete="nickname"
+                  onChange={(e) => {
+                    setNicknameReg(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
@@ -102,6 +166,21 @@ export default function SignUp() {
                   }}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type="number"
+                  required
+                  fullWidth
+                  id="phone"
+                  label="Phone Number"
+                  name="phone"
+                  autoComplete="phone"
+                  onChange={(e) => {
+                    setPhoneReg(e.target.value);
+                  }}
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required

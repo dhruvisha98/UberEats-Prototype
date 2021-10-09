@@ -15,7 +15,7 @@ var connection = mysql.createPool({
   port: constants.DB.port,
   database: constants.DB.database,
 });
-console.log(verify_token);
+// console.log(verify_token);
 router.get("/", verify_token, async function (req, res) {
   //console.log(req)
   //console.log(res)

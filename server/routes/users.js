@@ -18,13 +18,19 @@ router.post("/", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const name = req.body.name;
+  const city = req.body.city;
+  const state = req.body.state;
+  const country = req.body.country;
+  const nickname = req.body.nickname;
+  const phone = req.body.phone;
+
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
     }
     connection.query(
-      "INSERT INTO CUSTOMER_DETAILS(Cust_Name,Cust_Email,password) VALUES (?,?,?)",
-      [name, username, hash],
+      "INSERT INTO CUSTOMER_DETAILS(Cust_Name,Cust_City,Cust_State,Cust_Country,Cust_Nickname,Cust_Email,Cust_Phone,password) VALUES (?,?,?,?,?,?,?,?)",
+      [name, city, state, country, nickname, username, phone, hash],
       (err, result) => {
         console.log(err);
       }
