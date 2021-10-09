@@ -3,6 +3,7 @@ var express = require("express");
 var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
+const verify_token = require("../verifyToken").module;
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -12,7 +13,7 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 
-router.put("/updateDeliveryStatus", async function (req, res) {
+router.put("/updateDeliveryStatus", verify_token, async function (req, res) {
   var body = req.body;
   const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID =?";
   var values = [body.Delivery_Status, body.Order_ID];

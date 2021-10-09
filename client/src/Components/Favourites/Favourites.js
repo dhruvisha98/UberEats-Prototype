@@ -3,16 +3,12 @@ import Grid from "@mui/material/Grid";
 import Navbardb from "../Navbar/Navbardb";
 import Favcards from "../Card/FavCard";
 import { Config } from "../../config";
-
+import { Axios } from "../../axios";
 export default function Favourites() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(Config.url + "/favourites", { method: "GET" })
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-      });
+    Axios.get(Config.url + "/favourites").then((res) => setData(res.data));
   }, []);
   return (
     <div>

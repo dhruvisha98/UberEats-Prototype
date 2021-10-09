@@ -17,7 +17,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useHistory } from "react-router-dom";
 import logo from "../Images/logo.svg";
 import { Button } from "@mui/material";
-import axios from "axios";
+import { Axios } from "../../axios";
 import Cart from "../Cart/Cart";
 import { Config } from "../../config";
 
@@ -79,8 +79,7 @@ export default function PrimarySearchAppBar(props) {
   const handleChange = (txt) => {
     let text = txt.target.value;
     setSearchTxt(text);
-    axios
-      .post(Config.url + "/restaurant/searchResult", { Search: text })
+    Axios.post(Config.url + "/restaurant/searchResult", { Search: text })
       .then((res) => {
         //console.log(res);
         props.setSearch(res);
@@ -133,8 +132,7 @@ export default function PrimarySearchAppBar(props) {
   };
 
   const handleOpenCart = () => {
-    axios
-      .get(Config.url + "/cart/get")
+    Axios.get(Config.url + "/cart/get")
       .then((res) => {
         console.log(res.data);
         setCartData(res.data);

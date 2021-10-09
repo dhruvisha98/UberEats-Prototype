@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import { useHistory } from "react-router-dom";
-import Axios from "axios";
+import { Axios } from "../../axios";
 import { Config } from "../../config";
 
 const theme = createTheme();

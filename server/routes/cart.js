@@ -4,6 +4,8 @@ var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
 var axios = require("axios");
+const verify_token = require("../verifyToken").module;
+
 // var url = "http://localhost:5000";
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -35,7 +37,7 @@ var connection = mysql.createPool({
 // });
 
 //Get API
-router.get("/get", async function (req, res) {
+router.get("/get", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput =
@@ -58,7 +60,7 @@ router.get("/get", async function (req, res) {
   });
 });
 //Add API
-router.post("/add", async function (req, res) {
+router.post("/add", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput = "INSERT INTO CART (Cust_ID, Dish_ID, Status) VALUES (?,?,?)";
@@ -81,7 +83,7 @@ router.post("/add", async function (req, res) {
 });
 
 //Order
-router.post("/order", async function (req, res) {
+router.post("/order", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
 

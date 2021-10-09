@@ -11,9 +11,9 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import { useHistory } from "react-router-dom";
-import Axios from "axios";
+import { Axios, AddJWT } from "../../axios";
 import { Config } from "../../config";
-import axios from "axios";
+import { config } from "aws-sdk";
 
 const theme = createTheme();
 
@@ -36,7 +36,6 @@ export default function Login() {
         console.log(response);
         localStorage["customer"] = JSON.stringify(response.data.result);
         localStorage["jwt"] = response.data.token;
-        Axios.defaults.headers.common["Authorization"] = response.data.token;
       })
       .catch((err) => {
         console.log(err);

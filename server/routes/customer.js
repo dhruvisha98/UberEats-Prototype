@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
+const verify_token = require("../verifyToken").module;
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -10,7 +11,7 @@ var connection = mysql.createPool({
   port: constants.DB.port,
   database: constants.DB.database,
 });
-router.get("/", async function (req, res) {
+router.get("/", verify_token, async function (req, res) {
   await connection.query(
     "SELECT * FROM CUSTOMER_DETAILS WHERE Cust_ID='" + req.body.Cust_ID + "'",
     async function (error, results) {
@@ -30,7 +31,7 @@ router.get("/", async function (req, res) {
   );
 });
 
-router.put("/", async function (req, res) {
+router.put("/", verify_token, async function (req, res) {
   console.log("Hellp");
   console.log(req.body.Cust_Name);
   await connection.query(
@@ -102,7 +103,7 @@ router.post("/", async function (req, res) {
   });
 });
 
-router.get("/order", async function (req, res) {
+router.get("/order", verify_token, async function (req, res) {
   //console.log(req)
   //console.log(res)
   await connection.query(

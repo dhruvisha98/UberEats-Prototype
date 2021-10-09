@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbardb from "../Navbar/Navbardb";
-import Axios from "axios";
+import { Axios } from "../../axios";
 import { useHistory } from "react-router-dom";
 import $ from "jquery";
 import { Config } from "../../config";

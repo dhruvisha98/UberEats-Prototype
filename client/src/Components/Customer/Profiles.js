@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import image from "../Images/profileimage.jpeg";
-import Axios from "axios";
+import { Axios } from "../../axios";
 import { Config } from "../../config";
 
 export default function Profiles() {

@@ -59,7 +59,7 @@ router.get("/", verify_token, async function (req, res) {
 //   );
 // });
 
-router.put("/", async function (req, res) {
+router.put("/", verify_token, async function (req, res) {
   console.log(req.body);
   var body = req.body;
   const sqlput =
@@ -196,7 +196,7 @@ router.post("/rlogin", (req, res) => {
   );
 });
 
-router.post("/searchResult", async function (req, res) {
+router.post("/searchResult",verify_token, async function (req, res) {
   var search_res = req.body.Search;
   console.log(search_res);
   console.log(Restaurant_Search);

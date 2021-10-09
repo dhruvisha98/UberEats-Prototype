@@ -7,7 +7,6 @@ const verify_token = (req, res, next) => {
     let value = jwt.verify(req.headers.authorization, config.secret);
 
     req.body["auth_user"] = value;
-
     next();
   } catch {
     res.status(401).send("Not Authorised ");

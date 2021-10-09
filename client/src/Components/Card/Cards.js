@@ -8,7 +8,7 @@ import CardMedia from "@mui/material/CardMedia";
 import image from "./food.jpeg";
 import food from "./taco.jpeg";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import Axios from "axios";
+import { Axios } from "../../axios";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Config } from "../../config";
 const fav = (resID) => {

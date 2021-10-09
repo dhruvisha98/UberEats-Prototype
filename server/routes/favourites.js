@@ -4,6 +4,8 @@ var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
 var axios = require("axios");
+const verify_token = require("../verifyToken").module;
+
 // var url = "http://localhost:5000";
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -37,7 +39,8 @@ var connection = mysql.createPool({
 //   );
 // });
 
-router.get("/", (req, res) => {
+router.get("/", verify_token, (req, res) => {
+  console.log("GEEEEEeeeee");
   var Cust_ID = req.body.Cust_ID;
   let sql = "SELECT Restaurant_ID FROM FAVOURITE_RESTAURANT WHERE Cust_ID ='1'";
   connection.query(sql, async (err, result) => {
@@ -49,22 +52,30 @@ router.get("/", (req, res) => {
       for (i in result) {
         ResIds.push(result[i].Restaurant_ID);
       }
-      let datas = await axios.get("http://localhost:5000/restaurant");
-      let ans = [];
-      for (j in datas.data) {
-        console.log(datas.data[j].Restaurant_ID);
-        if (ResIds.includes(datas.data[j].Restaurant_ID)) {
-          await ans.push(datas.data[j]);
+      let datas = await connection.query(
+        "SELECT * FROM RESTAURANT_DETAILS",
+        async function (error, results) {
+          if (error) {
+            res.end(error.code);
+          } else {
+            let ans = [];
+            for (j in results) {
+              console.log(results[j].Restaurant_ID);
+              if (ResIds.includes(results[j].Restaurant_ID)) {
+                await ans.push(results[j]);
+              }
+            }
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "text/plain");
+            res.end(JSON.stringify(ans));
+          }
         }
-      }
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "text/plain");
-      res.end(JSON.stringify(ans));
+      );
     }
   });
 });
 
-router.post("/", async function (req, res) {
+router.post("/", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput =

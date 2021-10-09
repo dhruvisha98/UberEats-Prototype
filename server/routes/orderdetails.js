@@ -3,6 +3,8 @@ var express = require("express");
 var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
+const verify_token = require("../verifyToken").module;
+
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -12,7 +14,7 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 
-router.get("/", async function (req, res) {
+router.get("/", verify_token, async function (req, res) {
   //console.log(req)
   //console.log(res)
   await connection.query(
