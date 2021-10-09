@@ -10,7 +10,7 @@ const verify_token = (req, res, next) => {
 
     next();
   } catch {
-    res.status(401).send("Not Authorised ");
+    res.status(403).send("Not Authorised / Access Required ");
   }
 };
 

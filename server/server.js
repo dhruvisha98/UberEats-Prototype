@@ -42,7 +42,7 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 
-console.log("Aaavfvfvfvfvfvfvf");
+//console.log("Aaavfvfvfvfvfvfvf");
 Restaurant_Search.init(connection);
 connection.getConnection((err) => {
   if (err) {

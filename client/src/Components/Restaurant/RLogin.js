@@ -41,6 +41,7 @@ export default function Login() {
           console.log("Empty");
           history.push("/rdashboard");
         }
+        localStorage["jwt"] = response.data.token;
         localStorage["restaurant"] = JSON.stringify(response.data.result);
         // console.log(JSON.stringify(response.data));
       })

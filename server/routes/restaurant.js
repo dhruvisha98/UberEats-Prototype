@@ -5,7 +5,7 @@ var constants = require("../config.json");
 var mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const verify_token = require("../verifyToken").module;
-
+const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 let { Restaurant_Search } = require("../search.js");
 var connection = mysql.createPool({
@@ -221,9 +221,11 @@ router.post("/rlogin", (req, res) => {
           result[0].Restaurant_Password,
           (error, response) => {
             if (response) {
-              //console.log(JSON.stringify(response));
-              // console.log(result);
-              res.send({ message: "Success", result });
+              let token = jwt.sign(
+                { id: result[0].Cust_ID, email: result[0].Cust_Email },
+                constants.secret
+              );
+              res.send({ message: "Success", result: result[0], token });
             } else {
               res.send({ message: "Wrong Combination" });
             }
