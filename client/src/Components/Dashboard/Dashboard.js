@@ -10,11 +10,11 @@ export default function Dashboard() {
   const [datas, setDatas] = useState([]);
   const [searchData, setSearchData] = useState([]);
 
+
   const handleSearch = (search_data) => {
     setData(search_data.data.hits);
   };
   useEffect(() => {
-    console.log(Axios.interceptors);
     Axios.get(Config.url + "/restaurant")
       .then((res) => {
         console.log(res);
@@ -23,11 +23,6 @@ export default function Dashboard() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  useEffect(() => {
-    Axios.get(Config.url + "/menu")
-      .then((res) => setData(res.data));
-
   }, []);
 
   console.log(localStorage);
@@ -40,7 +35,7 @@ export default function Dashboard() {
             <Grid container>
               {data.map((restaurant) => (
                 <Grid item key={restaurant.Restaurant_ID} xs={12} md={8} lg={4}>
-                  <Cards restaurant={restaurant} />
+                  <Cards  content={"restaurant"} user={"customer"}  name={restaurant.Restaurant_Name} id={restaurant.Restaurant_ID} description={restaurant.Restaurant_Description}  />
                 </Grid>
               ))}
             </Grid>

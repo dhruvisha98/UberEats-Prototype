@@ -3,6 +3,7 @@ var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
 const verify_token = require("../verifyToken").module;
+const {rest_auth} = require("../authorization").module;
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -17,7 +18,7 @@ router.get("/", verify_token, async function (req, res) {
     // "SELECT * FROM RESTAURANT_MENU WHERE RESTAURANT_ID='" +
     //   req.body.Restaurant_ID +
     //   "' ",
-    "SELECT * FROM RESTAURANT_MENU WHERE RESTAURANT_ID='1'",
+    "SELECT * FROM RESTAURANT_MENU WHERE RESTAURANT_ID='?'",[req.body.auth_user.id],
     async function (error, results) {
       if (error) {
         res.writeHead(200, {
@@ -34,7 +35,7 @@ router.get("/", verify_token, async function (req, res) {
   );
 });
 
-router.post("/", verify_token, async function (req, res) {
+router.post("/", verify_token,rest_auth, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput =
@@ -45,7 +46,7 @@ router.post("/", verify_token, async function (req, res) {
     body.Ingredients,
     body.Dish_Description,
     body.Dish_Category,
-    1,
+    body.auth_user.id,
     body.Dish_image,
   ];
 
@@ -66,11 +67,11 @@ router.post("/", verify_token, async function (req, res) {
   });
 });
 
-router.put("/", verify_token, async function (req, res) {
+router.put("/", verify_token,rest_auth, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput =
-    "Update RESTAURANT_MENU SET Dish_Name=?, Ingredients=?, Dish_Category=?, Dish_Description=?, Dish_Cost=?, Restaurant_Name=? WHERE Dish_ID=?";
+    "Update RESTAURANT_MENU SET Dish_Name=?, Ingredients=?, Dish_Category=?, Dish_Description=?, Dish_Cost=?, Restaurant_Name=? WHERE Dish_ID=? AND Restaurant_ID=?";
   var values = [
     body.Dish_Name,
     body.Ingredients,
@@ -79,6 +80,7 @@ router.put("/", verify_token, async function (req, res) {
     body.Dish_Cost,
     body.Restaurant_Name,
     body.Dish_ID,
+    body.auth_user.id
   ];
 
   connection.query(sqlput, values, async function (error, results) {

@@ -32,7 +32,6 @@ router.get("/", verify_token,cust_auth, async function (req, res) {
 });
 
 router.put("/", verify_token, async function (req, res) {
-  console.log("Hellp");
   console.log(req.body.Cust_Name);
   await connection.query(
     "UPDATE CUSTOMER_DETAILS SET Cust_Name='" +
@@ -52,7 +51,7 @@ router.put("/", verify_token, async function (req, res) {
       "',Cust_Phone='" +
       req.body.Cust_Phone +
       "'WHERE Cust_ID='" +
-      req.body.Cust_ID +
+      req.body.auth_user.id +
       "'",
     async function (error, results) {
       if (error) {
