@@ -23,29 +23,25 @@ export default function Cart(props) {
         <ListItem>
           <Typography>Restaurant Name</Typography>
         </ListItem>
-        <ListItem>
-          <Button variant="outlined">
-            <AddIcon />
-            Add Item
-          </Button>
 
-          <ListItemText />
-        </ListItem>
-        <ListItem></ListItem>
-        <ListItem>
-          <Typography> Request utensils,straws,etc.</Typography>
-          <input type="checkbox" />
-        </ListItem>
-        <ListItem>
-          <input type="text" label="Add Notes" />
-        </ListItem>
         {props.data.map((d) => (
-          <ListItem>
+          <ListItem key={d.Dish_ID}>
             <Typography> {d.DISH_Name} </Typography>
             &nbsp;
             <Typography> ${d.Dish_Price} </Typography>
+            &nbsp;
+
+            <Typography> {d.Dish_QTY}QTY </Typography>
           </ListItem>
         ))}
+        <ListItem>
+          <Button variant="outlined" onClick={props.orderCart}>
+
+            Place Order
+          </Button>
+
+
+        </ListItem>
       </List>
     </Dialog>
   );

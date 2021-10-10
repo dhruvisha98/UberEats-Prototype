@@ -41,9 +41,16 @@ router.get("/get", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput =
-    "SELECT RESTAURANT_MENU.DISH_ID,RESTAURANT_MENU.DISH_Name,RESTAURANT_MENU.Dish_Price FROM CART JOIN RESTAURANT_MENU ON CART.Dish_ID = RESTAURANT_MENU.Dish_ID WHERE CART.Cust_ID = " +
-    req.body.auth_user.id;
-  var values = [1];
+    `SELECT 
+    RESTAURANT_MENU.DISH_ID,
+    RESTAURANT_MENU.DISH_Name,
+    SUM(RESTAURANT_MENU.Dish_Price) AS Dish_Price,
+    COUNT(RESTAURANT_MENU.DISH_Name) AS Dish_QTY FROM 
+    CART JOIN RESTAURANT_MENU ON 
+    CART.Dish_ID = RESTAURANT_MENU.Dish_ID WHERE CART.Cust_ID = ? AND
+    CART.Status='current' GROUP BY 
+    DISH_ID`;
+  var values = [req.body.auth_user.id];
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {
@@ -69,7 +76,6 @@ router.post("/", verify_token, async function (req, res) {
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {
-      console.log("Hello-World!!!!");
       res.writeHead(400, {
         "Content-Type": "text/plain",
       });
@@ -88,12 +94,12 @@ router.post("/order", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
 
-  const sqlput = "SELECT * FROM CART WHERE  = Cust_ID=? and Status=?";
-  var values = [req.body.auth_user.id, "current"];
+  const sqlput = "SELECT * FROM CART WHERE Cust_ID=? and Status='current'";
+  var values = [req.body.auth_user.id];
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {
-      res.writeHead(400, {
+      res.writeHead(404, {
         "Content-Type": "text/plain",
       });
       res.end(error.code);
@@ -105,7 +111,7 @@ router.post("/order", verify_token, async function (req, res) {
         var values = [r.Cust_ID, r.Dish_ID, "pending", "ordered"];
         connection.query(insert_query, values, async function (error, results) {
           if (error) {
-            res.writeHead(400, {
+            res.writeHead(404, {
               "Content-Type": "text/plain",
             });
             res.end(error.code);

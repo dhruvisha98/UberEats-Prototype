@@ -23,7 +23,7 @@ export default function RestaurantDetails(props) {
 
         Axios.post(Config.url + "/cart",{"Dish_ID":id})
         .then((res) =>{
-            console.log("Done Successfully!!!")
+            alert("Added To Cart")
         })
         .catch((err) =>{
 
