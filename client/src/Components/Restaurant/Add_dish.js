@@ -36,6 +36,11 @@ export default function Adddish() {
 
   const [success, setSuccess] = useState(false);
   const [restaurantName, setRestaurantName] = useState("");
+  const [type, setType] = React.useState('');
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+  };
 
   const [dishReg, setDishReg] = useState("");
   const [priceReg, setPriceReg] = useState("");
@@ -100,23 +105,34 @@ export default function Adddish() {
       console.log("Please upload a file");
     }
   };
+  
+  const onSubmit = (data) => {
+    const { dish_name, dish_price, ingredients, dish_description, dish_type, dish_image } = data;
+    let image_data = new FormData();
+    image_data.append("profileImage", dish_image[0], dish_image[0].name);
+    Axios.post(Config.url + "/images/upload", image_data, {
+      headers: {
+        accept: "application/json",
+        "Accept-Language": "en-US,en;q=0.8",
+        "Content-Type": `multipart/form-data; boundary=${image_data._boundary}`,
+      },
+    }).then((response) =>{
+      console.log(response);
+      // Axios.post(Config.url + "/menu", {
+      //   Dish_Name: dishReg,
+      //   Dish_Price: priceReg,
+      //   Ingredients: ingredientsReg,
+      //   Dish_Description: descriptionReg,
+      //   Dish_Category: categoryReg,
+      //   Restaurant_ID: restIDReg,
+      // }).then((response) => {
+      //   console.log(response);
+      // });
+    }).catch(() =>{
 
-  // ShowAlert Function
-  const ocShowAlert = (message, background = "#3089cf") => {
-    let alertContainer = document.querySelector("#oc-alert-container"),
-      alertEl = document.createElement("div"),
-      textNode = document.createTextNode(message);
-    alertEl.setAttribute("class", "oc-alert-pop-up");
-    $(alertEl).css("background", background);
-    alertEl.appendChild(textNode);
-    alertContainer.appendChild(alertEl);
-    setTimeout(function () {
-      $(alertEl).fadeOut("slow");
-      $(alertEl).remove();
-    }, 3000);
+    });
+    
   };
-
-  const onSubmit = (data) => console.log(data);
   return (
     <ThemeProvider theme={theme}>
       <div>
@@ -291,6 +307,8 @@ export default function Adddish() {
                 {...register("dish_type", {
                   required: true,
                 })}
+                value={type}
+                onChange={handleChange}
               >
                 <MenuItem value={"veg"}>Veg</MenuItem>
                 <MenuItem value={"non-veg"}>Non-Veg</MenuItem>
@@ -309,7 +327,7 @@ export default function Adddish() {
               fullWidth
             >
               <Input
-                id="component-error-dish-description"
+                id="component-error-dish-image"
                 type="file"
                 aria-describedby="component-error-text"
                 {...register("dish_image", {
@@ -322,19 +340,6 @@ export default function Adddish() {
                   : ""}
               </FormHelperText>
             </FormControl>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={singleFileUploadHandler}
-                  style={{ background: "#b26a00" }}
-                >
-                  Upload Image
-                  <input type="file" hidden />
-                </Button>
-              </Grid>
-            </Grid>
             <Button
               style={{ background: "#b26a00" }}
               type="submit"

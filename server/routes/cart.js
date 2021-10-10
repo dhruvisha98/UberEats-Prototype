@@ -106,7 +106,9 @@ router.post("/order", verify_token, async function (req, res) {
     } else {
       results.map((r) => {
         let insert_query =
-          "INSERT INTO ORDER_DETAILS(Cust_ID, Dish_ID,Delivery_Status,Order_Status) VALUES (?,?,?,?)";
+          `INSERT INTO ORDER_DETAILS(Cust_ID, Dish_ID,Delivery_Status,Order_Status) VALUES (?,?,?,?);
+           INSERT INTO ORDER()
+          `;
 
         var values = [r.Cust_ID, r.Dish_ID, "pending", "ordered"];
         connection.query(insert_query, values, async function (error, results) {
