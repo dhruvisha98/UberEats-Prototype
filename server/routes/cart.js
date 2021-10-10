@@ -88,7 +88,7 @@ router.post("/order", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
 
-  const sqlput = "SELECT * FROM CART WHERE  = ? and Status= ?";
+  const sqlput = "SELECT * FROM CART WHERE  = Cust_ID=? and Status=?";
   var values = [req.body.auth_user.id, "current"];
 
   connection.query(sqlput, values, async function (error, results) {

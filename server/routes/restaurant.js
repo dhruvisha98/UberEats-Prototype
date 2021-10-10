@@ -61,7 +61,6 @@ router.get("/", verify_token, cust_auth, async function (req, res) {
 // });
 
 router.put("/", verify_token, async function (req, res) {
-  console.log("Hello");
   // console.log(req.body.Cust_Name);
   await connection.query(
     "UPDATE RESTAURANT_DETAILS SET Retaurant_Name='" +
@@ -228,8 +227,8 @@ router.post("/rlogin", (req, res) => {
             if (response) {
               let token = jwt.sign(
                 {
-                  id: result[0].Cust_ID,
-                  email: result[0].Cust_Email,
+                  id: result[0].Restaurant_ID,
+                  email: result[0].Restaurant_Email,
                   type: "restaurant",
                 },
                 constants.secret

@@ -5,6 +5,7 @@ var constants = require("../config.json");
 var mysql = require("mysql");
 var axios = require("axios");
 const verify_token = require("../verifyToken").module;
+const {cust_auth} = require("../authorization").module;
 
 // var url = "http://localhost:5000";
 var connection = mysql.createPool({
@@ -39,7 +40,7 @@ var connection = mysql.createPool({
 //   );
 // });
 
-router.get("/", verify_token, (req, res) => {
+router.get("/", verify_token,cust_auth, (req, res) => {
   console.log("GEEEEEeeeee");
   var Cust_ID = req.body.Cust_ID;
   let sql =
@@ -77,7 +78,7 @@ router.get("/", verify_token, (req, res) => {
   });
 });
 
-router.post("/", verify_token, async function (req, res) {
+router.post("/", verify_token,cust_auth, async function (req, res) {
   var body = req.body;
   var id = req.body.auth_user.id;
   console.log(req.body);
