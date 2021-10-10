@@ -3,7 +3,7 @@ var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
 const verify_token = require("../verifyToken").module;
-const {rest_auth} = require("../authorization").module;
+const {cust_auth,rest_auth} = require("../authorization").module;
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -34,7 +34,29 @@ router.get("/", verify_token, async function (req, res) {
     }
   );
 });
-
+router.get("/:rest_id",verify_token,cust_auth,async function(req,res){
+  var rest_id = req.params.rest_id;
+  //console.log(parseInt(rest_id))
+  await connection.query(
+    "SELECT * FROM RESTAURANT_MENU WHERE Restaurant_ID = ?",
+    rest_id,
+    async function (error, results) {
+      if (error) {
+        res.writeHead(404, {
+          "Content-Type": "text/plain",
+        });
+        res.end(error.code);
+      } else {
+        console.log("Hello\n\n\n\n");
+        console.log(req.params.rest_id)
+        res.writeHead(200, {
+          "Content-Type": "text/plain",
+        });
+        res.end(JSON.stringify(results));
+      }
+    }
+  );
+});
 router.post("/", verify_token,rest_auth, async function (req, res) {
   var body = req.body;
   console.log(req.body);
