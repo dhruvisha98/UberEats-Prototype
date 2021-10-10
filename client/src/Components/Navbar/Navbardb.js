@@ -152,7 +152,15 @@ export default function PrimarySearchAppBar(props) {
       });
     setOpenCart(true);
   };
+  const orderCart= () =>{
+    Axios.post(Config.url + "/cart/order")
+    .then((res) =>{
+        alert("Ordered")
+    })
+    .catch((err) =>{
 
+    });
+}
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -252,7 +260,7 @@ export default function PrimarySearchAppBar(props) {
                 <ShoppingCartIcon />
               </IconButton>
 
-              <Cart open={openCart} setOpen={setOpenCart} data={cartData} />
+              <Cart open={openCart} setOpen={setOpenCart} data={cartData} orderCart={orderCart} />
 
               <IconButton
                 size="large"
