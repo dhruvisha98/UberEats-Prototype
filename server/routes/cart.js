@@ -40,8 +40,7 @@ var connection = mysql.createPool({
 router.get("/get", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
-  const sqlput =
-    `SELECT 
+  const sqlput = `SELECT 
     RESTAURANT_MENU.DISH_ID,
     RESTAURANT_MENU.DISH_Name,
     SUM(RESTAURANT_MENU.Dish_Price) AS Dish_Price,
@@ -104,27 +103,56 @@ router.post("/order", verify_token, async function (req, res) {
       });
       res.end(error.code);
     } else {
-      results.map((r) => {
-        let insert_query =
-          `INSERT INTO ORDER_DETAILS(Cust_ID, Dish_ID,Delivery_Status,Order_Status) VALUES (?,?,?,?);
-           INSERT INTO ORDER()
-          `;
+      connection.query(
+        "INSERT INTO ORDER_DETAILS(Delivery_Status,Order_Status,Cust_ID) VALUES (?,?,?)",
+        ["pending", "ordered", req.body.auth_user.id],
 
-        var values = [r.Cust_ID, r.Dish_ID, "pending", "ordered"];
-        connection.query(insert_query, values, async function (error, results) {
-          if (error) {
-            res.writeHead(404, {
-              "Content-Type": "text/plain",
-            });
-            res.end(error.code);
-          } else {
-            res.writeHead(200, {
-              "Content-Type": "text/plain",
-            });
-            res.end(JSON.stringify(results));
-          }
-        });
-      });
+        async function (error, order_res) {
+          data = [];
+          results.map((r) => {
+            data.push([order_res.insertId, r.Dish_ID]);
+          });
+          console.log(data);
+          let insert_query =
+            "INSERT INTO `ORDER` (order_detail_id,dish_id) VALUES ?";
+
+          //var values = [order_res.insertId, r.Dish_ID];
+          connection.query(
+            insert_query,
+            [data],
+            async function (error, results) {
+              console.log(results);
+              if (error) {
+                console.log(error);
+                res.writeHead(404, {
+                  "Content-Type": "text/plain",
+                });
+                res.end(error.code);
+              } else {
+                connection.query(
+                  "UPDATE CART SET Status = 'ordered' WHERE Status = 'current'",
+                  values,
+                  async function (error, results) {
+                    console.log(results);
+                    if (error) {
+                      console.log(error);
+                      res.writeHead(404, {
+                        "Content-Type": "text/plain",
+                      });
+                      res.end(error.code);
+                    } else {
+                      res.writeHead(200, {
+                        "Content-Type": "text/plain",
+                      });
+                      res.send();
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
+      );
     }
   });
 });

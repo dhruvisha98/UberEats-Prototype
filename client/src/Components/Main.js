@@ -11,6 +11,7 @@ import Home from "./Navbar/Home";
 import Favourites from "./Favourites/Favourites";
 import RDashboard from "./Dashboard/RDashboard";
 import RestaurantPage from "./Restaurant/RestaurantPage";
+import OrderDetails from "./Order/OrderDetails";
 
 export default function Main() {
   return (
@@ -28,6 +29,7 @@ export default function Main() {
         <Route exact path="/rdashboard" component={RDashboard} />
         <Route exact path="/favourites" component={Favourites} />
         <Route exact path="/restaurant/:id" component={RestaurantPage} />
+        <Route exact path="/order" component={OrderDetails} />
       </Router>
     </div>
   );
