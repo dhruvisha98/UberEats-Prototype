@@ -61,7 +61,7 @@ router.get("/get", verify_token, async function (req, res) {
   });
 });
 //Add API
-router.post("/add", verify_token, async function (req, res) {
+router.post("/", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput = "INSERT INTO CART (Cust_ID, Dish_ID, Status) VALUES (?,?,?)";

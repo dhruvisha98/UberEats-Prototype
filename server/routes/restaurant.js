@@ -37,6 +37,7 @@ router.get("/", verify_token, cust_auth, async function (req, res) {
     }
   );
 });
+
 // app.get("/getLocationRestaurant", async function (req, res) {
 //   //console.log(req)
 //   //console.log(res)

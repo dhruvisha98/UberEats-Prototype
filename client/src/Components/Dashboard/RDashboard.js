@@ -4,6 +4,7 @@ import Navbardb from "../Navbar/Navbardb";
 import Cards from "../Card/Cards";
 import { Config } from "../../config";
 import { Axios } from "../../axios";
+import RestaurantDetails from "../Restaurant/RestaurantDetails";
 
 
 export default function RDashboard() {
@@ -23,20 +24,6 @@ export default function RDashboard() {
       });
   }, []);
   return (
-    <div>
-      <Navbardb />
-      <div>
-          <h1>ABCD</h1>
-          <container>
-            <Grid container>
-            {data.map((menu) => (
-                <Grid item key={menu.Dish_ID} xs={12} md={8} lg={4}>
-                  <Cards content={"dish"} user={"restaurant"} name={menu.Dish_Name}  description={menu.Dish_Description} id={menu.Dish_ID} price={menu.Dish_Price} />
-                </Grid>
-              ))}
-            </Grid>
-          </container>
-      </div>
-    </div>
+    <RestaurantDetails data={data} user={"restaurant"}/>
   );
 }

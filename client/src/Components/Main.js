@@ -10,6 +10,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import Home from "./Navbar/Home";
 import Favourites from "./Favourites/Favourites";
 import RDashboard from "./Dashboard/RDashboard";
+import RestaurantPage from "./Restaurant/RestaurantPage";
 
 export default function Main() {
   return (
@@ -26,6 +27,7 @@ export default function Main() {
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/rdashboard" component={RDashboard} />
         <Route exact path="/favourites" component={Favourites} />
+        <Route exact path="/restaurant/:id" component={RestaurantPage} />
       </Router>
     </div>
   );

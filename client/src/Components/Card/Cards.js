@@ -12,6 +12,10 @@ import { Axios } from "../../axios";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import EditIcon from '@mui/icons-material/Edit';
 import { Config } from "../../config";
+import { useHistory } from "react-router-dom";
+
+
+
 const fav = (resID) => {
   Axios.post(Config.url + "/favourites", {
     Restaurant_ID: resID,
@@ -33,6 +37,11 @@ export default function Cards(props) {
     height: "250x",
     margin: "20px",
   };    
+  const history = useHistory();
+  const handleLearnMore = ()=>{
+    history.push("/restaurant/" + props.id)
+    
+  }
   return (
       <div>
         <Card style={cardStyle}>
@@ -56,7 +65,7 @@ export default function Cards(props) {
             >
               Favourite
             </Button>
-            <Button size="small" variant="contained">
+            <Button size="small" variant="contained" onClick = {handleLearnMore}>
               Learn More
             </Button>
           </CardActions>
@@ -81,7 +90,7 @@ export default function Cards(props) {
              variant="contained"
              sx={2}
             >
-              <AddShoppingCartIcon/>
+              <AddShoppingCartIcon onClick={(e)=>{props.addToCart(props.id)}}/>
             </Button>
             )}
           </CardActions>
