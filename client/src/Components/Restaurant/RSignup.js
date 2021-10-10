@@ -3,7 +3,6 @@ import {
   Avatar,
   Button,
   CssBaseline,
-  TextField,
   Grid,
   Box,
   Typography,
@@ -13,59 +12,51 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Navbarls from "../Navbar/Navbarls";
 import { Axios } from "../../axios";
 import { Config } from "../../config";
 
-import { useForm, Controller } from "react-hook-form";
-import Select from "react-select";
+import { useForm } from "react-hook-form";
 import Input from "@mui/material/Input";
 
 const theme = createTheme();
 
 export default function RSignUp() {
-  // const [nameReg, setNameReg] = useState("");
-  // const [emailReg, setEmailReg] = useState("");
-  // const [contactReg, setContactReg] = useState("");
-  // const [descriptionReg, setDescriptionReg] = useState("");
-  // const [locationReg, setLocationReg] = useState("");
-  // const [typeReg, setTypeReg] = useState("");
-  // const [timeReg, setTimeReg] = useState("");
-  // const [deliveryReg, setDeliveryReg] = useState("");
-  // const [dayReg, setDayReg] = useState("");
-  // const [passwordReg, setPasswordReg] = useState("");
-  // const rsignup = () => {
-  //   Axios.post(Config.url + "/restaurant", {
-  //     Restaurant_Name: nameReg,
-  //     Restaurant_Email: emailReg,
-  //     Restaurant_Description: descriptionReg,
-  //     Restaurant_Contact: contactReg,
-  //     Restaurant_Type: typeReg,
-  //     Restaurant_Time: timeReg,
-  //     Restaurant_Delivery: deliveryReg,
-  //     Restaurant_Day: dayReg,
-  //     Restaurant_Location: locationReg,
-  //     Restaurant_Password: passwordReg,
-  //   }).then((response) => {
-  //     console.log(response);
-  //   });
-  // };
+  const [success, setSuccess] = useState(false);
+  const [restaurantName, setRestaurantName] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
     const { name, email, password } = data;
     Axios.post(Config.url + "/restaurant", {
       Restaurant_Name: name,
       Restaurant_Email: email,
       Restaurant_Password: password,
-    }).then((response) => {
-      console.log(response);
-    });
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setRestaurantName(name);
+          setSuccess(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSuccess(false);
   };
   //console.log(errors);
   return (
@@ -220,6 +211,15 @@ export default function RSignUp() {
             </Grid>
           </Box>
         </Box>
+        <Snackbar open={success} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {restaurantName} Account has been created.
+          </Alert>
+        </Snackbar>
       </Container>
     </ThemeProvider>
   );

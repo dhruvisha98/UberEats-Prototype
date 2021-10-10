@@ -44,7 +44,7 @@ export default function Adddish() {
       console.log(selectedFile);
       data.append("profileImage", selectedFile, selectedFile.name);
 
-      Axios.post(Config + "/Images/upload", data, {
+      Axios.post(Config.url + "/images/upload", data, {
         headers: {
           accept: "application/json",
           "Accept-Language": "en-US,en;q=0.8",
