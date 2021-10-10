@@ -14,15 +14,13 @@ import {
   InputLabel,
   Alert,
   Snackbar,
+  Input,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Navbarls from "../Navbar/Navbarls";
 import { Axios } from "../../axios";
 import { Config } from "../../config";
-
 import { useForm } from "react-hook-form";
-import Input from "@mui/material/Input";
-
 const theme = createTheme();
 
 export default function RSignUp() {

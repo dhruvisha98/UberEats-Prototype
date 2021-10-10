@@ -50,7 +50,7 @@ export default function Profiles() {
       </div>
       <Grid container>
         <Grid item xs={6} md={4}>
-          <Paper>
+          <Paper style={{ "box-shadow": "0 0 0 0" }}>
             <Container component="main" maxWidth="xs">
               {/* <CssBaseline /> */}
               <Box
@@ -75,7 +75,7 @@ export default function Profiles() {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={6}>
-          <Paper>
+          <Paper style={{ "box-shadow": "0 0 0 0" }}>
             <Container component="main" maxWidth="xs">
               {/* <CssBaseline /> */}
               <Box

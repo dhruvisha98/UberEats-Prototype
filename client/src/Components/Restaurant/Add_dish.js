@@ -1,20 +1,42 @@
-import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React, { useState, useCallback } from "react";
+import {
+  Button,
+  CssBaseline,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  createTheme,
+  ThemeProvider,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Alert,
+  Snackbar,
+  Input,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import Navbardb from "../Navbar/Navbardb";
 import { Axios } from "../../axios";
 import $ from "jquery";
 import { Config } from "../../config";
-
+import { useForm } from "react-hook-form";
+import { useDropzone } from "react-dropzone";
 const theme = createTheme();
 
 export default function Adddish() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const [success, setSuccess] = useState(false);
+  const [restaurantName, setRestaurantName] = useState("");
+
   const [dishReg, setDishReg] = useState("");
   const [priceReg, setPriceReg] = useState("");
   const [ingredientsReg, setIngredientsReg] = useState("");
@@ -25,7 +47,7 @@ export default function Adddish() {
   const [trial, setTrial] = useState("Hello");
 
   const add = () => {
-    Axios.post(Config.url + "/restaurant", {
+    Axios.post(Config.url + "/menu", {
       Dish_Name: dishReg,
       Dish_Price: priceReg,
       Ingredients: ingredientsReg,
@@ -94,6 +116,7 @@ export default function Adddish() {
     }, 3000);
   };
 
+  const onSubmit = (data) => console.log(data);
   return (
     <ThemeProvider theme={theme}>
       <div>
@@ -115,98 +138,191 @@ export default function Adddish() {
 
           <Box
             component="form"
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             sx={{ mt: 3 }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="dish"
-                  name="dish"
-                  required
-                  fullWidth
-                  id="dish"
-                  label="Dish Name"
-                  autoFocus
-                  onChange={(e) => {
-                    setDishReg(e.target.value);
-                  }}
-                />
-              </Grid>
+            <FormControl
+              error={
+                errors.dish_name?.type === "required"
+                  ? true
+                  : errors.dish_name?.type === "minLength"
+                  ? true
+                  : errors.dish_name?.type === "maxLength"
+                  ? true
+                  : false
+              }
+              variant="standard"
+              fullWidth
+            >
+              <InputLabel htmlFor="component-dish-name" required>
+                Dish Name
+              </InputLabel>
+              <Input
+                id="component-error-dish-name"
+                aria-describedby="component-error-text"
+                placeholder="Enter a Dish Name"
+                {...register("dish_name", {
+                  required: true,
+                  minLength: 2,
+                  maxLength: 30,
+                })}
+              />
+              <FormHelperText id="component-error-text">
+                {errors.dish_name?.type === "required"
+                  ? "Dish Name is Required."
+                  : errors.dish_name?.type === "minLength"
+                  ? "Dish Name is too short."
+                  : errors.dish_name?.type === "maxLength"
+                  ? "Dish Name is too long."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
+            <FormControl
+              error={
+                errors.dish_price?.type === "required"
+                  ? true
+                  : errors.dish_price?.type === "min"
+                  ? true
+                  : errors.dish_price?.type === "pattern"
+                  ? true
+                  : false
+              }
+              variant="standard"
+              fullWidth
+            >
+              <InputLabel htmlFor="component-dish-price" required>
+                Dish Price
+              </InputLabel>
+              <Input
+                type="number"
+                id="component-error-dish-price"
+                aria-describedby="component-error-text"
+                placeholder="Dish Price"
+                {...register("dish_price", {
+                  required: true,
+                  min: 1,
+                  pattern: /^\d*[1-9]\d*$/,
+                })}
+              />
+              <FormHelperText id="component-error-text">
+                {errors.dish_price?.type === "required"
+                  ? "Dish Price is Required."
+                  : errors.dish_price?.type === "min"
+                  ? "Please add more then 1 or equal to 1."
+                  : errors.dish_price?.type === "pattern"
+                  ? "Enter only numeric values."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
+            <FormControl
+              error={
+                errors.ingredients?.type === "required"
+                  ? true
+                  : errors.ingredients?.type === "maxLength"
+                  ? true
+                  : false
+              }
+              variant="standard"
+              fullWidth
+            >
+              <InputLabel htmlFor="component-ingredients" required>
+                Ingredients
+              </InputLabel>
+              <Input
+                id="component-error-ingredients"
+                aria-describedby="component-error-text"
+                placeholder="Enter Dish Ingredients"
+                {...register("ingredients", {
+                  required: true,
+                  maxLength: 250,
+                })}
+              />
+              <FormHelperText id="component-error-text">
+                {errors.ingredients?.type === "required"
+                  ? "Ingredients is Required."
+                  : errors.ingredients?.type === "maxLength"
+                  ? "You can have only 250 characters."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
+            <FormControl
+              error={
+                errors.dish_description?.type === "required"
+                  ? true
+                  : errors.dish_description?.type === "maxLength"
+                  ? true
+                  : false
+              }
+              variant="standard"
+              fullWidth
+            >
+              <InputLabel htmlFor="component-dish-description" required>
+                Dish Description
+              </InputLabel>
+              <Input
+                id="component-error-dish-description"
+                type="textarea"
+                aria-describedby="component-error-text"
+                placeholder="Enter Dish Description"
+                {...register("dish_description", {
+                  required: true,
+                  maxLength: 600,
+                })}
+              />
+              <FormHelperText id="component-error-text">
+                {errors.ingredients?.type === "required"
+                  ? "Ingredients is Required."
+                  : errors.ingredients?.type === "maxLength"
+                  ? "You can have only 600 characters."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
+            <FormControl
+              error={errors.ingredients?.type === "required" ? true : false}
+              variant="standard"
+              fullWidth
+            >
+              <InputLabel htmlFor="component-ingredients" required>
+                Choose the type of dish
+              </InputLabel>
+              <Select
+                id="component-type"
+                placeholder="Choose the type of dish"
+                {...register("dish_type", {
+                  required: true,
+                })}
+              >
+                <MenuItem value={"veg"}>Veg</MenuItem>
+                <MenuItem value={"non-veg"}>Non-Veg</MenuItem>
+                <MenuItem value={"vegan"}>Vegan</MenuItem>
+              </Select>
+              <FormHelperText id="component-error-text">
+                {errors.ingredients?.type === "required"
+                  ? "Ingredients is Required."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
 
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="price"
-                  label="Dish Price"
-                  name="price"
-                  autoComplete="price"
-                  onChange={(e) => {
-                    setPriceReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="ingredients"
-                  label="Ingredients"
-                  name="ingredients"
-                  autoComplete="ingredients"
-                  onChange={(e) => {
-                    setIngredientsReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="description"
-                  label="Dish Description"
-                  name="description"
-                  autoComplete="description"
-                  onChange={(e) => {
-                    setDescriptionReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="category"
-                  label="Veg, Non-Veg or Vegan"
-                  name="category"
-                  autoComplete="category"
-                  onChange={(e) => {
-                    setCategoryReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="restID"
-                  label="Restaurant ID"
-                  name="restID"
-                  autoComplete="restID"
-                  onChange={(e) => {
-                    setRestIDReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <input
-                  type="file"
-                  onChange={(e) => {
-                    setSelectedFile(e.target.files[0]);
-                  }}
-                />
-              </Grid>
+            <FormControl
+              error={errors.dish_image?.type === "required" ? true : false}
+              variant="standard"
+              fullWidth
+            >
+              <Input
+                id="component-error-dish-description"
+                type="file"
+                aria-describedby="component-error-text"
+                {...register("dish_image", {
+                  required: true,
+                })}
+              />
+              <FormHelperText id="component-error-text">
+                {errors.dish_image?.type === "required"
+                  ? "Dish Image is Required."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
+            <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Button
                   variant="contained"
@@ -225,9 +341,8 @@ export default function Adddish() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onSubmit={add}
             >
-              Add
+              Add a Dish
             </Button>
           </Box>
         </Box>
