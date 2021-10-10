@@ -54,7 +54,7 @@ router.post("/login", (req, res) => {
         bcrypt.compare(password, result[0].password, (error, response) => {
           if (response) {
             let token = jwt.sign(
-              { id: result[0].Cust_ID, email: result[0].Cust_Email },
+              { id: result[0].Cust_ID, email: result[0].Cust_Email,type:"customer" },
               constants.secret
             );
             res.send({ message: "Success", result: result[0], token });

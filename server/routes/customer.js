@@ -3,7 +3,7 @@ var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
 const verify_token = require("../verifyToken").module;
-
+const {cust_auth}= require("../authorization").module;
 var connection = mysql.createPool({
   host: constants.DB.host,
   user: constants.DB.username,
@@ -11,7 +11,7 @@ var connection = mysql.createPool({
   port: constants.DB.port,
   database: constants.DB.database,
 });
-router.get("/", verify_token, async function (req, res) {
+router.get("/", verify_token,cust_auth, async function (req, res) {
   await connection.query(
     "SELECT * FROM CUSTOMER_DETAILS WHERE Cust_ID='" + req.body.Cust_ID + "'",
     async function (error, results) {
@@ -103,7 +103,7 @@ router.post("/", async function (req, res) {
   });
 });
 
-router.get("/order", verify_token, async function (req, res) {
+router.get("/order", verify_token,cust_auth, async function (req, res) {
   //console.log(req)
   //console.log(res)
   await connection.query(

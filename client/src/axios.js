@@ -20,9 +20,15 @@ Axios.interceptors.response.use(
     return res;
   },
   (err) => {
-    if (err.response.status === 401)
+    if (err.response.status === 403)
       window.location.href = "http://localhost:3000";
+    else if(err.response.status === 401)
+    {
+      console.log("Error occured");
+      window.location.href = "http://localhost:3000";
+    }
     return Promise.reject(err);
+
   }
 );
 

@@ -6,6 +6,7 @@ var mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const verify_token = require("../verifyToken").module;
 const jwt = require("jsonwebtoken");
+const {cust_auth} = require("../authorization").module;
 const saltRounds = 10;
 let { Restaurant_Search } = require("../search.js");
 var connection = mysql.createPool({
@@ -16,7 +17,7 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 // console.log(verify_token);
-router.get("/", verify_token, async function (req, res) {
+router.get("/", verify_token, cust_auth,async function (req, res) {
   //console.log(req)
   //console.log(res)
   await connection.query(
@@ -222,7 +223,7 @@ router.post("/rlogin", (req, res) => {
           (error, response) => {
             if (response) {
               let token = jwt.sign(
-                { id: result[0].Cust_ID, email: result[0].Cust_Email },
+                { id: result[0].Cust_ID, email: result[0].Cust_Email,type:"restaurant" },
                 constants.secret
               );
               res.send({ message: "Success", result: result[0], token });

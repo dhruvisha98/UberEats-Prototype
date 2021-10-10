@@ -25,11 +25,9 @@ export default function Dashboard() {
       });
   }, []);
   useEffect(() => {
-    fetch(Config.url + "/menu", { method: "GET" })
-      .then((res) => res.json())
-      .then((datas) => {
-        setDatas(datas);
-      });
+    Axios.get(Config.url + "/menu")
+      .then((res) => setData(res.data));
+
   }, []);
 
   console.log(localStorage);
