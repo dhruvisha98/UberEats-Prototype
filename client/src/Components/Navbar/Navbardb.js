@@ -20,6 +20,7 @@ import { Button } from "@mui/material";
 import { Axios } from "../../axios";
 import Cart from "../Cart/Cart";
 import { Config } from "../../config";
+import ReceiptIcon from "@mui/icons-material/Receipt";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -120,6 +121,9 @@ export default function PrimarySearchAppBar(props) {
     history.push("/favourites");
   };
 
+  const handleOrders = () => {
+    history.push("/order");
+  };
   const handleAdddish = () => {
     history.push("/adddish");
   };
@@ -152,15 +156,6 @@ export default function PrimarySearchAppBar(props) {
       });
     setOpenCart(true);
   };
-  const orderCart= () =>{
-    Axios.post(Config.url + "/cart/order")
-    .then((res) =>{
-        alert("Ordered")
-    })
-    .catch((err) =>{
-
-    });
-}
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -251,6 +246,14 @@ export default function PrimarySearchAppBar(props) {
               </IconButton>
               <IconButton
                 size="large"
+                aria-label="favourite"
+                color="inherit"
+                onClick={handleOrders}
+              >
+                <ReceiptIcon />
+              </IconButton>
+              <IconButton
+                size="large"
                 aria-label="cart"
                 color="inherit"
                 onClick={(e) => {
@@ -260,7 +263,7 @@ export default function PrimarySearchAppBar(props) {
                 <ShoppingCartIcon />
               </IconButton>
 
-              <Cart open={openCart} setOpen={setOpenCart} data={cartData} orderCart={orderCart} />
+              <Cart open={openCart} setOpen={setOpenCart} data={cartData} />
 
               <IconButton
                 size="large"
