@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const { cust_auth } = require("../authorization").module;
 const saltRounds = 10;
 let { Restaurant_Search } = require("../search.js");
+const { IoTFleetHub } = require("aws-sdk");
 var connection = mysql.createPool({
   host: constants.DB.host,
   user: constants.DB.username,
@@ -62,12 +63,10 @@ router.get("/", verify_token, cust_auth, async function (req, res) {
 // });
 
 router.put("/", verify_token, async function (req, res) {
-  // console.log(req.body.Cust_Name);
+  console.log(req.body);
   await connection.query(
-    "UPDATE RESTAURANT_DETAILS SET Retaurant_Name='" +
+    "UPDATE RESTAURANT_DETAILS SET Restaurant_Name='" +
       req.body.Restaurant_Name +
-      "',Restaurant_Email='" +
-      req.body.Restaurant_Email +
       "',Restaurant_Description='" +
       req.body.Restaurant_Description +
       "',Restaurant_Contact='" +
@@ -82,12 +81,15 @@ router.put("/", verify_token, async function (req, res) {
       req.body.Restaurant_Day +
       +"',Restaurant_Location='" +
       req.body.Restaurant_Location +
-      "'WHERE Restaurant_ID='" +
+      "',Restaurant_Image='" +
+      req.body.Restaurant_Image +
+      "' WHERE Restaurant_ID='" +
       req.body.Restaurant_ID +
       "'",
     async function (error, results) {
       if (error) {
-        res.writeHead(200, {
+        console.log(error);
+        res.writeHead(500, {
           "Content-Type": "text/plain",
         });
         res.end(error.code);
@@ -247,36 +249,63 @@ router.post("/rlogin", (req, res) => {
   );
 });
 
-router.post("/searchResult", verify_token, async function (req, res) {
-  var search_res = req.body.Search;
-  console.log(search_res);
-  console.log(Restaurant_Search);
-  Restaurant_Search.search(search_res).then((ans) => {
-    res.send(ans);
+router.get("/search", async function (req, res) {
+  let sql_query =
+    "SELECT * FROM RESTAURANT_DETAILS WHERE (Restaurant_Name LIKE '%" +
+    (req.query.searchvalue || "") +
+    "%' OR RESTAURANT_LOCATION LIKE '%" +
+    (req.query.searchvalue || "") +
+    "%' OR RESTAURANT_ID IN(SELECT Restaurant_ID FROM RESTAURANT_MENU WHERE DISH_NAME LIKE '%" +
+    (req.query.searchvalue || "") +
+    "%'))";
+  if (req.query.restype && req.query.restype != "") {
+    sql_query += "AND Restaurant_Type = '" + (req.query.restype || "") + "';";
+  }
+  console.log(sql_query);
+  await connection.query(sql_query, async function (error, results) {
+    if (error) {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(error.code);
+    } else {
+      res.status(200).json(results);
+      ``;
+    }
   });
-  // await connection.query(
-  //   "SELECT RESTAURANT_DETAILS.Restaurant_Name FROM RESTAURANT_DETAILS,RESTAURANT_MENU WHERE (RESTAURANT_DETAILS.Restaurant_Location='" +
-  //     search_res +
-  //     "' OR RESTAURANT_DETAILS.Restaurant_Delivery_Mode='" +
-  //     search_res +
-  //     "'OR RESTAURANT_MENU.Dish_Name='" +
-  //     search_res +
-  //     "') AND RESTAURANT_DETAILS.Restaurant_ID = RESTAURANT_MENU.Restaurant_ID",
-  //   async function (error, results) {
-  //     if (error) {
-  //       res.writeHead(200, {
-  //         "Content-Type": "text/plain",
-  //       });
-  //       res.end(error.code);
-  //     } else {
-  //       res.writeHead(200, {
-  //         "Content-Type": "text/plain",
-  //       });
-  //       res.end(JSON.stringify(results));
-  //     }
-  //   }
-  // );
 });
+
+module.exports = router;
+// router.post("/searchResult", verify_token, async function (req, res) {
+//   var search_res = req.body.Search;
+//   console.log(search_res);
+//   console.log(Restaurant_Search);
+//   Restaurant_Search.search(search_res).then((ans) => {
+//     res.send(ans);
+//   });
+// await connection.query(
+//   "SELECT RESTAURANT_DETAILS.Restaurant_Name FROM RESTAURANT_DETAILS,RESTAURANT_MENU WHERE (RESTAURANT_DETAILS.Restaurant_Location='" +
+//     search_res +
+//     "' OR RESTAURANT_DETAILS.Restaurant_Delivery_Mode='" +
+//     search_res +
+//     "'OR RESTAURANT_MENU.Dish_Name='" +
+//     search_res +
+//     "') AND RESTAURANT_DETAILS.Restaurant_ID = RESTAURANT_MENU.Restaurant_ID",
+//   async function (error, results) {
+//     if (error) {
+//       res.writeHead(200, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(error.code);
+//     } else {
+//       res.writeHead(200, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(JSON.stringify(results));
+//     }
+//   }
+// );
+// });
 
 // app.put("/addDish", async function (req, res) {
 //   var body = req.body;

@@ -5,6 +5,7 @@ const path = require("path");
 const url = require("url");
 const express = require("express");
 const router = express.Router();
+var mysql = require("mysql");
 
 // PROFILE IMAGE STORING STARTS
 const s3 = new aws.S3({

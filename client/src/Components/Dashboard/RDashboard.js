@@ -6,24 +6,18 @@ import { Config } from "../../config";
 import { Axios } from "../../axios";
 import RestaurantDetails from "../Restaurant/RestaurantDetails";
 
-
 export default function RDashboard() {
-
-  const [data,setData] = React.useState([]);
+  const [data, setData] = React.useState([]);
 
   useEffect(() => {
     Axios.get(Config.url + "/menu")
       .then((res) => {
-
         setData(res.data);
         console.log(res.data);
       })
       .catch((err) => {
-
         console.log(err);
       });
   }, []);
-  return (
-    <RestaurantDetails data={data} user={"restaurant"}/>
-  );
+  return <RestaurantDetails data={data} user={"restaurant"} />;
 }

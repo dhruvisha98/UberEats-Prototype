@@ -13,14 +13,12 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 
-router.put("/updateDeliveryStatus", verify_token, async function (req, res) {
+router.put("/", async function (req, res) {
   var body = req.body;
   const sqlput = "UPDATE ORDER_DETAILS SET Delivery_Status=? where Order_ID =?";
   var values = [body.Delivery_Status, body.Order_ID];
 
   connection.query(sqlput, values, async function (error, results) {
-    console.log(query.toString);
-    console.log(error);
     if (error) {
       res.writeHead(200, {
         "Content-Type": "text/plain",

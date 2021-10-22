@@ -13,6 +13,7 @@ var connection = mysql.createPool({
   password: constants.DB.password,
   port: constants.DB.port,
   database: constants.DB.database,
+  // connectionLimit: 50,
 });
 
 // router.post("/", async function (req, res) {
@@ -41,11 +42,9 @@ router.get("/get", verify_token, async function (req, res) {
   var body = req.body;
   console.log(req.body);
   const sqlput = `SELECT 
-    RESTAURANT_MENU.DISH_ID,
-    RESTAURANT_MENU.DISH_Name,
-    SUM(RESTAURANT_MENU.Dish_Price) AS Dish_Price,
-    COUNT(RESTAURANT_MENU.DISH_Name) AS Dish_QTY FROM 
-    CART JOIN RESTAURANT_MENU ON 
+    RESTAURANT_MENU.*
+    FROM
+    CART JOIN RESTAURANT_MENU ON
     CART.Dish_ID = RESTAURANT_MENU.Dish_ID WHERE CART.Cust_ID = ? AND
     CART.Status='current' GROUP BY 
     DISH_ID`;
@@ -53,7 +52,6 @@ router.get("/get", verify_token, async function (req, res) {
 
   connection.query(sqlput, values, async function (error, results) {
     if (error) {
-      console.log("Hello-World!!!!");
       res.writeHead(400, {
         "Content-Type": "text/plain",
       });
@@ -69,21 +67,61 @@ router.get("/get", verify_token, async function (req, res) {
 //Add API
 router.post("/", verify_token, async function (req, res) {
   var body = req.body;
+  var newRestId;
+  var oldRestId;
   console.log(req.body);
-  const sqlput = "INSERT INTO CART (Cust_ID, Dish_ID, Status) VALUES (?,?,?)";
-  var values = [req.body.auth_user.id, body.Dish_ID, "current"];
+  var query1 =
+    "select Restaurant_ID from CART join RESTAURANT_MENU on CART.Dish_ID = RESTAURANT_MENU.Dish_ID where CART.Cust_ID=" +
+    req.body.auth_user.id +
+    ' AND CART.Status="current" GROUP BY Restaurant_ID';
 
-  connection.query(sqlput, values, async function (error, results) {
+  var query2 =
+    "select Restaurant_ID from RESTAURANT_MENU where Dish_ID=" + body.Dish_ID;
+
+  const sqlput = "INSERT INTO CART (Cust_ID, Dish_ID, Status) VALUES (?,?,?)";
+
+  var values = [req.body.auth_user.id, body.Dish_ID, "current"];
+  var cartAddFlag = true;
+
+  connection.query(query1, async function (error, results) {
     if (error) {
-      res.writeHead(400, {
-        "Content-Type": "text/plain",
-      });
-      res.end(error.code);
+      console.log(error);
     } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end("added");
+      if (results.length === 0) {
+        cartAddFlag = true;
+      } else {
+        console.log("old Rest ", results);
+        oldRestId = results[0].Restaurant_ID;
+        cartAddFlag = false;
+        connection.query(query2, async function (error, results) {
+          if (error) {
+            console.log(error);
+          } else {
+            newRestId = results[0].Restaurant_ID;
+            console.log("oldRest: ", oldRestId, " New Rest Id: ", newRestId);
+            if (oldRestId !== newRestId) {
+              cartAddFlag = false;
+            } else {
+              cartAddFlag = true;
+            }
+          }
+        });
+      }
+      if (cartAddFlag === true) {
+        connection.query(sqlput, values, async function (error, results) {
+          if (error) {
+            console.log(error);
+          } else {
+            // res.send({ message: "added" });
+            console.log("Cart Updated");
+          }
+        });
+      } else {
+        console.log("FALSE LOOP");
+        res
+          .status(400)
+          .send({ error: "Cannot Add Item of Different Restaurant" });
+      }
     }
   });
 });
@@ -105,7 +143,7 @@ router.post("/order", verify_token, async function (req, res) {
     } else {
       connection.query(
         "INSERT INTO ORDER_DETAILS(Delivery_Status,Order_Status,Cust_ID) VALUES (?,?,?)",
-        ["pending", "ordered", req.body.auth_user.id],
+        ["Pending", "ordered", req.body.auth_user.id],
 
         async function (error, order_res) {
           data = [];
@@ -153,6 +191,32 @@ router.post("/order", verify_token, async function (req, res) {
           );
         }
       );
+    }
+  });
+});
+
+router.post("/resetCart", verify_token, async function (req, res) {
+  const sqlput = "DELETE FROM CART WHERE Cust_ID=? and Status='current'";
+  var values = [req.body.auth_user.id];
+
+  const insert = "INSERT INTO CART (Cust_ID, Dish_ID, Status) VALUES (?,?,?)";
+
+  var value = [req.body.auth_user.id, req.body.Dish_ID, "current"];
+
+  console.log(req.body.Dish_ID);
+  connection.query(sqlput, values, async function (error, results) {
+    if (error) {
+      res.send();
+    } else {
+      console.log("Deleted");
+      // res.send({ message: "Deleted" });
+      connection.query(insert, value, async function (error, result) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Added");
+        }
+      });
     }
   });
 });

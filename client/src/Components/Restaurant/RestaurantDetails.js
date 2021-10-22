@@ -5,54 +5,106 @@ import Navbardb from "../Navbar/Navbardb";
 import Cards from "../Card/Cards";
 import { Axios } from "../../axios";
 import { Config } from "../../config";
+import { Modal } from "@mui/material";
+import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
 
 export default function RestaurantDetails(props) {
-    // const handleSubmit = (event) => {
-    //   event.preventDefault();
-    //   const data = new FormData(event.currentTarget);
-    //   // eslint-disable-next-line no-console
-    //   console.log({
-    //     email: data.get("email"),
-    //     password: data.get("password"),
-    //   });
-    // };
-  
-    const history = useHistory();
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   // eslint-disable-next-line no-console
+  //   console.log({
+  //     email: data.get("email"),
+  //     password: data.get("password"),
+  //   });
+  // };
 
-    const addToCart = (id) =>{
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    width: 350,
+  };
+  const history = useHistory();
+  const [openCard, setOpenCard] = useState(false);
+  const [addDishId, setAddDishId] = useState("");
 
-        Axios.post(Config.url + "/cart",{"Dish_ID":id})
-        .then((res) =>{
-            alert("Added To Cart")
-        })
-        .catch((err) =>{
+  const addToCart = (id) => {
+    setAddDishId(id);
+    Axios.post(Config.url + "/cart", { Dish_ID: id })
+      .then((res) => {
+        alert("Added To Cart");
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenCard(true);
+      });
+  };
 
-        });
+  const newcart = () => {
+    Axios.post(Config.url + "/cart/resetCart", { Dish_ID: addDishId })
+      .then((res) => {
+        console.log("Deleted");
+      })
+      .catch((err) => {
+        console.log("Not deleted");
+      });
 
-    }
-    return (
+    setOpenCard(false);
+  };
+  return (
     <div>
-        <Navbardb />
-        <div>
-            <h1>{props.restaurant_id}</h1>
-            <container>
-              <Grid container>
-              {props.data.map((menu) => (
-                  <Grid item key={menu.Dish_ID} xs={12} md={8} lg={4}>
-                    <Cards 
-                        content={"dish"} 
-                        user={props.user} 
-                        name={menu.Dish_Name}  
-                        description={menu.Dish_Description} 
-                        id={menu.Dish_ID} 
-                        price={menu.Dish_Price} 
-                        addToCart={addToCart}
-                        />
-                  </Grid>
-                ))}
+      <Navbardb />
+      <Modal
+        open={openCard}
+        onClose={() => {
+          setOpenCard(false);
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <h2>Create new Order?</h2>
+          <Typography>
+            Your order contains items from another restaurant.Create a new order
+          </Typography>
+          <br />
+          <Button
+            onClick={newcart}
+            style={{ width: "100%" }}
+            variant="contained"
+          >
+            New Order
+          </Button>
+        </Box>
+      </Modal>
+      <div>
+        <container>
+          <Grid container>
+            {props.data.map((menu) => (
+              <Grid item key={menu.Dish_ID} xs={12} md={8} lg={4}>
+                <Cards
+                  content={"dish"}
+                  user={props.user}
+                  name={menu.Dish_Name}
+                  description={menu.Dish_Description}
+                  image={menu.Dish_Image}
+                  id={menu.Dish_ID}
+                  price={menu.Dish_Price}
+                  addToCart={addToCart}
+                />
               </Grid>
-            </container>
-        </div>
+            ))}
+          </Grid>
+        </container>
       </div>
-    )
+    </div>
+  );
 }

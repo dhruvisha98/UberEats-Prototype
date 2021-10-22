@@ -9,15 +9,13 @@ export default function Dashboard() {
   const [data, setData] = useState([]);
   const [datas, setDatas] = useState([]);
   const [searchData, setSearchData] = useState([]);
+  const [resType, setResType] = useState("");
+  const [resMode, setResMode] = useState("");
 
-
-  const handleSearch = (search_data) => {
-    setData(search_data.data.hits);
-  };
   useEffect(() => {
     Axios.get(Config.url + "/restaurant")
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -25,17 +23,51 @@ export default function Dashboard() {
       });
   }, []);
 
-  console.log(localStorage);
+  useEffect(() => {
+    console.log(searchData);
+    let url = Config.url + "/restaurant";
+    if (searchData?.length > 3 || resType != "" || resMode != "") {
+      url = Config.url + "/restaurant/search";
+    }
+    Axios.get(
+      url,
+      url.includes("search") && {
+        params: { searchvalue: searchData, restype: resType, resmode: resMode },
+      }
+    )
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchData, resType, resMode]);
+
   if (localStorage.getItem("user")) {
     return (
       <div>
-        <Navbardb search={searchData} setSearch={handleSearch} />
+        <Navbardb
+          search={searchData}
+          setSearch={setSearchData}
+          resType={resType}
+          setResType={setResType}
+          resMode={resMode}
+          setResMode={setResMode}
+        />
         <div>
           <container>
             <Grid container>
               {data.map((restaurant) => (
                 <Grid item key={restaurant.Restaurant_ID} xs={12} md={8} lg={4}>
-                  <Cards  content={"restaurant"} user={"customer"}  name={restaurant.Restaurant_Name} id={restaurant.Restaurant_ID} description={restaurant.Restaurant_Description}  />
+                  <Cards
+                    content={"restaurant"}
+                    user={"customer"}
+                    name={restaurant.Restaurant_Name}
+                    id={restaurant.Restaurant_ID}
+                    image={restaurant.Restaurant_Image}
+                    description={restaurant.Restaurant_Description}
+                  />
                 </Grid>
               ))}
             </Grid>

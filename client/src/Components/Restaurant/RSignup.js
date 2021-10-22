@@ -33,10 +33,12 @@ export default function RSignUp() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { name, email, password } = data;
+    const { name, email, password, delivery, location } = data;
     Axios.post(Config.url + "/restaurant", {
       Restaurant_Name: name,
       Restaurant_Email: email,
+      Restaurant_Delivery_Mode: delivery,
+      Restaurant_Location: location,
       Restaurant_Password: password,
     })
       .then((response) => {
@@ -155,6 +157,77 @@ export default function RSignUp() {
                   : ""}
               </FormHelperText>
             </FormControl>
+
+            <FormControl
+              error={
+                errors.delivery?.type === "required"
+                  ? true
+                  : errors.delivery?.type === "minLength"
+                  ? true
+                  : errors.delivery?.type === "maxLength"
+                  ? true
+                  : false
+              }
+              variant="standard"
+              fullWidth
+            >
+              <InputLabel htmlFor="component-delivery">
+                Delivery Mode
+              </InputLabel>
+              <Input
+                id="component-error-delivery"
+                aria-describedby="component-error-text"
+                placeholder="Delivery Mode"
+                {...register("delivery", {
+                  required: true,
+                  minLength: 2,
+                  maxLength: 30,
+                })}
+              />
+              <FormHelperText id="component-error-text">
+                {errors.delivery?.type === "required"
+                  ? "Delivery Mode Name is Required."
+                  : errors.delivery?.type === "minLength"
+                  ? "Delivery Mode Name is too short."
+                  : errors.delivery?.type === "maxLength"
+                  ? "Delivery Mode Name is too long."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
+            <FormControl
+              error={
+                errors.loaction?.type === "required"
+                  ? true
+                  : errors.loaction?.type === "minLength"
+                  ? true
+                  : errors.loaction?.type === "maxLength"
+                  ? true
+                  : false
+              }
+              variant="standard"
+              fullWidth
+            >
+              <InputLabel htmlFor="component-loaction">Location</InputLabel>
+              <Input
+                id="component-error-loaction"
+                aria-describedby="component-error-text"
+                placeholder="Location"
+                {...register("location", {
+                  required: true,
+                  minLength: 6,
+                  maxLength: 30,
+                })}
+              />
+              <FormHelperText id="component-error-text">
+                {errors.loaction?.type === "required"
+                  ? "Location is Required."
+                  : errors.loaction?.type === "minLength"
+                  ? "Location is too short."
+                  : errors.loaction?.type === "maxLength"
+                  ? "Location is too long."
+                  : ""}
+              </FormHelperText>
+            </FormControl>
             <FormControl
               error={
                 errors.password?.type === "required"
@@ -215,7 +288,7 @@ export default function RSignUp() {
             severity="success"
             sx={{ width: "100%" }}
           >
-            {restaurantName} Account has been created.
+            {restaurantName} your Account has been created.
           </Alert>
         </Snackbar>
       </Container>

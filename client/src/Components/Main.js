@@ -12,6 +12,9 @@ import Favourites from "./Favourites/Favourites";
 import RDashboard from "./Dashboard/RDashboard";
 import RestaurantPage from "./Restaurant/RestaurantPage";
 import OrderDetails from "./Order/OrderDetails";
+import EditDish from "./Restaurant/EditDish";
+import Order from "./Restaurant/Order";
+import MediaUploader from "./Images/mediaUploader";
 
 export default function Main() {
   return (
@@ -25,11 +28,14 @@ export default function Main() {
         <Route exact path="/rlogin" component={RLogin} />
         <Route exact path="/rprofile" component={RProfile} />
         <Route exact path="/adddish" component={Adddish} />
+        <Route exact path="/edit/:id" component={EditDish} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/rdashboard" component={RDashboard} />
         <Route exact path="/favourites" component={Favourites} />
         <Route exact path="/restaurant/:id" component={RestaurantPage} />
         <Route exact path="/order" component={OrderDetails} />
+        <Route exact path="/rorder" component={Order} />
+        <Route exact path="/media" component={MediaUploader} />
       </Router>
     </div>
   );

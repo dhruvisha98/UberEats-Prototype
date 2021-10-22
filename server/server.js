@@ -1,7 +1,7 @@
 var constants = require("./config.json");
 var mysql = require("mysql");
 const cors = require("cors");
-var { Restaurant_Search } = require("./search.js");
+// var { Restaurant_Search } = require("./search.js");
 const port = process.env.PORT || 5000; //Line 3
 
 var express = require("express");
@@ -43,14 +43,14 @@ var connection = mysql.createPool({
 });
 
 //console.log("Aaavfvfvfvfvfvfvf");
-Restaurant_Search.init(connection);
-connection.getConnection((err) => {
-  if (err) {
-    // eslint-disable-next-line no-throw-literal
-    throw "Error occurred" + err;
-  }
-  console.log("pool created");
-});
+// Restaurant_Search.init(connection);
+// connection.getConnection((err) => {
+//   if (err) {
+//     // eslint-disable-next-line no-throw-literal
+//     throw "Error occurred" + err;
+//   }
+//   console.log("pool created");
+// });
 
 var customer = require("./routes/customer.js");
 app.use("/customer", customer);

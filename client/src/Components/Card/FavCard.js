@@ -5,7 +5,8 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
-import image from "./food.jpeg";
+import { useHistory } from "react-router-dom";
+
 // import Axios from "axios";
 
 // const fav = (resID) => {
@@ -23,11 +24,19 @@ export default function Favcards({ favourites }) {
     height: "400px",
     margin: "20px",
   };
-
+  const history = useHistory();
+  const handleLearnMore = () => {
+    history.push("/restaurant/" + favourites.Restaurant_ID);
+  };
   return (
     <div>
       <Card style={cardStyle}>
-        <CardMedia component="img" alt="food" height="200" image={image} />
+        <CardMedia
+          component="img"
+          alt="food"
+          height="200"
+          image={favourites.Restaurant_Image}
+        />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {favourites.Restaurant_Name}
@@ -37,7 +46,7 @@ export default function Favcards({ favourites }) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" variant="contained">
+          <Button size="small" variant="contained" onClick={handleLearnMore}>
             Learn More
           </Button>
         </CardActions>

@@ -19,10 +19,10 @@ import { TableRow } from "@mui/material";
 import { TableCell } from "@mui/material";
 import { Paper } from "@mui/material";
 import { TableBody } from "@mui/material";
-import { Select } from "@mui/material";
-import { MenuItem } from "@mui/material";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
-export default function RestaurantDetails(props) {
+export default function RestaurantOrder(props) {
   // const handleSubmit = (event) => {
   //   event.preventDefault();
   //   const data = new FormData(event.currentTarget);
@@ -37,8 +37,9 @@ export default function RestaurantDetails(props) {
   const [data, setData] = useState([]);
   const [dispID, setDispID] = useState(0);
   const [openCard, setOpenCard] = useState(false);
-  const [status, setStatus] = useState(null);
   const [dispOrder, setDispOrder] = useState({});
+  const [status, setStatus] = useState();
+  const [filter, setFilter] = useState("All Orders");
 
   const style = {
     position: "absolute",
@@ -51,25 +52,34 @@ export default function RestaurantDetails(props) {
     p: 4,
   };
 
-  const handlechange = (event) => {
-    setStatus(event.target.value);
-    console.log(event.target.value);
-    getFilteredOrderDetails(event.target.value);
-    // Axios.get(Config.url + "/orderdetails/orderfilter", {
-    //   params: {
-    //     status: event.target.value,
-    //   },
-    // })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+  const handleChange = (e, id) => {
+    ///// Update Order status query
+    setStatus(e.target.value);
+    console.log(id);
+
+    Axios.put(Config.url + "/orderstatus", {
+      Delivery_Status: e.target.value,
+      Order_ID: id,
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handlefilter = (e) => {
+    setFilter(e.target.value);
+    getFilteredOrderDetails(e.target.value);
   };
 
   const getFilteredOrderDetails = (orderStatus) => {
-    if (orderStatus === null || orderStatus === undefined) {
+    if (
+      orderStatus === null ||
+      orderStatus === "All Orders" ||
+      orderStatus === undefined
+    ) {
       getAllOrderDetails();
       return;
     }
@@ -91,9 +101,9 @@ export default function RestaurantDetails(props) {
   const getAllOrderDetails = () => {
     Axios.get(Config.url + "/orderdetails")
       .then((res) => {
-        if (res.data.length === 0) {
-          console.log("NO DATA AVAILABLE");
-        }
+        // if (res.data.length === 0) {
+        //   console.log("NO DATA AVAILABLE");
+        // }
         setData(res.data);
       })
       .catch((err) => {
@@ -105,6 +115,20 @@ export default function RestaurantDetails(props) {
     var resp_data = [];
     getFilteredOrderDetails(status);
   }, []);
+
+  console.log(data);
+  // useEffect(() => {
+  //   var resp_data = [];
+  //   Axios.get(Config.url + "/orderdetails")
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
   const cardStyle = {
     display: "block",
     width: "400px",
@@ -112,8 +136,9 @@ export default function RestaurantDetails(props) {
     margin: "20px",
   };
 
-  const openDialog = (id) => {
+  const openDialog = (id, delStatus) => {
     setDispID(id);
+    setStatus(delStatus);
     const filtered = data.filter((item) => item.order_id == id);
     setDispOrder(filtered.length > 0 && filtered[0]);
     setOpenCard(true);
@@ -128,10 +153,10 @@ export default function RestaurantDetails(props) {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={status}
-            onChange={handlechange}
+            value={filter}
+            onChange={handlefilter}
           >
-            <MenuItem value={null}>All Orders</MenuItem>
+            <MenuItem value="All Orders">All Orders</MenuItem>
             <MenuItem value="Order Recieved">Order Recieved</MenuItem>
             <MenuItem value="Preparing">Preparing</MenuItem>
             <MenuItem value="On the way">On the way</MenuItem>
@@ -142,14 +167,17 @@ export default function RestaurantDetails(props) {
         <Grid container>
           {data.map((d) => (
             <div>
-              <Card onClick={() => openDialog(d.order_id)} style={cardStyle}>
+              <Card
+                onClick={() => openDialog(d.order_id, d.delivery_status)}
+                style={cardStyle}
+              >
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Order Id: {d.order_id}
+                    {d.order_id}
                   </Typography>
 
                   <Typography gutterBottom variant="h5" component="div">
-                    Name: {d.restaurant_name}
+                    Name: {d.customer_name}
                   </Typography>
                   <Typography gutterBottom variant="h5" component="div">
                     Description:{d.restaurant_desc}
@@ -157,9 +185,11 @@ export default function RestaurantDetails(props) {
                   <Typography gutterBottom variant="h5" component="div">
                     {d.restaurant_cont}
                   </Typography>
-
                   <Typography gutterBottom variant="h5" component="div">
-                    Order Status:{d.delivery_status}
+                    Order Status:{d.order_status}
+                  </Typography>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Delivery Status:{d.delivery_status}
                   </Typography>
                 </CardContent>
               </Card>
@@ -177,8 +207,7 @@ export default function RestaurantDetails(props) {
                     variant="h6"
                     component="h2"
                   >
-                    {dispOrder.order_id} : Order from{" "}
-                    {dispOrder.restaurant_name}
+                    {dispOrder.order_id} : Order for {dispOrder.customer_name}
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <TableContainer component={Paper}>
@@ -214,6 +243,18 @@ export default function RestaurantDetails(props) {
                         </TableBody>
                       </Table>
                     </TableContainer>
+                    <Select
+                      align="center"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={status}
+                      onChange={(e) => handleChange(e, dispOrder.order_id)}
+                    >
+                      <MenuItem value="Order Recieved">Order Recieved</MenuItem>
+                      <MenuItem value="Preparing">Preparing</MenuItem>
+                      <MenuItem value="On the way">On the way</MenuItem>
+                      <MenuItem value="Pending">Pending</MenuItem>
+                    </Select>
                   </Typography>
                 </Box>
               </Modal>

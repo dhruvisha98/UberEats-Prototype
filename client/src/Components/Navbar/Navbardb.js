@@ -21,6 +21,8 @@ import { Axios } from "../../axios";
 import Cart from "../Cart/Cart";
 import { Config } from "../../config";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import { ToggleButtonGroup } from "@mui/material";
+import { ToggleButton } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,8 +67,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
   const [searchTxt, setSearchTxt] = React.useState("");
   const [openCart, setOpenCart] = React.useState(false);
+  const [resType, setResType] = React.useState("");
+  const [resMode, setResMode] = React.useState("");
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const history = useHistory();
@@ -81,18 +86,34 @@ export default function PrimarySearchAppBar(props) {
 
   const handleChange = (txt) => {
     let text = txt.target.value;
-    setSearchTxt(text);
-    Axios.post(Config.url + "/restaurant/searchResult", { Search: text })
+    props.setSearch(text);
+  };
+
+  const handleVeg = () => {
+    Axios.get(Config.url + "/menu/check/Veg")
       .then((res) => {
         //console.log(res);
-        props.setSearch(res);
-        console.log(props);
+        console.log("Veg");
       })
       .catch((err) => {
         console.log(err);
       });
-    //CAll API
   };
+
+  // const handleType = (txt) => {
+  //   let text = txt.target.value;
+  //   setType(text);
+  //   Axios.post(Config.url + "/restaurant/searchResult", { Search: text })
+  //     .then((res) => {
+  //       //console.log(res);
+  //       props.setSearch(res);
+  //       console.log(props);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   //CAll API
+  // };
   const handleDashboard = () => {
     if (localStorage.getItem("user")) {
       history.push("/dashboard");
@@ -113,9 +134,16 @@ export default function PrimarySearchAppBar(props) {
     }
   };
 
-  // const handleRSignup = () => {
-  //   history.push("/rsignup");
-  // };
+  const handleResType = (e, rt) => {
+    props.setResType(rt);
+  };
+
+  const handleResMode = (e, rm) => {
+    props.setResMode(rm);
+  };
+  const handleOrder = () => {
+    history.push("/rorder");
+  };
 
   const handleFav = () => {
     history.push("/favourites");
@@ -228,12 +256,44 @@ export default function PrimarySearchAppBar(props) {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                value={searchTxt}
+                value={props.search}
                 onChange={handleChange}
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
+            <ToggleButtonGroup
+              value={props.resType}
+              exclusive
+              onChange={handleResType}
+              sx={{ mr: 2 }}
+            >
+              <ToggleButton value="Veg">Veg</ToggleButton>
+              <ToggleButton value="Non-Veg">Non-Veg</ToggleButton>
+              <ToggleButton value="Vegan">Vegan</ToggleButton>
+            </ToggleButtonGroup>
+
+            <ToggleButtonGroup
+              value={props.resMode}
+              exclusive
+              onChange={handleResMode}
+            >
+              <ToggleButton value="Pickup">Pickup</ToggleButton>
+              <ToggleButton value="Delivery">Delivery</ToggleButton>
+            </ToggleButtonGroup>
+            {/* <label for="type">Type: &nbsp; </label> */}
+
+            {/* <select
+              size="large"
+              aria-label="type"
+              color="inherit"
+              name="type"
+              id="type"
+            >
+              <option value="Veg">Veg</option>
+              <option value="Non-Veg">Non-Veg</option>
+              <option value="Vegan">Vegan</option>
+            </select> */}
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "block", md: "flex" } }}>
               <IconButton
@@ -319,6 +379,15 @@ export default function PrimarySearchAppBar(props) {
             <img src={logo} alt="logo" />
 
             <Box sx={{ flexGrow: 1 }} />
+            <IconButton
+              size="large"
+              aria-label="order"
+              color="inherit"
+              onClick={handleOrder}
+            >
+              <ReceiptIcon />
+            </IconButton>
+
             <Button color="inherit" variant="outlined" onClick={handleAdddish}>
               Add Dish
             </Button>

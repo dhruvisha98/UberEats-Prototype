@@ -2,7 +2,6 @@ import Axios from "axios";
 
 Axios.interceptors.request.use(
   (req) => {
-    console.log("hello");
     if (localStorage["jwt"])
       req.headers = {
         Authorization: localStorage["jwt"],
@@ -22,13 +21,11 @@ Axios.interceptors.response.use(
   (err) => {
     if (err.response.status === 403)
       window.location.href = "http://localhost:3000";
-    else if(err.response.status === 401)
-    {
+    else if (err.response.status === 401) {
       console.log("Error occured");
       window.location.href = "http://localhost:3000";
     }
     return Promise.reject(err);
-
   }
 );
 

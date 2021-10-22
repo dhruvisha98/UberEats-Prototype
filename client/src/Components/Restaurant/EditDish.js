@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -9,94 +9,47 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbardb from "../Navbar/Navbardb";
 import Axios from "axios";
-import $ from "jquery";
 import { Config } from "../../config";
+
 
 const theme = createTheme();
 
-export default function Adddish() {
+export default function EditDish(props) {
   const [dishReg, setDishReg] = useState("");
   const [priceReg, setPriceReg] = useState("");
   const [ingredientsReg, setIngredientsReg] = useState("");
   const [descriptionReg, setDescriptionReg] = useState("");
   const [categoryReg, setCategoryReg] = useState("");
-  const [restIDReg, setRestIDReg] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [dishImageUrl, setDishImageUrl] = useState("");
-  const [trial, setTrial] = useState("Hello");
 
-  const add = () => {
-    Axios.post(Config.url + "/menu", {
+  useEffect(() => {
+    const dishID = props.match.params.id;
+    Axios.get(Config.url + "/menu")
+      .then((res) => {
+        const filtered = res.data?.filter((item) => item.Dish_ID == dishID);
+        if (filtered.length > 0) {
+          setDishReg(filtered[0]?.Dish_Name);
+          setPriceReg(filtered[0]?.Dish_Price);
+          setIngredientsReg(filtered[0]?.Ingredients);
+          setDescriptionReg(filtered[0]?.Dish_Description);
+          setCategoryReg(filtered[0]?.Dish_Category);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const save = () => {
+    Axios.put(Config.url+"/menu", {
+      Dish_ID: props.match.params.id,
       Dish_Name: dishReg,
       Dish_Price: priceReg,
       Ingredients: ingredientsReg,
       Dish_Description: descriptionReg,
       Dish_Category: categoryReg,
-      Restaurant_ID: restIDReg,
-      Dish_Image: dishImageUrl,
     }).then((response) => {
       console.log(response);
     });
-  };
-
-  const singleFileUploadHandler = () => {
-    setTrial(selectedFile[0]);
-    const data = new FormData();
-    // If file selected
-    if ({ selectedFile }) {
-      console.log(selectedFile);
-      data.append("profileImage", selectedFile, selectedFile.name);
-
-      Axios.post("http://localhost:5000/Images/upload", data, {
-        headers: {
-          accept: "application/json",
-          "Accept-Language": "en-US,en;q=0.8",
-          "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
-        },
-      })
-        .then((response) => {
-          // console.log("image", response.data.location);
-
-          if (200 === response.status) {
-            // If file size is larger than expected.
-            if (response.data.error) {
-              if ("LIMIT_FILE_SIZE" === response.data.error.code) {
-                console.log("File is too large.");
-              } else {
-                console.log(response.data); // If not the given file type
-                console.log("File type not allowed");
-              }
-            } else {
-              // Success
-              // let fileName = response.data;
-              // console.log("fileName", fileName);
-              setDishImageUrl(response.data.location);
-            }
-          }
-        })
-        .catch((error) => {
-          // If another error
-          console.log(error);
-        });
-    } else {
-      // if file not selected throw error
-      console.log("Please upload a file");
-    }
-  };
-
-  // ShowAlert Function
-  const ocShowAlert = (message, background = "#3089cf") => {
-    let alertContainer = document.querySelector("#oc-alert-container"),
-      alertEl = document.createElement("div"),
-      textNode = document.createTextNode(message);
-    alertEl.setAttribute("class", "oc-alert-pop-up");
-    $(alertEl).css("background", background);
-    alertEl.appendChild(textNode);
-    alertContainer.appendChild(alertEl);
-    setTimeout(function () {
-      $(alertEl).fadeOut("slow");
-      $(alertEl).remove();
-    }, 3000);
   };
 
   return (
@@ -115,24 +68,25 @@ export default function Adddish() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Add Dish
+            Edit Dish
           </Typography>
 
           <Box
             component="form"
             // onSubmit={handleSubmit}
             sx={{ mt: 3 }}
+            autoComplete="off"
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  autoComplete="dish"
                   name="dish"
                   required
                   fullWidth
                   id="dish"
                   label="Dish Name"
                   autoFocus
+                  value={dishReg}
                   onChange={(e) => {
                     setDishReg(e.target.value);
                   }}
@@ -146,7 +100,7 @@ export default function Adddish() {
                   id="price"
                   label="Dish Price"
                   name="price"
-                  autoComplete="price"
+                  value={priceReg}
                   onChange={(e) => {
                     setPriceReg(e.target.value);
                   }}
@@ -160,6 +114,7 @@ export default function Adddish() {
                   label="Ingredients"
                   name="ingredients"
                   autoComplete="ingredients"
+                  value={ingredientsReg}
                   onChange={(e) => {
                     setIngredientsReg(e.target.value);
                   }}
@@ -172,7 +127,7 @@ export default function Adddish() {
                   id="description"
                   label="Dish Description"
                   name="description"
-                  autoComplete="description"
+                  value={descriptionReg}
                   onChange={(e) => {
                     setDescriptionReg(e.target.value);
                   }}
@@ -186,30 +141,11 @@ export default function Adddish() {
                   label="Veg, Non-Veg or Vegan"
                   name="category"
                   autoComplete="category"
+                  value={categoryReg}
                   onChange={(e) => {
                     setCategoryReg(e.target.value);
                   }}
                 />
-              </Grid>
-
-              <Grid item xs={12}>
-                <input
-                  type="file"
-                  onChange={(e) => {
-                    setSelectedFile(e.target.files[0]);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={singleFileUploadHandler}
-                  style={{ background: "#b26a00" }}
-                >
-                  Upload Image
-                  <input type="file" hidden />
-                </Button>
               </Grid>
             </Grid>
             <Button
@@ -218,9 +154,9 @@ export default function Adddish() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={add}
+              onClick={save}
             >
-              Add
+              Save
             </Button>
           </Box>
         </Box>

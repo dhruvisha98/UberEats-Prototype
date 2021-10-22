@@ -7,23 +7,21 @@ import Container from "@mui/material/Container";
 import Navbardb from "../Navbar/Navbardb";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import image from "../Images/profileimage.jpeg";
+// import image from "../Images/profileimage.jpeg";
 import { Axios } from "../../axios";
 import { Config } from "../../config";
 
 export default function RProfile() {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [trial, setTrial] = useState("Hello");
   let restaurant = null;
   if (localStorage["restaurant"])
     restaurant = JSON.parse(localStorage["restaurant"]);
 
-  console.log(restaurant);
   const [name, setName] = useState(
     restaurant == null ? "" : restaurant.Restaurant_Name
   );
 
-  const [email, setEmail] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Email
-  );
   const [des, setDes] = useState(
     restaurant == null ? "" : restaurant.Restaurant_Description
   );
@@ -45,21 +43,76 @@ export default function RProfile() {
   const [location, setLocation] = useState(
     restaurant == null ? "" : restaurant.Restaurant_Location
   );
+  const [image, setImage] = useState(
+    restaurant == null ? "" : restaurant.Restaurant_Image
+  );
+
+  const singleFileUploadHandler = () => {
+    setTrial(selectedFile[0]);
+    const data = new FormData();
+    // If file selected
+    if ({ selectedFile }) {
+      console.log(selectedFile);
+      data.append("profileImage", selectedFile, selectedFile.name);
+
+      Axios.post("http://localhost:5000/Images/upload", data, {
+        headers: {
+          accept: "application/json",
+          "Accept-Language": "en-US,en;q=0.8",
+          "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+        },
+      })
+        .then((response) => {
+          console.log("image", response.data.location);
+
+          if (200 === response.status) {
+            // If file size is larger than expected.
+            if (response.data.error) {
+              if ("LIMIT_FILE_SIZE" === response.data.error.code) {
+                console.log("File is too large.");
+              } else {
+                console.log(response.data); // If not the given file type
+                console.log("File type not allowed");
+              }
+            } else {
+              // Success
+              // let fileName = response.data;
+              // console.log("fileName", fileName);
+              setImage(response.data.location);
+            }
+          }
+        })
+        .catch((error) => {
+          // If another error
+          console.log(error);
+        });
+    } else {
+      // if file not selected throw error
+      console.log("Please upload a file");
+    }
+  };
+
   const handleSubmit = () => {
-    Axios.put(Config.url + "/restaurant", {
-      Restauarant_Name: name,
-      Restauarant_Email: email,
-      Restauarant_Description: des,
-      Restauarant_Contact: contact,
-      Restauarant_Type: type,
-      Restauarant_Time: time,
-      Restauarant_Delivery_Mode: delivery,
-      Restauarant_Day: day,
-      Restauarant_Location: location,
+    const data = {
+      Restaurant_Name: name,
+      Restaurant_Description: des,
+      Restaurant_Contact: contact,
+      Restaurant_Type: type,
+      Restaurant_Time: time,
+      Restaurant_Delivery_Mode: delivery,
+      Restaurant_Day: day,
+      Restaurant_Location: location,
+      Restaurant_Image: image,
       Restaurant_ID: restaurant.Restaurant_ID,
-    }).catch((err) => {
-      console.log(err);
-    });
+    };
+    Axios.put(Config.url + "/restaurant", data)
+      .then(() => {
+        console.log(data);
+        localStorage["restaurant"] = JSON.stringify(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div>
@@ -125,20 +178,6 @@ export default function RProfile() {
                       />
                     </Grid>
 
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                        }}
-                      />
-                    </Grid>
                     <Grid item xs={12}>
                       <TextField
                         autoComplete="des"
@@ -237,6 +276,25 @@ export default function RProfile() {
                           setLocation(e.target.value);
                         }}
                       />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <input
+                        type="file"
+                        onChange={(e) => {
+                          setSelectedFile(e.target.files[0]);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={singleFileUploadHandler}
+                        style={{ background: "#b26a00" }}
+                      >
+                        Upload Image
+                        <input type="file" hidden />
+                      </Button>
                     </Grid>
 
                     <Grid item xs={12}>
