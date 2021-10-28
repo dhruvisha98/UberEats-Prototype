@@ -6,6 +6,7 @@ var mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
+const CustomerService = require("../services/CustomerService");
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -25,18 +26,17 @@ router.post("/", (req, res) => {
   const nickname = req.body.nickname;
   const phone = req.body.phone;
 
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
-    }
-    connection.query(
-      "INSERT INTO CUSTOMER_DETAILS(Cust_Name,Cust_City,Cust_State,Cust_Country,Cust_Nickname,Cust_Email,Cust_Phone,password) VALUES (?,?,?,?,?,?,?,?)",
-      [name, city, state, country, nickname, username, phone, hash],
-      (err, result) => {
-        console.log(err);
-      }
-    );
-  });
+  CustomerService.createCustomer(
+    (CustomerName = name),
+    (CustomerEmail = username),
+    (CustomerDob = dob),
+    (CustomerNickname = nickname),
+    (CustomerPhone = phone),
+    (CustomerPassword = password),
+    (CustomerCity = city),
+    (CustomerState = state),
+    (CustomerCountry = country)
+  );
 });
 
 router.post("/login", (req, res) => {
@@ -54,7 +54,11 @@ router.post("/login", (req, res) => {
         bcrypt.compare(password, result[0].password, (error, response) => {
           if (response) {
             let token = jwt.sign(
-              { id: result[0].Cust_ID, email: result[0].Cust_Email,type:"customer" },
+              {
+                id: result[0].Cust_ID,
+                email: result[0].Cust_Email,
+                type: "customer",
+              },
               constants.secret
             );
             res.send({ message: "Success", result: result[0], token });

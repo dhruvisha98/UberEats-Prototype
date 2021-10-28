@@ -1,10 +1,6 @@
 {
   "DB": {
-    "host": "ubereats.csq8e5ojo7vo.us-east-2.rds.amazonaws.com",
-    "username": "admin",
-    "password": "admin123",
-    "port": "3306",
-    "database": "ubereatsapp"
+    "host": "mongodb+srv://admin:admin123@ubereats.j2tkm.mongodb.net/uberEats?retryWrites=true&w=majority"
   },
   "secret": "SHH_DONT_TELL"
 }

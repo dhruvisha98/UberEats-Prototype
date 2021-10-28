@@ -2,8 +2,10 @@ var express = require("express");
 var router = express.Router();
 var constants = require("../config.json");
 var mysql = require("mysql");
+var { CustomerService } = require("../services/");
 const verify_token = require("../verifyToken").module;
 const { cust_auth } = require("../authorization").module;
+
 var connection = mysql.createPool({
   host: constants.DB.host,
   user: constants.DB.username,
@@ -74,8 +76,7 @@ router.put("/", verify_token, async function (req, res) {
 router.post("/", async function (req, res) {
   var body = req.body;
   console.log(req.body);
-  const sqlput =
-    "INSERT INTO CUSTOMER_DETAILS (Cust_Name, Cust_DOB,Cust_City,Cust_State,Cust_Country,Cust_Nickname,Cust_Email,Cust_Phone) VALUES (?,?,?,?,?,?,?,?)";
+
   var values = [
     body.Cust_Name,
     body.Cust_DOB,
@@ -86,22 +87,10 @@ router.post("/", async function (req, res) {
     body.Cust_Email,
     body.Cust_Phone,
   ];
-
-  connection.query(sqlput, values, async function (error, results) {
-    console.log(query.toString + "asdfg");
-    console.log(error + "mnbv");
-    if (error) {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(error.code);
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(results));
-    }
-  });
+  CustomerService.createCustomer(
+    (name = body.Cust_Name),
+    (email = body.Cust_Email)
+  );
 });
 
 router.get("/order", verify_token, cust_auth, async function (req, res) {

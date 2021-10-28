@@ -58,8 +58,8 @@ export default function Cart(props) {
                 <TableRow>
                   <TableCell>Dish Name</TableCell>
                   <TableCell>Dish Description</TableCell>
+                  <TableCell>Ingredients</TableCell>
                   <TableCell>Dish Price</TableCell>
-                  <TableCell>Ingridients</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
