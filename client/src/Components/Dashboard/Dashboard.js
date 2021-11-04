@@ -59,14 +59,14 @@ export default function Dashboard() {
           <container>
             <Grid container>
               {data.map((restaurant) => (
-                <Grid item key={restaurant.Restaurant_ID} xs={12} md={8} lg={4}>
+                <Grid item key={restaurant._id} xs={12} md={8} lg={4}>
                   <Cards
                     content={"restaurant"}
                     user={"customer"}
-                    name={restaurant.Restaurant_Name}
-                    id={restaurant.Restaurant_ID}
-                    image={restaurant.Restaurant_Image}
-                    description={restaurant.Restaurant_Description}
+                    name={restaurant.RestaurantName}
+                    id={restaurant._id}
+                    image={restaurant.RestaurantImage}
+                    description={restaurant.RestaurantDescription}
                   />
                 </Grid>
               ))}

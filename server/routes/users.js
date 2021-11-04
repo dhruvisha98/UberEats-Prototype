@@ -6,7 +6,7 @@ var mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
-const CustomerService = require("../services/CustomerService");
+var { CustomerService } = require("../services/");
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -42,36 +42,39 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-
-  connection.query(
-    "SELECT * FROM CUSTOMER_DETAILS WHERE Cust_email = ? ;",
-    username,
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        bcrypt.compare(password, result[0].password, (error, response) => {
-          if (response) {
-            let token = jwt.sign(
-              {
-                id: result[0].Cust_ID,
-                email: result[0].Cust_Email,
-                type: "customer",
-              },
-              constants.secret
-            );
-            res.send({ message: "Success", result: result[0], token });
-          } else {
-            res.send({ message: "Wrong Combination" });
-          }
-        });
+  console.log("\n\n\n\n\n" + username);
+  CustomerService.findCustomerByEmail(username)
+    .then((customer) => {
+      console.log(customer);
+      if (customer.CustomerPassword === password) {
+        let token = jwt.sign(
+          {
+            id: customer._id,
+            email: customer.Cust_Email,
+            type: "customer",
+          },
+          constants.secret
+        );
+        res.send({ message: "Success", result: customer, token });
       } else {
         res.send({ message: "User doesn't exist" });
       }
-    }
-  );
+    })
+    .catch((err) => {
+      res.send({ message: "User doesn't exist" });
+    });
 });
+// bcrypt.compare(password, result[0].password, (error, response) => {
+//   if (response) {
+//     let token = jwt.sign(
+//       {
+//         id: result[0].Cust_ID,
+//         email: result[0].Cust_Email,
+//         type: "customer",
+//       },
+//       constants.secret
+//     );
+//     res.send({ message: "Success", result: result[0], token });
 
 module.exports = router;
 

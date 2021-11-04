@@ -32,6 +32,18 @@ var CustomerDetailsSchema = new mongoose.Schema({
   CustomerFavourites: {
     type: "Array",
   },
+  Cart: {
+    Dishes: [
+      {
+        DishName: "String",
+        DishPrice: "Number",
+        Ingredients: "Array",
+        DishDescription: "String",
+        DishCategory: "String",
+        DishImage: "String",
+      },
+    ],
+  },
 });
 
 CustomerDetailsSchema.pre("save", async function (next) {

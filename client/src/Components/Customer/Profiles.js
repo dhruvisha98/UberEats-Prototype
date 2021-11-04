@@ -21,24 +21,26 @@ export default function Profiles() {
 
   console.log(customer);
   const [country, setCountry] = useState(
-    customer == null ? "" : customer.Cust_Country
+    customer == null ? "" : customer.CustomerCountry
   );
-  const [name, setName] = useState(customer == null ? "" : customer.Cust_Name);
+  const [name, setName] = useState(
+    customer == null ? "" : customer.CustomerName
+  );
   const [nickname, setNickname] = useState(
-    customer == null ? "" : customer.Cust_Nickname
+    customer == null ? "" : customer.CustomerNickname
   );
   const [email, setEmail] = useState(
-    customer == null ? "" : customer.Cust_Email
+    customer == null ? "" : customer.CustomerEmail
   );
   const [phone, setPhone] = useState(
-    customer == null ? "" : customer.Cust_Phone
+    customer == null ? "" : customer.CustomerPhone
   );
   const [city, setCity] = useState(customer == null ? "" : customer.Cust_City);
   const [state, setState] = useState(
-    customer == null ? "" : customer.Cust_State
+    customer == null ? "" : customer.CustomerState
   );
   const [image, setImage] = useState(
-    customer == null ? "" : customer.Cust_Image
+    customer == null ? "" : customer.CustomerImage
   );
 
   const singleFileUploadHandler = () => {
@@ -87,15 +89,15 @@ export default function Profiles() {
   };
   const handleSubmit = () => {
     const data = {
-      Cust_Name: name,
-      Cust_Nickname: nickname,
-      Cust_Email: email,
-      Cust_Phone: phone,
-      Cust_City: city,
-      Cust_State: state,
-      Cust_Country: country,
-      Cust_Image: image,
-      Cust_ID: customer.Cust_ID,
+      CustomerName: name,
+      CustomerNickname: nickname,
+      CustomerEmail: email,
+      CustomerPhone: phone,
+      CustomerCity: city,
+      CustomerState: state,
+      CustomerCountry: country,
+      CustomerImage: image,
+      CustomerID: customer.Cust_ID,
     };
     Axios.put(Config.url + "/customer", data)
       .then(() => {

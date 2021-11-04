@@ -19,32 +19,32 @@ export default function RProfile() {
     restaurant = JSON.parse(localStorage["restaurant"]);
 
   const [name, setName] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Name
+    restaurant == null ? "" : restaurant.RestaurantName
   );
 
   const [des, setDes] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Description
+    restaurant == null ? "" : restaurant.RestaurantDescription
   );
   const [contact, setContact] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Contact
+    restaurant == null ? "" : restaurant.RestaurantPhone
   );
   const [type, setType] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Type
+    restaurant == null ? "" : restaurant.RestaurantType
   );
   const [time, setTime] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Time
+    restaurant == null ? "" : restaurant.RestaurantTime
   );
   const [delivery, setDelivery] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Delivery_Mode
+    restaurant == null ? "" : restaurant.RestaurantDeliveryMode
   );
   const [day, setDay] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Day
+    restaurant == null ? "" : restaurant.RestaurantDay
   );
   const [location, setLocation] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Location
+    restaurant == null ? "" : restaurant.RestaurantLocation
   );
   const [image, setImage] = useState(
-    restaurant == null ? "" : restaurant.Restaurant_Image
+    restaurant == null ? "" : restaurant.RestaurantImage
   );
 
   const singleFileUploadHandler = () => {
@@ -94,16 +94,16 @@ export default function RProfile() {
 
   const handleSubmit = () => {
     const data = {
-      Restaurant_Name: name,
-      Restaurant_Description: des,
-      Restaurant_Contact: contact,
-      Restaurant_Type: type,
-      Restaurant_Time: time,
-      Restaurant_Delivery_Mode: delivery,
-      Restaurant_Day: day,
-      Restaurant_Location: location,
-      Restaurant_Image: image,
-      Restaurant_ID: restaurant.Restaurant_ID,
+      RestaurantName: name,
+      RestaurantDescription: des,
+      RestaurantContact: contact,
+      RestaurantType: type,
+      RestaurantTime: time,
+      RestaurantDeliveryMode: delivery,
+      RestaurantDay: day,
+      RestaurantLocation: location,
+      RestaurantImage: image,
+      RestaurantID: restaurant.Restaurant_ID,
     };
     Axios.put(Config.url + "/restaurant", data)
       .then(() => {

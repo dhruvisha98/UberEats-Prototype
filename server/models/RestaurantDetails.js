@@ -25,6 +25,16 @@ var RestaurantDetailsSchema = new mongoose.Schema({
   RestaurantPassword: {
     type: "String",
   },
+  RestaurantDishes: [
+    {
+      DishName: "String",
+      DishPrice: "Number",
+      Ingredients: "String",
+      DishDescription: "String",
+      DishCategory: "String",
+      DishImage: "String",
+    },
+  ],
 });
 var RestaurantDetails = mongoose.model(
   "Restaurant_Details",

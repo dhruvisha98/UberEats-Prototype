@@ -4,6 +4,8 @@ var constants = require("../config.json");
 var mysql = require("mysql");
 const verify_token = require("../verifyToken").module;
 const { cust_auth, rest_auth } = require("../authorization").module;
+const { RestaurantServices } = require("../services");
+const { RestaurantDetails } = require("../models/RestaurantDetails");
 
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -14,26 +16,13 @@ var connection = mysql.createPool({
 });
 
 router.get("/", verify_token, async function (req, res) {
-  await connection.query(
-    // "SELECT * FROM RESTAURANT_MENU WHERE RESTAURANT_ID='" +
-    //   req.body.Restaurant_ID +
-    //   "' ",
-    "SELECT * FROM RESTAURANT_MENU WHERE RESTAURANT_ID='?'",
-    [req.body.auth_user.id],
-    async function (error, results) {
-      if (error) {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(error.code);
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(results));
-      }
-    }
-  );
+  RestaurantServices.getAllRestaurants(req.body.auth_user.id)
+    .then((resp) => {
+      res.send(resp);
+    })
+    .catch((err) => {
+      res.sendStatus(404);
+    });
 });
 
 // router.get("/check/:type", async function (req, res) {
@@ -105,34 +94,21 @@ router.get("/:rest_id", verify_token, cust_auth, async function (req, res) {
 
 router.post("/", verify_token, rest_auth, async function (req, res) {
   var body = req.body;
-  console.log(req.body);
-  const sqlput =
-    "INSERT INTO RESTAURANT_MENU (Dish_Name,Dish_Price, Ingredients, Dish_Description, Dish_Category, Restaurant_ID,Dish_Image) VALUES (?,?,?,?,?,?,?)";
-  var values = [
+  RestaurantServices.addDish(
+    req.body.auth_user.id,
     body.Dish_Name,
     body.Dish_Price,
     body.Ingredients,
     body.Dish_Description,
     body.Dish_Category,
-    req.body.auth_user.id,
-    body.Dish_Image,
-  ];
-
-  connection.query(sqlput, values, async function (error, results) {
-    // console.log(query.toString + "asdfg");
-    // console.log(error + "mnbv");
-    if (error) {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(error.code);
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(results));
-    }
+    body.Dish_Image
+  ).then((resp) => {
+    console.log(resp);
+    res.send(resp);
   });
+  // .catch((err) => {
+  //   res.end(err);
+  // });
 });
 
 router.put("/", verify_token, rest_auth, async function (req, res) {

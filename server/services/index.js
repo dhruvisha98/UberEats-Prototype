@@ -1,3 +1,3 @@
-const CustomerServices = require("./CustomerService");
+const CustomerService = require("./CustomerService");
 const RestaurantServices = require("./RestaurantService");
-module.exports = { CustomerServices, RestaurantServices };
+module.exports = { CustomerService, RestaurantServices };

@@ -2,7 +2,7 @@ var constants = require("./config.json");
 var mysql = require("mysql");
 const cors = require("cors");
 // var { Restaurant_Search } = require("./search.js");
-const port = process.env.PORT || 5000; //Line 3
+const port = process.env.PORT || 5001; //Line 3
 
 var express = require("express");
 //create an express app

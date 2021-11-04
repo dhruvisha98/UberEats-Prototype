@@ -14,63 +14,14 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 router.get("/", verify_token, cust_auth, async function (req, res) {
-  await connection.query(
-    "SELECT * FROM CUSTOMER_DETAILS WHERE Cust_ID='" + req.body.Cust_ID + "'",
-    async function (error, results) {
-      if (error) {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(error.code);
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.send({ results });
-        res.end(JSON.stringify(results));
-      }
-    }
-  );
+  var customer = CustomerService.findCustomerById(req.body.Cust_ID);
+  res.send(customer);
 });
 
 router.put("/", verify_token, async function (req, res) {
   console.log(req.body.Cust_Name);
-  await connection.query(
-    "UPDATE CUSTOMER_DETAILS SET Cust_Name='" +
-      req.body.Cust_Name +
-      "',Cust_DOB='" +
-      req.body.Cust_DOB +
-      "',Cust_City='" +
-      req.body.Cust_City +
-      "',Cust_State='" +
-      req.body.Cust_State +
-      "',Cust_Country='" +
-      req.body.Cust_Country +
-      "',Cust_Nickname='" +
-      req.body.Cust_Nickname +
-      "',Cust_Email='" +
-      req.body.Cust_Email +
-      "',Cust_Phone='" +
-      req.body.Cust_Phone +
-      "',Cust_Image='" +
-      req.body.Cust_Image +
-      "'WHERE Cust_ID='" +
-      req.body.auth_user.id +
-      "'",
-    async function (error, results) {
-      if (error) {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(error.code);
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(results));
-      }
-    }
-  );
+  CustomerService.updateCustomerById(req.body.auth_user.id, req.body);
+  res.sendStatus(200);
 });
 
 router.post("/", async function (req, res) {
