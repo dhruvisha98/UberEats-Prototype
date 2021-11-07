@@ -6,7 +6,8 @@ var mysql = require("mysql");
 var axios = require("axios");
 const verify_token = require("../verifyToken").module;
 const { cust_auth } = require("../authorization").module;
-
+const { CustomerService } = require("../services/");
+const { CustomerDetails } = require("../models/CustomerDetails");
 // var url = "http://localhost:5000";
 var connection = mysql.createPool({
   host: constants.DB.host,
@@ -16,91 +17,31 @@ var connection = mysql.createPool({
   database: constants.DB.database,
 });
 
-// router.get("/", async function (req, res) {
-//   //console.log(req)
-//   //console.log(res)
-//   await connection.query(
-//     "SELECT Restaurant_ID FROM FAVOURITE_RESTAURANT WHERE Cust_ID ='1'",
-
-//     async function (error, data) {
-//       if (error) {
-//         res.writeHead(200, {
-//           "Content-Type": "text/plain",
-//         });
-//         res.end(error.code);
-//       } else {
-//         res.writeHead(200, {
-//           "Content-Type": "text/plain",
-//         });
-//         console.log(data);
-
-//         // res.end(JSON.stringify(data));
-//       }
-//     }
-//   );
-// });
-
 router.get("/", verify_token, cust_auth, (req, res) => {
-  console.log("GEEEEEeeeee");
-  var Cust_ID = req.body.Cust_ID;
-  let sql =
-    "SELECT Restaurant_ID FROM FAVOURITE_RESTAURANT WHERE Cust_ID = " +
-    req.body.auth_user.id;
-  connection.query(sql, async (err, result) => {
-    if (err) {
+  var Cust_ID = req.body.auth_user.id;
+  CustomerService.getFavouriteRestaurants(Cust_ID)
+    .then((favourite) => {
+      console.log("HELLLO");
+      console.log(favourite);
+      res.send(favourite);
+    })
+    .catch((err) => {
       console.log(err);
-      res.send([]);
-    } else {
-      var ResIds = [];
-      for (i in result) {
-        ResIds.push(result[i].Restaurant_ID);
-      }
-      let datas = await connection.query(
-        "SELECT * FROM RESTAURANT_DETAILS",
-        async function (error, results) {
-          if (error) {
-            res.end(error.code);
-          } else {
-            let ans = [];
-            for (j in results) {
-              console.log(results[j].Restaurant_ID);
-              if (ResIds.includes(results[j].Restaurant_ID)) {
-                await ans.push(results[j]);
-              }
-            }
-            res.statusCode = 200;
-            res.setHeader("Content-Type", "text/plain");
-            res.end(JSON.stringify(ans));
-          }
-        }
-      );
-    }
-  });
+      res.sendStatus(404);
+    });
 });
 
 router.post("/", verify_token, cust_auth, async function (req, res) {
   var body = req.body;
   var id = req.body.auth_user.id;
   console.log(req.body);
-  const sqlput =
-    "INSERT INTO FAVOURITE_RESTAURANT (Cust_ID,Restaurant_ID) VALUES (?,?)";
-
-  var values = [id, body.Restaurant_ID];
-  // console.log(sqlput);
-  connection.query(sqlput, values, async function (error, results) {
-    if (error) {
-      console.log(error);
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(error.code);
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(results));
-    }
-  });
+  CustomerService.addFavourite(id, body.Restaurant_ID)
+    .then((resp) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(404);
+    });
 });
 
 module.exports = router;

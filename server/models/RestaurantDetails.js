@@ -25,6 +25,9 @@ var RestaurantDetailsSchema = new mongoose.Schema({
   RestaurantPassword: {
     type: "String",
   },
+  RestaurantImage: {
+    type: "String",
+  },
   RestaurantDishes: [
     {
       DishName: "String",

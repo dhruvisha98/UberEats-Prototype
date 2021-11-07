@@ -11,7 +11,6 @@ import Navbardb from "../Navbar/Navbardb";
 import Axios from "axios";
 import { Config } from "../../config";
 
-
 const theme = createTheme();
 
 export default function EditDish(props) {
@@ -25,13 +24,16 @@ export default function EditDish(props) {
     const dishID = props.match.params.id;
     Axios.get(Config.url + "/menu")
       .then((res) => {
-        const filtered = res.data?.filter((item) => item.Dish_ID == dishID);
+        //console.log(res.data.RestaurantDishes);
+        const filtered = res.data.RestaurantDishes?.filter(
+          (item) => item._id == dishID
+        );
         if (filtered.length > 0) {
-          setDishReg(filtered[0]?.Dish_Name);
-          setPriceReg(filtered[0]?.Dish_Price);
+          setDishReg(filtered[0]?.DishName);
+          setPriceReg(filtered[0]?.DishPrice);
           setIngredientsReg(filtered[0]?.Ingredients);
-          setDescriptionReg(filtered[0]?.Dish_Description);
-          setCategoryReg(filtered[0]?.Dish_Category);
+          setDescriptionReg(filtered[0]?.DishDescription);
+          setCategoryReg(filtered[0]?.DishCategory);
         }
       })
       .catch((err) => {
@@ -40,7 +42,7 @@ export default function EditDish(props) {
   }, []);
 
   const save = () => {
-    Axios.put(Config.url+"/menu", {
+    Axios.put(Config.url + "/menu", {
       Dish_ID: props.match.params.id,
       Dish_Name: dishReg,
       Dish_Price: priceReg,

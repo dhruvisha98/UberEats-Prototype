@@ -52,7 +52,9 @@ var connection = mysql.createPool({
 //   console.log("pool created");
 // });
 var mongodb = require("./models/index.js");
+
 var customer = require("./routes/customer.js");
+
 app.use("/customer", customer);
 
 var restaurant = require("./routes/restaurant");

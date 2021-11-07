@@ -29,9 +29,12 @@ var CustomerDetailsSchema = new mongoose.Schema({
   CustomerCountry: {
     type: "String",
   },
-  CustomerFavourites: {
-    type: "Array",
+  CustomerImage: {
+    type: "String",
   },
+  CustomerFavourites: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Restaurant_Details" },
+  ],
   Cart: {
     Dishes: [
       {

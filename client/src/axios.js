@@ -9,8 +9,6 @@ Axios.interceptors.request.use(
     return req;
   },
   (err) => {
-    console.log("err");
-    console.log(err);
     return Promise.reject(err);
   }
 );
@@ -22,7 +20,6 @@ Axios.interceptors.response.use(
     if (err.response.status === 403)
       window.location.href = "http://localhost:3000";
     else if (err.response.status === 401) {
-      console.log("Error occured");
       window.location.href = "http://localhost:3000";
     }
     return Promise.reject(err);

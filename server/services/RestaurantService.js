@@ -12,7 +12,8 @@ const createRestaurant = async (
   RestaurantType = "",
   RestaurantDeliveryMode = "",
   RestaurantLocation = "",
-  RestaurantPassword = ""
+  RestaurantPassword = "",
+  RestaurantImage = ""
 ) => {
   // console.log("HHHH");
   console.log(RestaurantPassword);
@@ -25,6 +26,7 @@ const createRestaurant = async (
     RestaurantDeliveryMode,
     RestaurantLocation,
     RestaurantPassword,
+    RestaurantImage,
   });
 };
 const RestaurantLogin = (username, password) =>
@@ -64,6 +66,7 @@ const updateRestaurantById = async (id, body) => {
     "RestaurantType",
     "RestaurantDeliveryMode",
     "RestaurantLocation",
+    "RestaurantImage",
     "RestaurantPassword",
   ];
   var query = {};
@@ -74,6 +77,8 @@ const updateRestaurantById = async (id, body) => {
   }
   return await RestaurantDetails.findByIdAndUpdate(id, query);
 };
+
+const updateDishByID = async (id, body) => {};
 const getAllRestaurants = async () => {
   return RestaurantDetails.find();
 };
@@ -106,7 +111,7 @@ const addDish = (
 };
 
 const getDishList = (id) => {
-  return RestaurantDetails.find({ _id: id }).exec();
+  return RestaurantDetails.findById(id).exec();
 };
 const searchRestaurant = (query) => {
   return RestaurantDetails.find({
@@ -122,11 +127,17 @@ const searchRestaurant = (query) => {
   }).exec();
 };
 
+const getRestaurantById = (id) => {
+  return RestaurantDetails.findById(id).exec();
+};
+
 module.exports = {
   createRestaurant,
   getAllRestaurants,
   RestaurantLogin,
   updateRestaurantById,
   addDish,
+  getDishList,
   searchRestaurant,
+  getRestaurantById,
 };

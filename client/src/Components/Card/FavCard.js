@@ -26,7 +26,7 @@ export default function Favcards({ favourites }) {
   };
   const history = useHistory();
   const handleLearnMore = () => {
-    history.push("/restaurant/" + favourites.Restaurant_ID);
+    history.push("/restaurant/" + favourites._id);
   };
   return (
     <div>
@@ -35,14 +35,14 @@ export default function Favcards({ favourites }) {
           component="img"
           alt="food"
           height="200"
-          image={favourites.Restaurant_Image}
+          image={favourites.RestaurantImage}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {favourites.Restaurant_Name}
+            {favourites.RestaurantName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {favourites.Restaurant_Description}
+            {favourites.RestaurantDescription}
           </Typography>
         </CardContent>
         <CardActions>

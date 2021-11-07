@@ -39,7 +39,6 @@ export default function Cards(props) {
   };
 
   const edit = (dID) => {
-    console.log(dID);
     history.push(`/edit/${dID}`);
   };
   return (

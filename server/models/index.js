@@ -3,7 +3,7 @@ const config = require("../config.json");
 
 mongoose.connect(config.DB.host);
 
-const CustomerDetails = require("./CustomerDetails");
 const RestaurantDetails = require("./RestaurantDetails");
+const CustomerDetails = require("./CustomerDetails");
 
 module.exports = { CustomerDetails, RestaurantDetails };

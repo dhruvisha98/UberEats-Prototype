@@ -16,7 +16,7 @@ var connection = mysql.createPool({
 });
 
 router.get("/", verify_token, async function (req, res) {
-  RestaurantServices.getAllRestaurants(req.body.auth_user.id)
+  RestaurantServices.getDishList(req.body.auth_user.id)
     .then((resp) => {
       res.send(resp);
     })
@@ -25,25 +25,6 @@ router.get("/", verify_token, async function (req, res) {
     });
 });
 
-// router.get("/check/:type", async function (req, res) {
-//   var type = req.params.type;
-//   const sqlput = "SELECT * FROM RESTAURANT_DETAILS WHERE Restaurant_Type=?";
-//   var values = type;
-//   connection.query(sqlput, values, async function (error, results) {
-//     if (error) {
-//       res.writeHead(400, {
-//         "Content-Type": "text/plain",
-//       });
-//       res.end(error.code);
-//     } else {
-//       console.log(results);
-//       res.writeHead(200, {
-//         "Content-Type": "text/plain",
-//       });
-//       res.end(JSON.stringify(results));
-//     }
-//   });
-// });
 router.get("/check/:type", verify_token, cust_auth, async function (req, res) {
   var type = req.params.type;
   console.log(type);
@@ -71,25 +52,15 @@ router.get("/check/:type", verify_token, cust_auth, async function (req, res) {
 router.get("/:rest_id", verify_token, cust_auth, async function (req, res) {
   var rest_id = req.params.rest_id;
   //console.log(parseInt(rest_id))
-  await connection.query(
-    "SELECT * FROM RESTAURANT_MENU WHERE Restaurant_ID = ?",
-    rest_id,
-    async function (error, results) {
-      if (error) {
-        res.writeHead(404, {
-          "Content-Type": "text/plain",
-        });
-        res.end(error.code);
-      } else {
-        console.log("Hello\n\n\n\n");
-        console.log(req.params.rest_id);
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(results));
-      }
-    }
-  );
+  console.log("Hellllo");
+  RestaurantServices.getRestaurantById(rest_id)
+    .then((restaurant) => {
+      console.log(restaurant);
+      res.send(restaurant);
+    })
+    .catch((err) => {
+      res.sendStatus(404);
+    });
 });
 
 router.post("/", verify_token, rest_auth, async function (req, res) {

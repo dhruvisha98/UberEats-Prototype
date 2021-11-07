@@ -36,43 +36,6 @@ router.put("/", verify_token, async function (req, res) {
   console.log(req.body);
   RestaurantServices.updateRestaurantById(req.body.auth_user.id, req.body);
   res.sendStatus(200);
-  // await connection.query(
-  //   "UPDATE RESTAURANT_DETAILS SET Restaurant_Name='" +
-  //     req.body.Restaurant_Name +
-  //     "',Restaurant_Description='" +
-  //     req.body.Restaurant_Description +
-  //     "',Restaurant_Contact='" +
-  //     req.body.Restaurant_Contact +
-  //     "',Restaurant_Type='" +
-  //     req.body.Restaurant_Type +
-  //     "',Restaurant_Time='" +
-  //     req.body.Restaurant_Time +
-  //     "',Restaurant_Delivery_Mode='" +
-  //     req.body.Restaurant_Delivery_Mode +
-  //     "',Restaurant_Day='" +
-  //     req.body.Restaurant_Day +
-  //     +"',Restaurant_Location='" +
-  //     req.body.Restaurant_Location +
-  //     "',Restaurant_Image='" +
-  //     req.body.Restaurant_Image +
-  //     "' WHERE Restaurant_ID='" +
-  //     req.body.Restaurant_ID +
-  //     "'",
-  //   async function (error, results) {
-  //     if (error) {
-  //       console.log(error);
-  //       res.writeHead(500, {
-  //         "Content-Type": "text/plain",
-  //       });
-  //       res.end(error.code);
-  //     } else {
-  //       res.writeHead(200, {
-  //         "Content-Type": "text/plain",
-  //       });
-  //       res.end(JSON.stringify(results));
-  //     }
-  //   }
-  // );
 });
 
 router.post("/", (req, res) => {

@@ -59,6 +59,7 @@ export default function RestaurantDetails(props) {
 
     setOpenCard(false);
   };
+  console.log(props.data);
   return (
     <div>
       <Navbardb />
@@ -88,20 +89,22 @@ export default function RestaurantDetails(props) {
       <div>
         <container>
           <Grid container>
-            {props.data.map((menu) => (
-              <Grid item key={menu.Dish_ID} xs={12} md={8} lg={4}>
-                <Cards
-                  content={"dish"}
-                  user={props.user}
-                  name={menu.Dish_Name}
-                  description={menu.Dish_Description}
-                  image={menu.Dish_Image}
-                  id={menu.Dish_ID}
-                  price={menu.Dish_Price}
-                  addToCart={addToCart}
-                />
-              </Grid>
-            ))}
+            {props.data &&
+              props.data.RestaurantDishes &&
+              props.data.RestaurantDishes.map((menu) => (
+                <Grid item key={menu._id} xs={12} md={8} lg={4}>
+                  <Cards
+                    content={"dish"}
+                    user={props.user}
+                    name={menu.DishName}
+                    description={menu.DishDescription}
+                    image={menu.DishImage}
+                    id={menu._id}
+                    price={menu.DishPrice}
+                    addToCart={addToCart}
+                  />
+                </Grid>
+              ))}
           </Grid>
         </container>
       </div>

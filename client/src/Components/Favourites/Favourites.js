@@ -8,7 +8,9 @@ export default function Favourites() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    Axios.get(Config.url + "/favourites").then((res) => setData(res.data));
+    Axios.get(Config.url + "/favourites").then((res) => {
+      setData(res.data.CustomerFavourites);
+    });
   }, []);
   return (
     <div>
@@ -17,7 +19,7 @@ export default function Favourites() {
         <container>
           <Grid container>
             {data.map((favourites) => (
-              <Grid item key={favourites.Restaurant_ID} xs={12} md={8} lg={4}>
+              <Grid item key={favourites._id} xs={12} md={8} lg={4}>
                 <Favcards favourites={favourites} />
               </Grid>
             ))}

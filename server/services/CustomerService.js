@@ -10,6 +10,7 @@ const createCustomer = async (
   CustomerCity = "",
   CustomerState = "",
   CustomerCountry = "",
+  CustomerImage = "",
   CustomerFavourites = []
 ) => {
   return CustomerDetails.create({
@@ -22,6 +23,7 @@ const createCustomer = async (
     CustomerCity,
     CustomerState,
     CustomerCountry,
+    CustomerImage,
     CustomerFavourites,
   });
 };
@@ -44,6 +46,7 @@ const updateCustomerById = async (id, body) => {
     "CustomerCity",
     "CustomerState",
     "CustomerCountry",
+    "CustomerImage",
   ];
   var query = {};
   for (var r of names) {
@@ -51,6 +54,33 @@ const updateCustomerById = async (id, body) => {
       query[r] = body[r];
     }
   }
+  console.log(query);
   return await CustomerDetails.findByIdAndUpdate(id, query);
 };
-module.exports = { createCustomer, findCustomerByEmail, updateCustomerById };
+
+const addFavourite = (cust_id, rest_id) => {
+  var query = CustomerDetails.updateOne(
+    { _id: cust_id },
+    {
+      $push: {
+        CustomerFavourites: rest_id,
+      },
+    }
+  );
+
+  return query.exec();
+};
+
+const getFavouriteRestaurants = (cust_id) => {
+  var query = CustomerDetails.findById(cust_id)
+    .select("CustomerFavourites")
+    .populate("CustomerFavourites");
+  return query.exec();
+};
+module.exports = {
+  createCustomer,
+  findCustomerByEmail,
+  updateCustomerById,
+  addFavourite,
+  getFavouriteRestaurants,
+};

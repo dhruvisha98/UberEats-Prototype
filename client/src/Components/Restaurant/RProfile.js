@@ -55,7 +55,7 @@ export default function RProfile() {
       console.log(selectedFile);
       data.append("profileImage", selectedFile, selectedFile.name);
 
-      Axios.post("http://localhost:5000/Images/upload", data, {
+      Axios.post("http://localhost:5001/Images/upload", data, {
         headers: {
           accept: "application/json",
           "Accept-Language": "en-US,en;q=0.8",

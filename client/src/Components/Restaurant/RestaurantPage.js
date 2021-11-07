@@ -10,7 +10,9 @@ export default function RDashboard(props) {
   const { id } = useParams();
   useEffect(() => {
     Axios.get(Config.url + "/menu/" + id).then((res) => {
-      setData(res.data);
+      console.log("HHHHHH");
+      console.log(res.data.RestaurantDishes);
+      setData(res.data.RestaurantDishes);
     });
   }, []);
   return (
