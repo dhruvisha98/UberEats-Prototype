@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 // import image from "../Images/profileimage.jpeg";
 import { Axios } from "../../axios";
 import { Config } from "../../config";
+import { useHistory } from "react-router-dom";
 
 export default function RProfile() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -47,6 +48,7 @@ export default function RProfile() {
     restaurant == null ? "" : restaurant.RestaurantImage
   );
 
+  const history = useHistory();
   const singleFileUploadHandler = () => {
     setTrial(selectedFile[0]);
     const data = new FormData();
@@ -96,7 +98,7 @@ export default function RProfile() {
     const data = {
       RestaurantName: name,
       RestaurantDescription: des,
-      RestaurantContact: contact,
+      RestaurantPhone: contact,
       RestaurantType: type,
       RestaurantTime: time,
       RestaurantDeliveryMode: delivery,
@@ -108,6 +110,7 @@ export default function RProfile() {
     Axios.put(Config.url + "/restaurant", data)
       .then(() => {
         console.log(data);
+        history.push("/rdashboard");
         localStorage["restaurant"] = JSON.stringify(data);
       })
       .catch((err) => {
@@ -301,7 +304,6 @@ export default function RProfile() {
                       <Button
                         onClick={handleSubmit}
                         style={{ background: "#b26a00" }}
-                        type="submit"
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}

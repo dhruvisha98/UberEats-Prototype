@@ -15,7 +15,6 @@ const createRestaurant = async (
   RestaurantPassword = "",
   RestaurantImage = ""
 ) => {
-  // console.log("HHHH");
   console.log(RestaurantPassword);
   return RestaurantDetails.create({
     RestaurantName,
@@ -78,7 +77,25 @@ const updateRestaurantById = async (id, body) => {
   return await RestaurantDetails.findByIdAndUpdate(id, query);
 };
 
-const updateDishByID = async (id, body) => {};
+const updateDishByID = async (id, body) => {
+  console.log(body);
+
+  return RestaurantDetails.updateOne(
+    {
+      "RestaurantDishes.id": id,
+    },
+    {
+      $set: {
+        "RestaurantDishes.$.DishName": body.DishName,
+        "RestaurantDishes.$.DishPrice": body.DishPrice,
+        "RestaurantDishes.$.Ingredients": body.Ingredients,
+        "RestaurantDishes.$.DishDescription": body.DishDescription,
+        "RestaurantDishes.$.DishCategory": body.DishCategory,
+        "RestaurantDishes.$.DishImage": body.DishImage,
+      },
+    }
+  ).exec();
+};
 const getAllRestaurants = async () => {
   return RestaurantDetails.find();
 };
@@ -140,4 +157,5 @@ module.exports = {
   getDishList,
   searchRestaurant,
   getRestaurantById,
+  updateDishByID,
 };

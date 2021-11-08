@@ -84,38 +84,16 @@ router.post("/", verify_token, rest_auth, async function (req, res) {
 
 router.put("/", verify_token, rest_auth, async function (req, res) {
   var body = req.body;
-  console.log("Update", req.body);
-  await connection.query(
-    "UPDATE RESTAURANT_MENU SET Dish_Name='" +
-      req.body.Dish_Name +
-      "',Dish_Price='" +
-      req.body.Dish_Price +
-      "',Ingredients='" +
-      req.body.Ingredients +
-      "',Dish_Description='" +
-      req.body.Dish_Description +
-      "',Dish_Category='" +
-      req.body.Dish_Category +
-      "',Restaurant_ID='" +
-      req.body.auth_user.id +
-      "',Dish_Image='Image' WHERE Dish_ID=" +
-      req.body.Dish_ID +
-      "",
-    async function (error, results) {
-      if (error) {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(error.code);
-        console.log(error);
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(results));
-      }
-    }
-  );
+
+  RestaurantServices.updateDishByID(req.body.Dish_ID, req.body)
+    .then((resp) => {
+      console.log(resp);
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 
 module.exports = router;

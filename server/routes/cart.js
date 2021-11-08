@@ -16,27 +16,6 @@ var connection = mysql.createPool({
   // connectionLimit: 50,
 });
 
-// router.post("/", async function (req, res) {
-//   var body = req.body;
-//   console.log(req.body);
-//   const sqlput = "INSERT INTO CART_DETAILS (Cust_ID, Cart_State) VALUES (?,?)";
-//   var values = [body.Cust_ID, "Current"];
-
-//   connection.query(sqlput, values, async function (error, results) {
-//     if (error) {
-//       res.writeHead(400, {
-//         "Content-Type": "text/plain",
-//       });
-//       res.end(error.code);
-//     } else {
-//       res.writeHead(200, {
-//         "Content-Type": "text/plain",
-//       });
-//       res.end(JSON.stringify(results));
-//     }
-//   });
-// });
-
 //Get API
 router.get("/get", verify_token, async function (req, res) {
   var body = req.body;

@@ -12,6 +12,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbarls from "../Navbar/Navbarls";
 import { Axios } from "../../axios";
 import { Config } from "../../config";
+import { InputLabel } from "@mui/material";
+import { Select } from "@mui/material";
+import { MenuItem } from "@mui/material";
 
 const theme = createTheme();
 
@@ -100,59 +103,6 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* <TextField
-                  type="date"
-                  fullWidth
-                  autoComplete="dob"
-                  name="dob"
-                  id="dob"
-                  autoFocus
-                  onChange={(e) => {
-                    setDobReg(e.target.value);
-                  }}
-                /> */}
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="city"
-                  label="City"
-                  name="city"
-                  autoComplete="city"
-                  onChange={(e) => {
-                    setCityReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="state"
-                  label="State"
-                  name="state"
-                  autoComplete="state"
-                  onChange={(e) => {
-                    setStateReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="country"
-                  label="Country"
-                  name="country"
-                  autoComplete="country"
-                  onChange={(e) => {
-                    setCountryReg(e.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -205,6 +155,67 @@ export default function SignUp() {
                     setPasswordReg(e.target.value);
                   }}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                {/* <TextField
+                  type="date"
+                  fullWidth
+                  autoComplete="dob"
+                  name="dob"
+                  id="dob"
+                  autoFocus
+                  onChange={(e) => {
+                    setDobReg(e.target.value);
+                  }}
+                /> */}
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="city"
+                  label="City"
+                  name="city"
+                  autoComplete="city"
+                  onChange={(e) => {
+                    setCityReg(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="state"
+                  label="State"
+                  name="state"
+                  autoComplete="state"
+                  onChange={(e) => {
+                    setStateReg(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel id="country">Country</InputLabel>
+                <Select
+                  labelId="country"
+                  id="country_select"
+                  label="Country"
+                  autoComplete="country"
+                  nane="country"
+                  fullWidth
+                  required
+                  onChange={(e) => {
+                    setCountryReg(e.target.value);
+                  }}
+                >
+                  <MenuItem value="United States of America">
+                    United States of America{" "}
+                  </MenuItem>
+                  <MenuItem value="Canada">Canada</MenuItem>
+                  <MenuItem value="India">India</MenuItem>
+                </Select>
               </Grid>
             </Grid>
             <Button

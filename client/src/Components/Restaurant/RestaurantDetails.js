@@ -59,7 +59,7 @@ export default function RestaurantDetails(props) {
 
     setOpenCard(false);
   };
-  console.log(props.data);
+  console.log(props);
   return (
     <div>
       <Navbardb />
@@ -87,11 +87,20 @@ export default function RestaurantDetails(props) {
         </Box>
       </Modal>
       <div>
+        <div>
+          <img src={props.image} style={{ width: "100vw", height: "450px" }} />
+        </div>
+        <div style={{ width: "100%", marginLeft: "2%" }}>
+          <h1>{props.name}</h1>
+          <h3>Description: {props.detail.RestaurantDescription}</h3>
+          <h3>Contact No.: {props.detail.RestaurantPhone}</h3>
+          <h3>Location: {props.detail.RestaurantLocation}</h3>
+          <h3>Delivery Mode : {props.detail.RestaurantDeliveryMode}</h3>
+        </div>
         <container>
           <Grid container>
             {props.data &&
-              props.data.RestaurantDishes &&
-              props.data.RestaurantDishes.map((menu) => (
+              props.data.map((menu) => (
                 <Grid item key={menu._id} xs={12} md={8} lg={4}>
                   <Cards
                     content={"dish"}

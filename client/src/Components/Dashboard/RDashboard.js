@@ -8,16 +8,30 @@ import RestaurantDetails from "../Restaurant/RestaurantDetails";
 
 export default function RDashboard() {
   const [data, setData] = React.useState([]);
+  const [image, setImage] = useState("");
+  const [name, setName] = useState("");
+  const [detail, setDetail] = useState({});
 
   useEffect(() => {
     Axios.get(Config.url + "/menu")
       .then((res) => {
-        setData(res.data);
-        console.log(res.data);
+        setData(res.data.RestaurantDishes);
+        setImage(res.data.RestaurantImage);
+        setName(res.data.RestaurantName);
+        setDetail(res.data);
+        console.log("Res DATA", res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  return <RestaurantDetails data={data} user={"restaurant"} />;
+  return (
+    <RestaurantDetails
+      data={data}
+      image={image}
+      name={name}
+      detail={detail}
+      user={"restaurant"}
+    />
+  );
 }

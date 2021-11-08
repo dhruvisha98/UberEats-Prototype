@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbardb from "../Navbar/Navbardb";
 import Axios from "axios";
 import { Config } from "../../config";
+import { useHistory } from "react-router";
 
 const theme = createTheme();
 
@@ -19,6 +20,7 @@ export default function EditDish(props) {
   const [ingredientsReg, setIngredientsReg] = useState("");
   const [descriptionReg, setDescriptionReg] = useState("");
   const [categoryReg, setCategoryReg] = useState("");
+  const history = useHistory();
 
   useEffect(() => {
     const dishID = props.match.params.id;
@@ -44,14 +46,19 @@ export default function EditDish(props) {
   const save = () => {
     Axios.put(Config.url + "/menu", {
       Dish_ID: props.match.params.id,
-      Dish_Name: dishReg,
-      Dish_Price: priceReg,
+      DishName: dishReg,
+      DishPrice: priceReg,
       Ingredients: ingredientsReg,
-      Dish_Description: descriptionReg,
-      Dish_Category: categoryReg,
-    }).then((response) => {
-      console.log(response);
-    });
+      DishDescription: descriptionReg,
+      DishCategory: categoryReg,
+    })
+      .then((response) => {
+        console.log(response);
+        history.push("/rdashboard");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -152,7 +159,6 @@ export default function EditDish(props) {
             </Grid>
             <Button
               style={{ background: "#b26a00" }}
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}

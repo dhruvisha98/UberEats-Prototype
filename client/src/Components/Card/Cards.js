@@ -27,12 +27,7 @@ export default function Cards(props) {
     height: "500px",
     margin: "20px",
   };
-  // const cardStyles = {
-  //   display: "block",
-  //   width: "500px",
-  //   height: "250x",
-  //   margin: "20px",
-  // };
+  
   const history = useHistory();
   const handleLearnMore = () => {
     history.push("/restaurant/" + props.id);
