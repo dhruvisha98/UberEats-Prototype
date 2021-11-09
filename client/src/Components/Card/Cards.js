@@ -82,7 +82,7 @@ export default function Cards(props) {
             <InputLabel
               style={{ marginLeft: "2%" }}
               size="small"
-              id="country"
+              id="qty"
             ></InputLabel>
             <Select
               labelId="qty"

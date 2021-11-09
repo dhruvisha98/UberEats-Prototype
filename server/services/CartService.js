@@ -119,18 +119,105 @@ const getCartById = async (id) => {
     dishMap.set(dish._id.toString(), dish);
   });
 
+  let totPrice = 0;
   cartItems.forEach((item) => {
     item["name"] = dishMap.get(item.dishId.toString()).DishName;
     item["restName"] = dishes.RestaurantName;
+    totPrice += item.totalPrice;
+
     delete item.restaurant;
   });
+
+  totPrice = totPrice.toFixed(2);
   console.log(cartItems);
-  return cartItems;
+  return { cartItems, totPrice };
   // return cart.findById(id).exec();
+};
+
+const deleteCartItem = async (req) => {
+  const custId = req.body.custId;
+  const cartItemId = req.body.cartItemId;
+  console.log("Cart Id", req.body.cartItemId);
+
+  try {
+    const item = await cart.deleteOne({
+      _id: mongoose.Types.ObjectId(String(cartItemId)),
+    });
+
+    return { message: "Cart Item Deleted" };
+  } catch (err) {
+    return { error: "Error Deleting Cart Item" };
+  }
+};
+
+const updateCartItems = async (req, res) => {
+  const custId = req.body.auth_user.id;
+  if (custId === null || custId === undefined) {
+    return { error: "Session Expired!" };
+  }
+  const cartId = req.body.cartItemId;
+  const qty = req.body.qty;
+
+  const cartItem = await cart.findOne({
+    _id: mongoose.Types.ObjectId(String(cartId)),
+  });
+
+  if (!cartItem || cartItem === undefined) {
+    return { error: "Cart Item not found" };
+  }
+  const pricePerItem = cartItem.totalPrice / cartItem.qty;
+  const updateCartItem = await cart.findOneAndUpdate(
+    {
+      _id: mongoose.Types.ObjectId(String(cartId)),
+    },
+    {
+      $set: {
+        qty,
+        totalPrice: (Math.round(qty * pricePerItem * 100) / 100).toFixed(2),
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  const cartItems = await cart.aggregate([
+    {
+      $match: {
+        custId: mongoose.Types.ObjectId(String(custId)),
+      },
+    },
+  ]);
+
+  if (cartItems.length === 0) {
+    return { error: "No Items in Cart" };
+  }
+
+  const restId = cartItems[0].restId;
+  const dish = await RestaurantDetails.findOne({
+    _id: mongoose.Types.ObjectId(String(restId)),
+  })
+    .select("RestaurantDishes")
+    .select("RestaurantName");
+
+  let dishMap = new Map();
+  const temp = dish.RestaurantDishes.map((item) => {
+    dishMap.set(item._id.toString(), item);
+  });
+
+  let totPrice = 0;
+  cartItems.forEach((item) => {
+    item["name"] = dishMap.get(item.dishId.toString()).DishName;
+    item["restName"] = dish.RestaurantName;
+    totPrice += item.totalPrice;
+  });
+
+  return { cartItems, totPrice };
 };
 
 module.exports = {
   addItemToCart,
   createCart,
   getCartById,
+  deleteCartItem,
+  updateCartItems,
 };

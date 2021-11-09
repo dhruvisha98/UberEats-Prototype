@@ -76,6 +76,7 @@ export default function PrimarySearchAppBar(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const history = useHistory();
 
+  const [totPrice, setTotPrice] = React.useState(0);
   const [cartData, setCartData] = React.useState([]);
   const handleHome = () => {
     history.push("/");
@@ -177,7 +178,8 @@ export default function PrimarySearchAppBar(props) {
     Axios.get(Config.url + "/cart/get")
       .then((res) => {
         console.log("Cart items navbar", res.data);
-        setCartData(res.data);
+        setCartData(res.data.cartItems);
+        setTotPrice(res.data.totPrice);
       })
       .catch((err) => {
         console.log(err);
@@ -323,7 +325,13 @@ export default function PrimarySearchAppBar(props) {
                 <ShoppingCartIcon />
               </IconButton>
 
-              <Cart open={openCart} setOpen={setOpenCart} data={cartData} />
+              <Cart
+                handleOpenCart={handleOpenCart}
+                open={openCart}
+                setOpen={setOpenCart}
+                data={cartData}
+                totPrice={totPrice}
+              />
 
               <IconButton
                 size="large"

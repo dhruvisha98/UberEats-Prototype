@@ -40,6 +40,27 @@ router.post("/", verify_token, async function (req, res) {
     });
 });
 
+//Delete Cart Item
+router.put("/deleteCartItem", verify_token, async function (req, res) {
+  CartService.deleteCartItem(req)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(400);
+    });
+});
+
+//Update Quantity in Cart
+router.put("/updateCartQuantity", verify_token, async function (req, res) {
+  CartService.updateCartItems(req)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(400);
+    });
+});
 //Order
 router.post("/order", verify_token, async function (req, res) {
   var body = req.body;
