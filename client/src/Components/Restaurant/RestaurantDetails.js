@@ -61,6 +61,9 @@ export default function RestaurantDetails(props) {
 
     setOpenCard(false);
   };
+  const cancel = () => {
+    setOpenCard(false);
+  };
   return (
     <div>
       <Navbardb />
@@ -84,6 +87,13 @@ export default function RestaurantDetails(props) {
             variant="contained"
           >
             New Order
+          </Button>
+          <Button
+            onClick={cancel}
+            style={{ width: "100%", marginTop: "2%" }}
+            variant="contained"
+          >
+            Cancel
           </Button>
         </Box>
       </Modal>
