@@ -79,7 +79,7 @@ router.post("/rlogin", (req, res) => {
   const Restaurant_Password = req.body.Restaurant_Password;
   RestaurantServices.RestaurantLogin(Restaurant_Email, Restaurant_Password)
     .then((resp) => {
-      console.log("hello");
+      // console.log("hello");
       console.log(resp);
       return res.send({ ...resp, message: "Success" });
     })

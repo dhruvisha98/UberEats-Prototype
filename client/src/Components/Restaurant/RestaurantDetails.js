@@ -46,7 +46,7 @@ export default function RestaurantDetails(props) {
       })
       .catch((err) => {
         console.log(err);
-        setOpenCard(true);
+        if (err.response && err.response.status === 409) setOpenCard(true);
       });
   };
 
@@ -61,7 +61,6 @@ export default function RestaurantDetails(props) {
 
     setOpenCard(false);
   };
-  console.log("Restaurant", props);
   return (
     <div>
       <Navbardb />

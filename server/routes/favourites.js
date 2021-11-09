@@ -21,7 +21,7 @@ router.get("/", verify_token, cust_auth, (req, res) => {
   var Cust_ID = req.body.auth_user.id;
   CustomerService.getFavouriteRestaurants(Cust_ID)
     .then((favourite) => {
-      console.log("HELLLO");
+      // console.log("HELLLO");
       console.log(favourite);
       res.send(favourite);
     })

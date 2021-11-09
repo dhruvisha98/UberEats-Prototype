@@ -19,9 +19,9 @@ const createCart = async (
 };
 
 const addItemToCart = async (req) => {
-  console.log(req.body);
   const { Dish_ID, restId } = req.body;
   const custId = req.body.auth_user.id;
+
   if ((restId && !Dish_ID) || (!restId && Dish_ID)) {
     return { error: "Provide all details" };
   }
@@ -46,7 +46,7 @@ const addItemToCart = async (req) => {
   const checkCart = await cart.aggregate([
     {
       $lookup: {
-        from: "RestaurantDetails",
+        from: "restaurant_details",
         localField: "restId",
         foreignField: "_id",
         as: "restaurants",
@@ -60,6 +60,8 @@ const addItemToCart = async (req) => {
   req.body.totalPrice = (
     Math.round(req.body.qty * pricePerQty * 100) / 100
   ).toFixed(2);
+
+  req.body["dishId"] = req.body.Dish_ID;
 
   if (!checkCart || checkCart.length === 0) {
     const newCartItem = new cart(req.body);
@@ -76,19 +78,22 @@ const addItemToCart = async (req) => {
   ) {
     const tempRes = {
       restId: checkCart[0].restId,
+      dishId: Dish_ID,
+      qty: req.body.qty,
+      totalPrice: req.body.totalPrice,
       restName: checkCart[0].restaurants[0].name,
-      error: "Cannot added dishes for multiple restaurants",
+      message: "Cannot added dishes for multiple restaurants",
     };
     return tempRes;
   }
-  req.body["dishId"] = req.body.Dish_ID;
+
   const newCartItem = new cart(req.body);
   const createdCartItem = await newCartItem.save();
   return { message: "Dish Added to Cart" };
 };
 
 const getCartById = async (id) => {
-  const cartItems = await cart.aggregate([
+  let cartItems = await cart.aggregate([
     {
       $lookup: {
         from: "restaurant_details",
@@ -120,24 +125,28 @@ const getCartById = async (id) => {
   });
 
   let totPrice = 0;
-  cartItems.forEach((item) => {
-    item["name"] = dishMap.get(item.dishId.toString()).DishName;
-    item["restName"] = dishes.RestaurantName;
+
+  cartItems = cartItems.map((item) => {
     totPrice += item.totalPrice;
 
     delete item.restaurant;
+    return {
+      ...item,
+      name: dishMap.get(item.dishId.toString())?.DishName,
+      restName: dishes.RestaurantName,
+    };
+    // item["name"] = dishMap[item.dishId.toString()]?.DishName;
+    // // item["name"] = "temp";
+    // item["restName"] = dishes.RestaurantName;
   });
 
   totPrice = totPrice.toFixed(2);
-  console.log(cartItems);
   return { cartItems, totPrice };
-  // return cart.findById(id).exec();
 };
 
 const deleteCartItem = async (req) => {
   const custId = req.body.custId;
   const cartItemId = req.body.cartItemId;
-  console.log("Cart Id", req.body.cartItemId);
 
   try {
     const item = await cart.deleteOne({
@@ -214,10 +223,30 @@ const updateCartItems = async (req, res) => {
   return { cartItems, totPrice };
 };
 
+const resetCart = async (req, res) => {
+  const custId = req.body.auth_user.id;
+  const { dishId, restId, qty } = req.body;
+
+  if ((restId && !dishId) || (!restId && dishId)) {
+    return { error: "Provide all details" };
+  }
+  try {
+    await cart.findOneAndDelete({
+      custId: mongoose.Types.ObjectId(String(custId)),
+    });
+
+    const newCartItem = new cart(req.body);
+    const createdCartItem = await newCartItem.save();
+    return { message: "Dish Added to Cart" };
+  } catch (err) {
+    return { message: "Error while adding dish to cart" };
+  }
+};
 module.exports = {
   addItemToCart,
   createCart,
   getCartById,
   deleteCartItem,
   updateCartItems,
+  resetCart,
 };

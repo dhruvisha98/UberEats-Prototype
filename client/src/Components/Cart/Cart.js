@@ -24,7 +24,6 @@ export default function Cart(props) {
   const [totalPrice, setTotalPrice] = React.useState(props.totPrice);
   const [qty, setQty] = React.useState("");
 
-  console.log("props", props);
   const orderCart = () => {
     Axios.post(Config.url + "/cart/order")
       .then((res) => {
@@ -37,7 +36,7 @@ export default function Cart(props) {
   };
 
   const updateQuantity = (custId, cartItemId, qty) => {
-    console.log(custId, cartItemId, qty);
+    // console.log(custId, cartItemId, qty);
     Axios.put(Config.url + "/cart/updateCartQuantity", {
       cartItemId: cartItemId,
       qty: qty,
@@ -72,7 +71,6 @@ export default function Cart(props) {
     });
     setTotalPrice(total);
   }, [qty]);
-  console.log(totalPrice);
   return (
     <Dialog style={{ border: 3 }} open={props.open}>
       <CloseIcon

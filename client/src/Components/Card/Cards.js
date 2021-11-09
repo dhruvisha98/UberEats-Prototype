@@ -92,7 +92,7 @@ export default function Cards(props) {
               required
               value={qty}
               onChange={(e) => {
-                console.log(e.target.value);
+               
                 setQty(e.target.value);
               }}
             >

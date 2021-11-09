@@ -54,7 +54,7 @@ const updateCustomerById = async (id, body) => {
       query[r] = body[r];
     }
   }
-  console.log(query);
+  // console.log(query);
   return await CustomerDetails.findByIdAndUpdate(id, query);
 };
 

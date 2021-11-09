@@ -19,7 +19,6 @@ var connection = mysql.createPool({
 
 //Get API
 router.get("/get", verify_token, async function (req, res) {
-  console.log(req.body.auth_user.id);
   CartService.getCartById(req.body.auth_user.id)
     .then((rests) => {
       res.send(rests);
@@ -32,8 +31,10 @@ router.get("/get", verify_token, async function (req, res) {
 //Add API
 router.post("/", verify_token, async function (req, res) {
   CartService.addItemToCart(req)
-    .then(() => {
-      res.sendStatus(200);
+    .then((response) => {
+      if (response.message === "Cannot added dishes for multiple restaurants")
+        return res.status(409).json({ message: response.message });
+      return res.status(200);
     })
     .catch((err) => {
       console.log(err);

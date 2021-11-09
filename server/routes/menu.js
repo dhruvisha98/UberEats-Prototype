@@ -52,10 +52,9 @@ router.get("/check/:type", verify_token, cust_auth, async function (req, res) {
 router.get("/:rest_id", verify_token, cust_auth, async function (req, res) {
   var rest_id = req.params.rest_id;
   //console.log(parseInt(rest_id))
-  console.log("Hellllo");
+  // console.log("Hellllo");
   RestaurantServices.getRestaurantById(rest_id)
     .then((restaurant) => {
-      console.log(restaurant);
       res.send(restaurant);
     })
     .catch((err) => {

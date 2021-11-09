@@ -66,7 +66,7 @@ export default function Navbarls() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar style={{ background: "#b26a00" }} position="static">
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -75,14 +75,14 @@ export default function Navbarls() {
             onClick={handleProfileMenuOpen}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: { xs: "block", sm: "block" } }}
           >
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" onClick={handleHome} />
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}></Box>

@@ -78,7 +78,7 @@ export default function Home() {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar style={{ background: "#b26a00" }} position="static">
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               size="large"
               edge="start"
               color="inherit"
@@ -87,7 +87,7 @@ export default function Home() {
               onClick={handleProfileMenuOpen}
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
 
             <Typography
               variant="h6"
@@ -95,7 +95,7 @@ export default function Home() {
               component="div"
               sx={{ display: { xs: "block", sm: "block" } }}
             >
-              <img src={logo} alt="logo" />
+              <img src={logo} alt="logo" onClick={handleHome} />
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "block", md: "flex" } }}>
@@ -123,7 +123,7 @@ export default function Home() {
       </Box>
 
       <div>
-        <img src={image} alt="Logo" height="910" width="1870" />
+        <img src={image} alt="Logo" height="1100" width="1870" />
       </div>
     </div>
   );

@@ -15,7 +15,6 @@ const createRestaurant = async (
   RestaurantPassword = "",
   RestaurantImage = ""
 ) => {
-  console.log(RestaurantPassword);
   return RestaurantDetails.create({
     RestaurantName,
     RestaurantEmail,
@@ -51,7 +50,7 @@ const RestaurantLogin = (username, password) =>
             return resolve({ result: restaurant, token });
           })
           .catch((err) => {
-            console.log("Weeeeeeeee");
+            // console.log("Weeeeeeeee");
             return reject(err);
           });
       });
@@ -78,7 +77,7 @@ const updateRestaurantById = async (id, body) => {
 };
 
 const updateDishByID = async (id, body) => {
-  console.log(body);
+  // console.log(body);
 
   return RestaurantDetails.updateOne(
     {

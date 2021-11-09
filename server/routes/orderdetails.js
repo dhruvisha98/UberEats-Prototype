@@ -15,7 +15,7 @@ var connection = mysql.createPool({
 
 router.get("/", verify_token, async function (req, res) {
   //console.log(req)
-  console.log(req.body.auth_user);
+  // console.log(req.body.auth_user);
   if (req.body.auth_user.type === "customer")
     await connection.query(
       "SELECT * FROM ORDER_DETAILS JOIN `ORDER` ON ORDER_DETAILS.Order_ID = `ORDER`.order_detail_id JOIN RESTAURANT_MENU ON RESTAURANT_MENU.Dish_ID = `ORDER`.dish_id JOIN RESTAURANT_DETAILS ON RESTAURANT_MENU.Restaurant_ID = RESTAURANT_DETAILS.Restaurant_ID where ORDER_DETAILS.Cust_ID = ? ",
@@ -93,7 +93,7 @@ router.get("/", verify_token, async function (req, res) {
 });
 router.post("/", verify_token, async function (req, res) {
   //console.log(req)
-  console.log(req.body.auth_user.id);
+  // console.log(req.body.auth_user.id);
   await connection.query(
     "SELECT GROUP_CONCAT(RESTAURANT_MENU.Dish_Name SEPARATOR ',') AS Dish_Names FROM ORDER_DETAILS JOIN `ORDER` ON ORDER_DETAILS.ORDER_ID = `ORDER`.order_detail_id JOIN RESTAURANT_MENU ON RESTAURANT_MENU.Dish_ID = `ORDER`.dish_id WHERE RESTAURANT_MENU.RESTAURANT_ID = ? JOIN  GROUP BY ORDER_DETAILS.ORDER_ID",
     req.body.auth_user.id,
@@ -116,7 +116,7 @@ router.post("/", verify_token, async function (req, res) {
 router.get("/orderfilter?", verify_token, async function (req, res) {
   //console.log(req)
   var status = req.query.status;
-  console.log(req.body.auth_user);
+  // console.log(req.body.auth_user);
   if (req.body.auth_user.type === "customer")
     await connection.query(
       "SELECT * FROM ORDER_DETAILS JOIN `ORDER` ON ORDER_DETAILS.Order_ID = `ORDER`.order_detail_id JOIN RESTAURANT_MENU ON RESTAURANT_MENU.Dish_ID = `ORDER`.dish_id JOIN RESTAURANT_DETAILS ON RESTAURANT_MENU.Restaurant_ID = RESTAURANT_DETAILS.Restaurant_ID where ORDER_DETAILS.Cust_ID = ? AND DELIVERY_STATUS=" +

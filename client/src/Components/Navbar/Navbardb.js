@@ -101,20 +101,6 @@ export default function PrimarySearchAppBar(props) {
       });
   };
 
-  // const handleType = (txt) => {
-  //   let text = txt.target.value;
-  //   setType(text);
-  //   Axios.post(Config.url + "/restaurant/searchResult", { Search: text })
-  //     .then((res) => {
-  //       //console.log(res);
-  //       props.setSearch(res);
-  //       console.log(props);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   //CAll API
-  // };
   const handleDashboard = () => {
     if (localStorage.getItem("user")) {
       history.push("/dashboard");
@@ -122,10 +108,6 @@ export default function PrimarySearchAppBar(props) {
       history.push("/rdashboard");
     }
   };
-
-  // const handleRoute = () => {
-  //   history.push("/login");
-  // };
 
   const handleProfile = () => {
     if (localStorage.getItem("user")) {
@@ -177,7 +159,6 @@ export default function PrimarySearchAppBar(props) {
   const handleOpenCart = () => {
     Axios.get(Config.url + "/cart/get")
       .then((res) => {
-        console.log("Cart items navbar", res.data);
         setCartData(res.data.cartItems);
         setTotPrice(res.data.totPrice);
       })
@@ -236,7 +217,7 @@ export default function PrimarySearchAppBar(props) {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar style={{ background: "#b26a00" }} position="static">
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               size="large"
               edge="start"
               color="inherit"
@@ -245,14 +226,14 @@ export default function PrimarySearchAppBar(props) {
               sx={{ mr: 2 }}
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             ></Typography>
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" onClick={handleDashboard} />
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -368,7 +349,7 @@ export default function PrimarySearchAppBar(props) {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar style={{ background: "#b26a00" }} position="static">
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               size="large"
               edge="start"
               color="inherit"
@@ -377,14 +358,14 @@ export default function PrimarySearchAppBar(props) {
               sx={{ mr: 2 }}
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             ></Typography>
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" onClick={handleDashboard} />
 
             <Box sx={{ flexGrow: 1 }} />
             <IconButton
