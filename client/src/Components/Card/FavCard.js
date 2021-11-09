@@ -21,7 +21,7 @@ export default function Favcards({ favourites }) {
   const cardStyle = {
     display: "block",
     width: "500px",
-    height: "400px",
+    height: "500px",
     margin: "20px",
   };
   const history = useHistory();
@@ -34,7 +34,7 @@ export default function Favcards({ favourites }) {
         <CardMedia
           component="img"
           alt="food"
-          height="200"
+          height="300"
           image={favourites.RestaurantImage}
         />
         <CardContent>

@@ -79,27 +79,23 @@ export default function Cards(props) {
                 <EditIcon onClick={() => edit(props.id)} />
               </Button>
             )}
-            <InputLabel
-              style={{ marginLeft: "2%" }}
-              size="small"
-              id="qty"
-            ></InputLabel>
-            <Select
-              labelId="qty"
-              id="qty_select"
-              autoComplete="qty"
-              name="qty"
-              required
-              value={qty}
-              onChange={(e) => {
-               
-                setQty(e.target.value);
-              }}
-            >
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-            </Select>
+            {props.user === "customer" && (
+              <Select
+                labelId="qty"
+                id="qty_select"
+                autoComplete="qty"
+                name="qty"
+                required
+                value={qty}
+                onChange={(e) => {
+                  setQty(e.target.value);
+                }}
+              >
+                <MenuItem value="1">1</MenuItem>
+                <MenuItem value="2">2</MenuItem>
+                <MenuItem value="3">3</MenuItem>
+              </Select>
+            )}
             {props.user === "customer" && (
               <Button size="small" variant="contained" sx={2}>
                 <AddShoppingCartIcon

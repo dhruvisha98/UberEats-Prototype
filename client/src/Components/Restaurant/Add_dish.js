@@ -11,6 +11,7 @@ import Navbardb from "../Navbar/Navbardb";
 import Axios from "axios";
 import $ from "jquery";
 import { Config } from "../../config";
+import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
 
@@ -25,6 +26,8 @@ export default function Adddish() {
   const [dishImageUrl, setDishImageUrl] = useState("");
   const [trial, setTrial] = useState("Hello");
 
+  const history = useHistory();
+
   const add = () => {
     Axios.post(Config.url + "/menu", {
       Dish_Name: dishReg,
@@ -36,6 +39,7 @@ export default function Adddish() {
       Dish_Image: dishImageUrl,
     }).then((response) => {
       console.log(response);
+      history.push("/rdashboard");
     });
   };
 

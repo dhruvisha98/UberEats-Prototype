@@ -90,17 +90,6 @@ export default function PrimarySearchAppBar(props) {
     props.setSearch(text);
   };
 
-  const handleVeg = () => {
-    Axios.get(Config.url + "/menu/check/Veg")
-      .then((res) => {
-        //console.log(res);
-        console.log("Veg");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   const handleDashboard = () => {
     if (localStorage.getItem("user")) {
       history.push("/dashboard");
