@@ -1,10 +1,20 @@
 var mongoose = require("mongoose");
 
 var CartSchema = new mongoose.Schema({
-  Customer: {
+  custId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "customer_details",
+  },
+  dishId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+  restId: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
+  qty: {
+    type: Number,
+  },
+  totalPrice: {
+    type: Number,
   },
 });
-var CartSchema = mongoose.model("cart_Details", CartSchema);
-module.exports = { OrderDetails };
+module.exports = mongoose.model("cart", CartSchema);

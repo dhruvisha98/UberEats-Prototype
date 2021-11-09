@@ -176,7 +176,7 @@ export default function PrimarySearchAppBar(props) {
   const handleOpenCart = () => {
     Axios.get(Config.url + "/cart/get")
       .then((res) => {
-        console.log(res.data);
+        console.log("Cart items navbar", res.data);
         setCartData(res.data);
       })
       .catch((err) => {

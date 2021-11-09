@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -11,7 +11,9 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import EditIcon from "@mui/icons-material/Edit";
 import { Config } from "../../config";
 import { useHistory } from "react-router-dom";
-
+import { InputLabel } from "@mui/material";
+import { Select } from "@mui/material";
+import { MenuItem } from "@mui/material";
 const fav = (resID) => {
   Axios.post(Config.url + "/favourites", {
     Restaurant_ID: resID,
@@ -21,13 +23,14 @@ const fav = (resID) => {
 };
 
 export default function Cards(props) {
+  const [qty, setQty] = useState("1");
   const cardStyle = {
     display: "block",
     width: "500px",
     height: "500px",
     margin: "20px",
   };
-  
+
   const history = useHistory();
   const handleLearnMore = () => {
     history.push("/restaurant/" + props.id);
@@ -36,6 +39,7 @@ export default function Cards(props) {
   const edit = (dID) => {
     history.push(`/edit/${dID}`);
   };
+  // console.log("qqqq", props);
   return (
     <div>
       <Card style={cardStyle}>
@@ -75,11 +79,32 @@ export default function Cards(props) {
                 <EditIcon onClick={() => edit(props.id)} />
               </Button>
             )}
+            <InputLabel
+              style={{ marginLeft: "2%" }}
+              size="small"
+              id="country"
+            ></InputLabel>
+            <Select
+              labelId="qty"
+              id="qty_select"
+              autoComplete="qty"
+              name="qty"
+              required
+              value={qty}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setQty(e.target.value);
+              }}
+            >
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+            </Select>
             {props.user === "customer" && (
               <Button size="small" variant="contained" sx={2}>
                 <AddShoppingCartIcon
                   onClick={(e) => {
-                    props.addToCart(props.id);
+                    props.addToCart(props.id, props.restId, qty);
                   }}
                 />
               </Button>
@@ -89,37 +114,4 @@ export default function Cards(props) {
       </Card>
     </div>
   );
-  // } else {
-  //   return (
-  //     <div>
-  //       {/* <img src={cover} alt="cover" height="200" width="1680" /> */}
-  //       <Card style={cardStyles}>
-  //         <CardMedia component="img" alt="food" height="140" image={food} />
-  //         <CardContent>
-  //           <Typography gutterBottom variant="h5" component="div">
-  //             {restaurant.Dish_Name}
-  //           </Typography>
-  //           <Typography variant="body2" color="text.secondary">
-  //             Ingredients :{restaurant.Ingredients}
-  //           </Typography>
-  //           <Typography variant="body2" color="text.secondary">
-  //             Description :{restaurant.Dish_Description}
-  //           </Typography>
-  //         </CardContent>
-  //         <CardActions>
-  //           <Button size="small" variant="contained">
-  //             ${restaurant.Dish_Price}
-  //           </Button>
-
-  //           {/* <Button
-  //             size="small"
-  //             variant="contained"
-  //             sx={2}
-  //             endIcon={<EditIcon />}
-  //           /> */}
-  //         </CardActions>
-  //       </Card>
-  //     </div>
-  //   );
-  // }
 }

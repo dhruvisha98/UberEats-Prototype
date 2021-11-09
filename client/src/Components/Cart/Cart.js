@@ -17,6 +17,7 @@ import { Table } from "@mui/material";
 import { Paper } from "@mui/material";
 
 export default function Cart(props) {
+  // Total Price for Order
   const [totalPrice, setTotalPrice] = React.useState(0);
   const orderCart = () => {
     Axios.post(Config.url + "/cart/order")
@@ -32,9 +33,9 @@ export default function Cart(props) {
   React.useEffect(() => {
     let total = 0;
     props.data.forEach((item) => {
-      total += parseInt(item.Dish_Price, 10);
+      total += parseInt(item.totalPrice, 10);
+      // console.log(total);
     });
-    console.log(total);
     setTotalPrice(total);
   }, []);
 
@@ -57,27 +58,31 @@ export default function Cart(props) {
               <TableHead>
                 <TableRow>
                   <TableCell>Dish Name</TableCell>
-                  <TableCell>Dish Description</TableCell>
-                  <TableCell>Ingredients</TableCell>
-                  <TableCell>Dish Price</TableCell>
+                  <TableCell>Quantity</TableCell>
+                  <TableCell>Dish Total Price</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {props.data?.map((d) => (
-                  <TableRow
-                    key={d.Dish_ID}
-                    sx={{
-                      "&:last-child td, &:last-child th": {
-                        border: 0,
-                      },
-                    }}
-                  >
-                    <TableCell>{d.Dish_Name}</TableCell>
-                    <TableCell>{d.Dish_Description}</TableCell>
-                    <TableCell>{d.Ingredients}</TableCell>
-                    <TableCell>{d.Dish_Price}</TableCell>
-                  </TableRow>
-                ))}
+                {props.data &&
+                  props.data.length > 0 &&
+                  props.data?.map((d) => (
+                    <TableRow
+                      key={d.Dish_ID}
+                      sx={{
+                        "&:last-child td, &:last-child th": {
+                          border: 0,
+                        },
+                      }}
+                    >
+                      <TableCell>{d.name}</TableCell>
+                      <TableCell>{d.qty}</TableCell>
+                      <TableCell>${d.totalPrice}</TableCell>
+                      <TableCell>
+                        <Button>Delete</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 <TableRow>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
@@ -90,9 +95,11 @@ export default function Cart(props) {
         </Typography>
 
         <ListItem>
-          <Button variant="outlined" onClick={orderCart}>
-            Place Order
-          </Button>
+          <div style={{ alignItems: "center" }}>
+            <Button variant="outlined" onClick={orderCart}>
+              Place Order
+            </Button>
+          </div>
         </ListItem>
       </List>
     </Dialog>

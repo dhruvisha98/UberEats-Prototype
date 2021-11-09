@@ -36,9 +36,11 @@ export default function RestaurantDetails(props) {
   const [openCard, setOpenCard] = useState(false);
   const [addDishId, setAddDishId] = useState("");
 
-  const addToCart = (id) => {
+  const addToCart = (id, resId, qty) => {
+    console.log(id);
+    console.log(resId);
     setAddDishId(id);
-    Axios.post(Config.url + "/cart", { Dish_ID: id })
+    Axios.post(Config.url + "/cart", { Dish_ID: id, restId: resId, qty: qty })
       .then((res) => {
         alert("Added To Cart");
       })
@@ -59,7 +61,7 @@ export default function RestaurantDetails(props) {
 
     setOpenCard(false);
   };
-  console.log(props);
+  console.log("Restaurant", props);
   return (
     <div>
       <Navbardb />
@@ -109,6 +111,7 @@ export default function RestaurantDetails(props) {
                     description={menu.DishDescription}
                     image={menu.DishImage}
                     id={menu._id}
+                    restId={props.restaurant_id}
                     price={menu.DishPrice}
                     addToCart={addToCart}
                   />
