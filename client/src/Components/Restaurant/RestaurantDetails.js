@@ -35,27 +35,42 @@ export default function RestaurantDetails(props) {
   const history = useHistory();
   const [openCard, setOpenCard] = useState(false);
   const [addDishId, setAddDishId] = useState("");
+  const [restId, setRestId] = useState("");
+  const [qty, setQty] = useState("");
+  const [totalPrice, setTotalPrice] = useState("");
+  const [dishId, setDishId] = useState("");
 
   const addToCart = (id, resId, qty) => {
     console.log(id);
-    console.log(resId);
+    console.log("resId", resId);
     setAddDishId(id);
     Axios.post(Config.url + "/cart", { Dish_ID: id, restId: resId, qty: qty })
       .then((res) => {
         alert("Added To Cart");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err.response?.data);
         if (err.response && err.response.status === 409) setOpenCard(true);
+        setRestId(resId);
+        setQty(err.response?.data.qty);
+        setTotalPrice(err.response?.data.totalPrice);
+        setDishId(err.response?.data.dishId);
       });
   };
 
   const newcart = () => {
-    Axios.post(Config.url + "/cart/resetCart", { Dish_ID: addDishId })
+    // console.log("New cart", qty, dishId, restId, totalPrice);
+    Axios.post(Config.url + "/cart/resetCart", {
+      Dish_ID: dishId,
+      restId: restId,
+      qty: qty,
+      totalPrice: totalPrice,
+    })
       .then((res) => {
-        console.log("Deleted");
+        console.log(res);
       })
       .catch((err) => {
+        console.log(err);
         console.log("Not deleted");
       });
 
