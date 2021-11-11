@@ -98,6 +98,7 @@ router.get("/orderfilter?", verify_token, async function (req, res) {
       res.status(200).send(rests);
     })
     .catch((err) => {
+      console.log("err", err);
       res.sendStatus(400);
     });
 });

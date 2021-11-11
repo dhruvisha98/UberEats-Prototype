@@ -21,6 +21,8 @@ import { Paper } from "@mui/material";
 import { TableBody } from "@mui/material";
 import { Select } from "@mui/material";
 import { MenuItem } from "@mui/material";
+import { Stack } from "@mui/material";
+import { Pagination } from "@mui/material";
 
 export default function RestaurantDetails(props) {
   // const handleSubmit = (event) => {
@@ -37,8 +39,14 @@ export default function RestaurantDetails(props) {
   const [data, setData] = useState([]);
   const [dispID, setDispID] = useState(0);
   const [openCard, setOpenCard] = useState(false);
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState("All Orders");
   const [dispOrder, setDispOrder] = useState({});
+  const [limit, setLimit] = useState("5");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   const style = {
     position: "absolute",
@@ -69,42 +77,42 @@ export default function RestaurantDetails(props) {
   };
 
   const getFilteredOrderDetails = (orderStatus) => {
-    if (orderStatus === null || orderStatus === undefined) {
-      getAllOrderDetails();
-      return;
+    if (orderStatus === "All Orders") {
+      orderStatus = "";
     }
-
     Axios.get(Config.url + "/orderdetails/orderfilter", {
       params: {
         status: orderStatus,
+        limit,
+        page,
       },
     })
       .then((res) => {
-        console.log(res);
-        setData(res.data);
+        setData(res.data.filteredOrders);
+        setTotalPages(res.data.totalPages);
+        setPage(res.data.currentPage);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const getAllOrderDetails = () => {
-    Axios.get(Config.url + "/orderdetails")
-      .then((res) => {
-        if (res.data.length === 0) {
-          console.log("NO DATA AVAILABLE");
-        }
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  console.log("data", data);
+  // const getAllOrderDetails = () => {
+  //   Axios.get(Config.url + "/orderdetails")
+  //     .then((res) => {
+  //       if (res.data.length === 0) {
+  //         console.log("NO DATA AVAILABLE");
+  //       }
+  //       setData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   useEffect(() => {
     var resp_data = [];
     getFilteredOrderDetails(status);
-  }, []);
+  }, [limit, page]);
   const cardStyle = {
     display: "block",
     width: "100%",
@@ -122,8 +130,30 @@ export default function RestaurantDetails(props) {
   return (
     <div>
       <Navbardb />
+
       <div>
         <center>
+          <Stack spacing={2}>
+            <Typography>Page: {page}</Typography>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handleChange}
+            />
+          </Stack>
+          <Select
+            align="center"
+            labelId="limit"
+            id="limit"
+            value={limit}
+            onChange={(e) => {
+              setLimit(e.target.value);
+            }}
+          >
+            <MenuItem value="2">2</MenuItem>
+            <MenuItem value="5">5</MenuItem>
+            <MenuItem value="10">10</MenuItem>
+          </Select>
           <label>Order Status :</label>
           <Select
             labelId="demo-simple-select-label"
@@ -131,7 +161,7 @@ export default function RestaurantDetails(props) {
             value={status}
             onChange={handlechange}
           >
-            <MenuItem value={null}>All Orders</MenuItem>
+            <MenuItem value="All Orders">All Orders</MenuItem>
             <MenuItem value="Order Recieved">Order Recieved</MenuItem>
             <MenuItem value="Preparing">Preparing</MenuItem>
             <MenuItem value="On the way">On the way</MenuItem>
@@ -142,24 +172,26 @@ export default function RestaurantDetails(props) {
         <Grid container>
           {data?.map((d) => (
             <div style={{ textAlign: "center" }}>
-              <Card onClick={() => openDialog(d._id)} style={cardStyle}>
-                <CardContent>
-                  <h2 style={{ textAlign: "center" }}>
-                    {d?.restaurant.RestaurantName}
-                  </h2>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Total Order Price: ${d?.finalOrderPrice}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Order Status:{d?.status}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Order Time:{" "}
-                    {d?.createdAt ? new Date(d.createdAt).getHours() : null}:
-                    {d?.createdAt ? new Date(d.createdAt).getMinutes() : null}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <div style={{ marginLeft: "10%" }}>
+                <Card onClick={() => openDialog(d._id)} style={cardStyle}>
+                  <CardContent>
+                    <h2 style={{ textAlign: "center" }}>
+                      {d?.restaurant.RestaurantName}
+                    </h2>
+                    <Typography gutterBottom variant="h5" component="div">
+                      Total Order Price: ${d?.finalOrderPrice}
+                    </Typography>
+                    <Typography gutterBottom variant="h5" component="div">
+                      Order Status:{d?.status}
+                    </Typography>
+                    <Typography gutterBottom variant="h5" component="div">
+                      Order Time:{" "}
+                      {d?.createdAt ? new Date(d.createdAt).getHours() : null}:
+                      {d?.createdAt ? new Date(d.createdAt).getMinutes() : null}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </div>
               <Modal
                 open={openCard}
                 onClose={() => {

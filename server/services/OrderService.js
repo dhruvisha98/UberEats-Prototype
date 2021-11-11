@@ -5,17 +5,34 @@ const mongoose = require("mongoose");
 
 const getFilteredOrders = async (req, res) => {
   const id = req.body.auth_user.id;
+  const { page = 1, limit = 3, status } = req.query;
+
+  const checkProperties = (obj) => {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === null || obj[key] === "" || obj[key] === undefined) {
+        // eslint-disable-next-line no-param-reassign
+        delete obj[key];
+      }
+    });
+  };
+
   const role = req.body.auth_user.type;
-  console.log(req.body);
-  console.log(req.query);
-  const status = req.query.status;
+
+  let temp = {
+    custId: mongoose.Types.ObjectId(String(id)),
+    status,
+  };
+
+  checkProperties(temp);
+
   if (role === "customer") {
+    const custOrders = await order.find(temp);
+
+    const count = custOrders.length;
+
     const filteredOrders = await order.aggregate([
       {
-        $match: {
-          custId: mongoose.Types.ObjectId(String(id)),
-          status,
-        },
+        $match: temp,
       },
       {
         $lookup: {
@@ -30,8 +47,24 @@ const getFilteredOrders = async (req, res) => {
           path: "$restaurant",
         },
       },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
+        $skip: (page - 1) * limit,
+      },
+      {
+        $limit: limit * 1,
+      },
     ]);
-    return filteredOrders;
+    return {
+      totalDocs: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      filteredOrders,
+    };
   } else if (role === "restaurant") {
     const filteredOrders = await order.aggregate([
       {

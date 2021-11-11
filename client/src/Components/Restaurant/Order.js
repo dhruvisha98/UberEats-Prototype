@@ -40,6 +40,7 @@ export default function RestaurantOrder(props) {
   const [dispOrder, setDispOrder] = useState({});
   const [status, setStatus] = useState();
   const [filter, setFilter] = useState("All Orders");
+  const [limit, setLimit] = useState("5");
 
   const style = {
     position: "absolute",
@@ -221,6 +222,7 @@ export default function RestaurantOrder(props) {
                         </TableBody>
                       </Table>
                     </TableContainer>
+
                     <Select
                       align="center"
                       labelId="demo-simple-select-label"
