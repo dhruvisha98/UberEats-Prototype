@@ -8,13 +8,13 @@ const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 var { CustomerService } = require("../services/");
 
-var connection = mysql.createPool({
-  host: constants.DB.host,
-  user: constants.DB.username,
-  password: constants.DB.password,
-  port: constants.DB.port,
-  database: constants.DB.database,
-});
+// var connection = mysql.createPool({
+//   host: constants.DB.host,
+//   user: constants.DB.username,
+//   password: constants.DB.password,
+//   port: constants.DB.port,
+//   database: constants.DB.database,
+// });
 router.post("/", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -42,10 +42,11 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  console.log("\n\n\n\n\n" + username);
+  // console.log("\n\n\n\n\n" + username);
   CustomerService.findCustomerByEmail(username)
     .then((customer) => {
-      console.log(customer);
+      // console.log(customer);
+
       if (customer.CustomerPassword === password) {
         let token = jwt.sign(
           {

@@ -1,26 +1,45 @@
 var mongoose = require("mongoose");
 
 var OrderDetailsSchema = new mongoose.Schema({
-  OrderStatus: {
-    type: "String",
+  restId: {
+    type: mongoose.Schema.Types.ObjectId,
   },
-  DeliveryStatus: {
-    type: "String",
+  custId: {
+    type: mongoose.Schema.Types.ObjectId,
   },
-  Dishes: [
+  totalOrderPrice: {
+    type: Number,
+  },
+  tax: {
+    type: Number,
+  },
+  finalOrderPrice: {
+    type: Number,
+  },
+  dishes: [
     {
-      DishName: "String",
-      DishPrice: "Number",
-      Ingredients: "Array",
-      DishDescription: "String",
-      DishCategory: "String",
-      DishImage: "String",
+      dishId: { type: mongoose.Schema.Types.ObjectId },
+      qty: { type: Number },
+      totalPrice: { type: Number },
+      name: { type: String },
     },
   ],
-  Customer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "customer_details",
+  orderType: {
+    type: String,
+  },
+  status: {
+    type: String,
+  },
+
+  createdAt: {
+    type: Date,
+  },
+  updatedAt: {
+    type: Date,
+  },
+  notes: {
+    type: String,
   },
 });
-var OrderDetails = mongoose.model("Order_Details", OrderDetailsSchema);
-module.exports = { OrderDetails };
+
+module.exports = mongoose.model("order", OrderDetailsSchema);

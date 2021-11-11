@@ -112,7 +112,9 @@ const getCartById = async (id) => {
   // Update this
   if (cartItems.length === 0) return null;
 
+  // console.log(cartItems);
   const restId = cartItems[0].restId;
+  // console.log("restId", restId);
   const dishes = await RestaurantDetails.findOne({
     _id: mongoose.Types.ObjectId(String(restId)),
   })
@@ -124,6 +126,7 @@ const getCartById = async (id) => {
     dishMap.set(dish._id.toString(), dish);
   });
 
+  // console.log(dishMap);
   let totPrice = 0;
 
   cartItems = cartItems.map((item) => {
@@ -225,17 +228,24 @@ const updateCartItems = async (req, res) => {
 
 const resetCart = async (req, res) => {
   const custId = req.body.auth_user.id;
-  const { dishId, restId, qty } = req.body;
-
-  if ((restId && !dishId) || (!restId && dishId)) {
+  const { Dish_ID, restId, qty, totalPrice } = req.body;
+  // console.log("....", req.body);
+  if ((restId && !Dish_ID) || (!restId && Dish_ID)) {
     return { error: "Provide all details" };
   }
   try {
-    await cart.findOneAndDelete({
+    await cart.deleteMany({
       custId: mongoose.Types.ObjectId(String(custId)),
     });
-
-    const newCartItem = new cart(req.body);
+    console.log("...", custId, restId, req.body.Dish_ID, totalPrice, qty);
+    const newCartItem = new cart({
+      custId,
+      restId,
+      dishId: req.body.Dish_ID,
+      totalPrice,
+      qty,
+    });
+    // console.log(newCartItem);
     const createdCartItem = await newCartItem.save();
     return { message: "Dish Added to Cart" };
   } catch (err) {

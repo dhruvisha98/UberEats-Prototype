@@ -24,10 +24,11 @@ export default function Cart(props) {
   const [totalPrice, setTotalPrice] = React.useState(props.totPrice);
   const [qty, setQty] = React.useState("");
 
-  const orderCart = () => {
-    Axios.post(Config.url + "/cart/order")
+  const orderCart = (custId) => {
+    Axios.post(Config.url + "/cart/order", { custId: custId })
       .then((res) => {
         alert("Ordered");
+        // console.log("res", res);
         props.setOpen(false);
       })
       .catch((err) => {
@@ -43,7 +44,7 @@ export default function Cart(props) {
       custId: custId,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setQty(res.data.qty);
         setTotalPrice(res.data.totPrice);
         props.handleOpenCart(true);
@@ -153,7 +154,7 @@ export default function Cart(props) {
 
         <ListItem>
           <div style={{ alignItems: "center" }}>
-            <Button variant="outlined" onClick={orderCart}>
+            <Button variant="outlined" onClick={() => orderCart(props.custId)}>
               Place Order
             </Button>
           </div>

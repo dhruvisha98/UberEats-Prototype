@@ -100,21 +100,21 @@ export default function RestaurantDetails(props) {
         console.log(err);
       });
   };
-
+  console.log("data", data);
   useEffect(() => {
     var resp_data = [];
     getFilteredOrderDetails(status);
   }, []);
   const cardStyle = {
     display: "block",
-    width: "400px",
-    height: "500px",
+    width: "100%",
+    height: "100%",
     margin: "20px",
   };
 
   const openDialog = (id) => {
     setDispID(id);
-    const filtered = data.filter((item) => item.order_id == id);
+    const filtered = data.filter((item) => item._id == id);
     setDispOrder(filtered.length > 0 && filtered[0]);
     setOpenCard(true);
   };
@@ -140,26 +140,23 @@ export default function RestaurantDetails(props) {
         </center>
         <h1>{props.restaurant_id}</h1>
         <Grid container>
-          {data.map((d) => (
-            <div>
-              <Card onClick={() => openDialog(d.order_id)} style={cardStyle}>
+          {data?.map((d) => (
+            <div style={{ textAlign: "center" }}>
+              <Card onClick={() => openDialog(d._id)} style={cardStyle}>
                 <CardContent>
+                  <h2 style={{ textAlign: "center" }}>
+                    {d?.restaurant.RestaurantName}
+                  </h2>
                   <Typography gutterBottom variant="h5" component="div">
-                    Order Id: {d.order_id}
-                  </Typography>
-
-                  <Typography gutterBottom variant="h5" component="div">
-                    Name: {d.restaurant_name}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Description:{d.restaurant_desc}
+                    Total Order Price: ${d?.finalOrderPrice}
                   </Typography>
                   <Typography gutterBottom variant="h5" component="div">
-                    {d.restaurant_cont}
+                    Order Status:{d?.status}
                   </Typography>
-
                   <Typography gutterBottom variant="h5" component="div">
-                    Order Status:{d.delivery_status}
+                    Order Time:{" "}
+                    {d?.createdAt ? new Date(d.createdAt).getHours() : null}:
+                    {d?.createdAt ? new Date(d.createdAt).getMinutes() : null}
                   </Typography>
                 </CardContent>
               </Card>
@@ -176,20 +173,19 @@ export default function RestaurantDetails(props) {
                     id="modal-modal-title"
                     variant="h6"
                     component="h2"
+                    style={{ textAlign: "center" }}
                   >
-                    {dispOrder.order_id} : Order from{" "}
-                    {dispOrder.restaurant_name}
+                    {dispOrder?.restaurant?.RestaurantName}
                   </Typography>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <TableContainer component={Paper}>
                       <Table aria-label="simple table">
                         <TableHead>
                           <TableRow>
-                            <TableCell>Dish ID</TableCell>
                             <TableCell>Dish Name</TableCell>
-                            <TableCell>Dish Description</TableCell>
                             <TableCell>Dish Price</TableCell>
-                            <TableCell>Ingridients</TableCell>
+                            <TableCell>Qty</TableCell>
+                            <TableCell>Total Price</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -202,19 +198,20 @@ export default function RestaurantDetails(props) {
                                 },
                               }}
                             >
-                              <TableCell component="th" scope="row">
-                                {row.Dish_ID}
-                              </TableCell>
-                              <TableCell>{row.Dish_Name}</TableCell>
-                              <TableCell>{row.Dish_Description}</TableCell>
-                              <TableCell>{row.Dish_Price}</TableCell>
-                              <TableCell>{row.Ingredients}</TableCell>
+                              <TableCell>{row.name}</TableCell>
+                              <TableCell>{row.totalPrice / row.qty}</TableCell>
+                              <TableCell>{row.qty}</TableCell>
+                              <TableCell>{row.totalPrice}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
                       </Table>
                     </TableContainer>
                   </Typography>
+                  <div style={{ textAlign: "right", marginTop: "3%" }}>
+                    Tax : ${dispOrder?.tax} <br />
+                    Final Price: ${dispOrder?.finalOrderPrice}
+                  </div>
                 </Box>
               </Modal>
             </div>

@@ -55,11 +55,9 @@ export default function RestaurantOrder(props) {
   const handleChange = (e, id) => {
     ///// Update Order status query
     setStatus(e.target.value);
-    console.log(id);
-
     Axios.put(Config.url + "/orderstatus", {
-      Delivery_Status: e.target.value,
-      Order_ID: id,
+      status: e.target.value,
+      id,
     })
       .then((res) => {
         console.log(res);
@@ -90,7 +88,6 @@ export default function RestaurantOrder(props) {
       },
     })
       .then((res) => {
-        console.log(res);
         setData(res.data);
       })
       .catch((err) => {
@@ -116,7 +113,6 @@ export default function RestaurantOrder(props) {
     getFilteredOrderDetails(status);
   }, []);
 
-  console.log(data);
   // useEffect(() => {
   //   var resp_data = [];
   //   Axios.get(Config.url + "/orderdetails")
@@ -131,8 +127,8 @@ export default function RestaurantOrder(props) {
 
   const cardStyle = {
     display: "block",
-    width: "400px",
-    height: "500px",
+    width: "100%",
+    height: "100%",
     margin: "20px",
   };
 
@@ -172,24 +168,14 @@ export default function RestaurantOrder(props) {
                 style={cardStyle}
               >
                 <CardContent>
+                  <div style={{ textAlign: "center" }}>
+                    <h2>{d?.customer?.CustomerName}</h2>
+                  </div>
                   <Typography gutterBottom variant="h5" component="div">
-                    {d.order_id}
-                  </Typography>
-
-                  <Typography gutterBottom variant="h5" component="div">
-                    Name: {d.customer_name}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Description:{d.restaurant_desc}
+                    Order Status: {d.status}
                   </Typography>
                   <Typography gutterBottom variant="h5" component="div">
-                    {d.restaurant_cont}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Order Status:{d.order_status}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Delivery Status:{d.delivery_status}
+                    Order Price: ${d?.finalOrderPrice}
                   </Typography>
                 </CardContent>
               </Card>
@@ -202,23 +188,18 @@ export default function RestaurantOrder(props) {
                 aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                  >
-                    {dispOrder.order_id} : Order for {dispOrder.customer_name}
-                  </Typography>
+                  <div style={{ textAlign: "center" }}>
+                    <h2>{dispOrder?.customer?.CustomerName}</h2>
+                  </div>
                   <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <TableContainer component={Paper}>
                       <Table aria-label="simple table">
                         <TableHead>
                           <TableRow>
-                            <TableCell>Dish ID</TableCell>
                             <TableCell>Dish Name</TableCell>
-                            <TableCell>Dish Description</TableCell>
                             <TableCell>Dish Price</TableCell>
-                            <TableCell>Ingridients</TableCell>
+                            <TableCell>Qty</TableCell>
+                            <TableCell>Total Price</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -231,13 +212,10 @@ export default function RestaurantOrder(props) {
                                 },
                               }}
                             >
-                              <TableCell component="th" scope="row">
-                                {row.Dish_ID}
-                              </TableCell>
-                              <TableCell>{row.Dish_Name}</TableCell>
-                              <TableCell>{row.Dish_Description}</TableCell>
-                              <TableCell>{row.Dish_Price}</TableCell>
-                              <TableCell>{row.Ingredients}</TableCell>
+                              <TableCell>{row?.name}</TableCell>
+                              <TableCell>{row?.totalPrice / row.qty}</TableCell>
+                              <TableCell>{row?.qty}</TableCell>
+                              <TableCell>{row?.totalPrice}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -248,7 +226,7 @@ export default function RestaurantOrder(props) {
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       value={status}
-                      onChange={(e) => handleChange(e, dispOrder.order_id)}
+                      onChange={(e) => handleChange(e, dispOrder._id)}
                     >
                       <MenuItem value="Order Recieved">Order Recieved</MenuItem>
                       <MenuItem value="Preparing">Preparing</MenuItem>

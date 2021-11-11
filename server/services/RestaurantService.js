@@ -50,7 +50,6 @@ const RestaurantLogin = (username, password) =>
             return resolve({ result: restaurant, token });
           })
           .catch((err) => {
-            // console.log("Weeeeeeeee");
             return reject(err);
           });
       });
