@@ -47,7 +47,21 @@ export default function RestaurantDetails(props) {
   const handleChange = (event, value) => {
     setPage(value);
   };
+  console.log("Props", props);
+  const cancelOrder = (id) => {
+    ///// Update Order status query
 
+    Axios.put(Config.url + "/orderstatus", {
+      status: "Cancelled",
+      id,
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const style = {
     position: "absolute",
     top: "50%",
@@ -173,23 +187,41 @@ export default function RestaurantDetails(props) {
           {data?.map((d) => (
             <div style={{ textAlign: "center" }}>
               <div style={{ marginLeft: "10%" }}>
-                <Card onClick={() => openDialog(d._id)} style={cardStyle}>
-                  <CardContent>
-                    <h2 style={{ textAlign: "center" }}>
-                      {d?.restaurant.RestaurantName}
-                    </h2>
-                    <Typography gutterBottom variant="h5" component="div">
-                      Total Order Price: ${d?.finalOrderPrice}
-                    </Typography>
-                    <Typography gutterBottom variant="h5" component="div">
-                      Order Status:{d?.status}
-                    </Typography>
-                    <Typography gutterBottom variant="h5" component="div">
-                      Order Time:{" "}
-                      {d?.createdAt ? new Date(d.createdAt).getHours() : null}:
-                      {d?.createdAt ? new Date(d.createdAt).getMinutes() : null}
-                    </Typography>
-                  </CardContent>
+                <Card style={cardStyle}>
+                  <div onClick={() => openDialog(d._id)}>
+                    <CardContent>
+                      <h2 style={{ textAlign: "center" }}>
+                        {d?.restaurant.RestaurantName}
+                      </h2>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Total Order Price: ${d?.finalOrderPrice}
+                      </Typography>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Order Status:{d?.status}
+                      </Typography>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Order Time:{" "}
+                        {d?.createdAt ? new Date(d.createdAt).getHours() : null}
+                        :
+                        {d?.createdAt
+                          ? new Date(d.createdAt).getMinutes()
+                          : null}
+                      </Typography>
+                    </CardContent>
+                  </div>
+
+                  <div>
+                    <center>
+                      {d?.status === "Order Recieved" ? (
+                        <Button
+                          variant="outlined"
+                          onClick={() => cancelOrder(d?._id)}
+                        >
+                          Cancel
+                        </Button>
+                      ) : null}
+                    </center>
+                  </div>
                 </Card>
               </div>
               <Modal

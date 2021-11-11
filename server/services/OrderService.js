@@ -171,8 +171,7 @@ const createOrder = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
-  const status = req.body.status;
-  const id = req.body.id;
+  const { status, id } = req.body;
 
   const orderDetails = await order.findOne({
     _id: mongoose.Types.ObjectId(String(id)),
@@ -192,6 +191,7 @@ const updateOrder = async (req, res) => {
   }
   try {
     console.log(status);
+
     const updateStatus = await order.updateOne(
       {
         _id: mongoose.Types.ObjectId(String(id)),
