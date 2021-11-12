@@ -1,4 +1,5 @@
 const { CustomerDetails } = require("../models/CustomerDetails");
+const mongoose = require("mongoose");
 
 const createCustomer = async (
   CustomerName = "",
@@ -48,16 +49,32 @@ const updateCustomerById = async (id, body) => {
     "CustomerCountry",
     "CustomerImage",
   ];
+  var address = body["address"];
   var query = {};
   for (var r of names) {
     if (body[r] !== null && body[r] !== undefined) {
       query[r] = body[r];
     }
   }
+
+  if (address !== null) {
+    await CustomerDetails.findOneAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(String(id)),
+      },
+      {
+        $push: {
+          CustomerAddress: [address],
+        },
+      }
+    );
+  }
   // console.log(query);
   return await CustomerDetails.findByIdAndUpdate(id, query);
 };
-
+const getAddress = (cust_id) => {
+  return CustomerDetails.findById(cust_id).exec();
+};
 const addFavourite = (cust_id, rest_id) => {
   var query = CustomerDetails.updateOne(
     { _id: cust_id },
@@ -77,9 +94,11 @@ const getFavouriteRestaurants = (cust_id) => {
     .populate("CustomerFavourites");
   return query.exec();
 };
+
 module.exports = {
   createCustomer,
   findCustomerByEmail,
+  getAddress,
   updateCustomerById,
   addFavourite,
   getFavouriteRestaurants,

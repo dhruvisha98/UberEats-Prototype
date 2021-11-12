@@ -33,6 +33,7 @@ export default function RSignUp() {
   } = useForm();
 
   const onSubmit = (data) => {
+    console.log("bruh0");
     const { name, email, password, delivery, location } = data;
     Axios.post(Config.url + "/restaurant", {
       Restaurant_Name: name,
@@ -42,12 +43,15 @@ export default function RSignUp() {
       Restaurant_Password: password,
     })
       .then((response) => {
+        console.log("bruh1");
+        console.log(response);
         if (response.status === 200) {
           setRestaurantName(name);
           setSuccess(true);
         }
       })
       .catch((error) => {
+        console.log("bruh2");
         console.log(error);
       });
   };

@@ -14,6 +14,7 @@ import RestaurantPage from "./Restaurant/RestaurantPage";
 import OrderDetails from "./Order/OrderDetails";
 import EditDish from "./Restaurant/EditDish";
 import Order from "./Restaurant/Order";
+import Checkout from "./Cart/Checkout";
 
 export default function Main() {
   return (
@@ -34,6 +35,7 @@ export default function Main() {
         <Route exact path="/restaurant/:id" component={RestaurantPage} />
         <Route exact path="/order" component={OrderDetails} />
         <Route exact path="/rorder" component={Order} />
+        <Route exact path="/checkout/:oid" component={Checkout} />
       </Router>
     </div>
   );

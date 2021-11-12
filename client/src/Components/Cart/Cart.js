@@ -18,23 +18,32 @@ import { Paper } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { MenuItem } from "@mui/material";
+import { useHistory } from "react-router-dom";
 
 export default function Cart(props) {
   // Total Price for Order
   const [totalPrice, setTotalPrice] = React.useState(props.totPrice);
   const [qty, setQty] = React.useState("");
 
+  const history = useHistory();
+
   const orderCart = (custId) => {
     Axios.post(Config.url + "/cart/order", { custId: custId })
       .then((res) => {
         alert("Ordered");
-        // console.log("res", res);
+        // res.send(res.data);
+        history.push(`/checkout/${res.data.orderId}`);
+
         props.setOpen(false);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  // const handleCheckout = () => {
+  //   history.push("/checkout");
+  // };
 
   const updateQuantity = (custId, cartItemId, qty) => {
     // console.log(custId, cartItemId, qty);
@@ -155,9 +164,14 @@ export default function Cart(props) {
         <ListItem>
           <div style={{ alignItems: "center" }}>
             <Button variant="outlined" onClick={() => orderCart(props.custId)}>
-              Place Order
+              Check Out
             </Button>
           </div>
+          {/* <div style={{ alignItems: "center" }}>
+            <Button variant="outlined" onClick={() => orderCart(props.custId)}>
+              Place Order
+            </Button>
+          </div> */}
         </ListItem>
       </List>
     </Dialog>

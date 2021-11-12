@@ -83,8 +83,8 @@ router.post("/order", verify_token, async function (req, res) {
   // console.log(req.body);
   // console.log("GHSJSDHJSHD");
   OrderService.createOrder(req)
-    .then(() => {
-      res.sendStatus(200);
+    .then((data) => {
+      res.status(200).send(data);
     })
     .catch((err) => {
       res.sendStatus(400);

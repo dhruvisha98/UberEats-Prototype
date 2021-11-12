@@ -74,21 +74,17 @@ export default function RestaurantOrder(props) {
   };
 
   const getFilteredOrderDetails = (orderStatus) => {
-    if (
-      orderStatus === null ||
-      orderStatus === "All Orders" ||
-      orderStatus === undefined
-    ) {
-      getAllOrderDetails();
-      return;
+    console.log("orderstatus", orderStatus);
+    if (orderStatus === "All Orders") {
+      orderStatus = "";
     }
-
     Axios.get(Config.url + "/orderdetails/orderfilter", {
       params: {
         status: orderStatus,
       },
     })
       .then((res) => {
+        console.log("res", res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -164,22 +160,30 @@ export default function RestaurantOrder(props) {
         <Grid container>
           {data.map((d) => (
             <div>
-              <Card
-                onClick={() => openDialog(d.order_id, d.delivery_status)}
-                style={cardStyle}
-              >
-                <CardContent>
-                  <div style={{ textAlign: "center" }}>
-                    <h2>{d?.customer?.CustomerName}</h2>
-                  </div>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Order Status: {d.status}
-                  </Typography>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Order Price: ${d?.finalOrderPrice}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <div style={{ marginLeft: "10%" }}>
+                <Card
+                  onClick={() => openDialog(d.order_id, d.delivery_status)}
+                  style={cardStyle}
+                >
+                  <CardContent>
+                    <div style={{ textAlign: "center" }}>
+                      <img
+                        src={d.customer.CustomerImage}
+                        style={{ width: "280px", height: "150px" }}
+                      />
+                      <h2>{d?.customer?.CustomerName}</h2>
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Order Status: {d.status}
+                      </Typography>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Order Price: ${d?.finalOrderPrice}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
               <Modal
                 open={openCard}
                 onClose={() => {

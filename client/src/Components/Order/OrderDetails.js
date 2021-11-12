@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -147,14 +148,16 @@ export default function RestaurantDetails(props) {
 
       <div>
         <center>
-          <Stack spacing={2}>
-            <Typography>Page: {page}</Typography>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={handleChange}
-            />
-          </Stack>
+          <div>
+            <Stack spacing={2}>
+              <Typography>Page: {page}</Typography>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={handleChange}
+              />
+            </Stack>
+          </div>
           <Select
             align="center"
             labelId="limit"
@@ -182,6 +185,7 @@ export default function RestaurantDetails(props) {
             <MenuItem value="Pending">Pending</MenuItem>
           </Select>
         </center>
+
         <h1>{props.restaurant_id}</h1>
         <Grid container>
           {data?.map((d) => (
@@ -190,6 +194,10 @@ export default function RestaurantDetails(props) {
                 <Card style={cardStyle}>
                   <div onClick={() => openDialog(d._id)}>
                     <CardContent>
+                      <img
+                        src={d.restaurant.RestaurantImage}
+                        style={{ width: "280px", height: "150px" }}
+                      />
                       <h2 style={{ textAlign: "center" }}>
                         {d?.restaurant.RestaurantName}
                       </h2>

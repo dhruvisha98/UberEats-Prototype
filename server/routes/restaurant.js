@@ -12,13 +12,8 @@ let { Restaurant_Search } = require("../search.js");
 const { IoTFleetHub } = require("aws-sdk");
 const { RestaurantServices } = require("../services/index");
 const { RestaurantDetails } = require("../models/RestaurantDetails");
-var connection = mysql.createPool({
-  host: constants.DB.host,
-  user: constants.DB.username,
-  password: constants.DB.password,
-  port: constants.DB.port,
-  database: constants.DB.database,
-});
+const { make_request } = require("../kafka/client");
+
 // console.log(verify_token);
 router.get("/", verify_token, cust_auth, async function (req, res) {
   //console.log(req)
@@ -39,55 +34,41 @@ router.put("/", verify_token, async function (req, res) {
 });
 
 router.post("/", (req, res) => {
-  const Restaurant_Name = req.body.Restaurant_Name;
-  const Restaurant_Email = req.body.Restaurant_Email;
-  const Restaurant_Description = req.body.Restaurant_Description;
-  const Restaurant_Contact = req.body.Restaurant_Contact;
-  const Restaurant_Type = req.body.Restaurant_Type;
-  const Restaurant_Time = req.body.Restaurant_Time;
-  const Restaurant_Delivery_Mode = req.body.Restaurant_Delivery_Mode;
-  const Restaurant_Day = req.body.Restaurant_Day;
-  const Restaurant_Location = req.body.Restaurant_Location;
-  const Restaurant_Password = req.body.Restaurant_Password;
-
-  bcrypt.hash(Restaurant_Password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
+  make_request("restaurant.create", req.body, (error, response) => {
+    if (error || !response) {
+      return res.status(500).json({ error });
     }
-    console.log(hash);
-    RestaurantServices.createRestaurant(
-      Restaurant_Name,
-      Restaurant_Email,
-      Restaurant_Description,
-      Restaurant_Contact,
-      Restaurant_Type,
-      Restaurant_Delivery_Mode,
-      Restaurant_Location,
-      (RestaurantPassword = hash)
-    )
-      .then((rest) => {
-        res.send(rest);
-      })
-      .catch((err) => {
-        res.sendStatus(400);
-      });
+    return res.status(200).json({ ...response.rest });
   });
 });
 
 router.post("/rlogin", (req, res) => {
   const Restaurant_Email = req.body.Restaurant_Email;
   const Restaurant_Password = req.body.Restaurant_Password;
-  RestaurantServices.RestaurantLogin(Restaurant_Email, Restaurant_Password)
-    .then((resp) => {
-      // console.log("hello");
-      console.log(resp);
-      return res.send({ ...resp, message: "Success" });
-    })
-    .catch((err) => {
-      console.log(err);
-      console.log("Error");
-      res.sendStatus(404);
-    });
+
+  make_request(
+    "restaurant.login",
+    { Restaurant_Email, Restaurant_Password },
+    (error, response) => {
+      console.log(error);
+      console.log(response);
+      if (error || !response) {
+        return res.status(404).json({ error });
+      }
+      return res.status(200).json({ response });
+    }
+  );
+  // RestaurantServices.RestaurantLogin(Restaurant_Email, Restaurant_Password)
+  //   .then((resp) => {
+  //     // console.log("hello");
+  //     console.log(resp);
+  //     return res.send({ ...resp, message: "Success" });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     console.log("Error");
+  //     res.sendStatus(404);
+  //   });
 });
 
 router.get("/search", async function (req, res) {

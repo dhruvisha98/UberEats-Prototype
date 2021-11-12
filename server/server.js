@@ -1,6 +1,7 @@
 var constants = require("./config.json");
 var mysql = require("mysql");
 const cors = require("cors");
+const { createKafkaTopics } = require("./kafka/topics");
 // var { Restaurant_Search } = require("./search.js");
 const port = process.env.PORT || 5001; //Line 3
 
@@ -34,23 +35,7 @@ app.use(
     saveUninitialized: true,
   })
 );
-var connection = mysql.createPool({
-  host: constants.DB.host,
-  user: constants.DB.username,
-  password: constants.DB.password,
-  port: constants.DB.port,
-  database: constants.DB.database,
-});
 
-//console.log("Aaavfvfvfvfvfvfvf");
-// Restaurant_Search.init(connection);
-// connection.getConnection((err) => {
-//   if (err) {
-//     // eslint-disable-next-line no-throw-literal
-//     throw "Error occurred" + err;
-//   }
-//   console.log("pool created");
-// });
 var mongodb = require("./models/index.js");
 
 var customer = require("./routes/customer.js");
@@ -81,6 +66,7 @@ app.use("/cart", cart);
 const images = require("./routes/images");
 app.use("/images", images);
 
+createKafkaTopics();
 app.listen(port, () => console.log(`Sever listening on port ${port}`));
 
-module.exports = { app, connection };
+module.exports = { app };
