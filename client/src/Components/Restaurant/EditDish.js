@@ -158,7 +158,7 @@ export default function EditDish(props) {
               </Grid>
             </Grid>
             <Button
-              style={{ background: "#b26a00" }}
+              style={{ background: "#000000" }}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}

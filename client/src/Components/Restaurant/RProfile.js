@@ -293,7 +293,7 @@ export default function RProfile() {
                         variant="contained"
                         fullWidth
                         onClick={singleFileUploadHandler}
-                        style={{ background: "#b26a00" }}
+                        style={{ background: "#000000" }}
                       >
                         Upload Image
                         <input type="file" hidden />
@@ -303,7 +303,7 @@ export default function RProfile() {
                     <Grid item xs={12}>
                       <Button
                         onClick={handleSubmit}
-                        style={{ background: "#b26a00" }}
+                        style={{ background: "#000000" }}
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}

@@ -30,7 +30,7 @@ export default function Cart(props) {
   const orderCart = (custId) => {
     Axios.post(Config.url + "/cart/order", { custId: custId })
       .then((res) => {
-        alert("Ordered");
+        // alert("Ordered");
         // res.send(res.data);
         history.push(`/checkout/${res.data.orderId}`);
 
@@ -144,7 +144,11 @@ export default function Cart(props) {
                       </TableCell>
                       <TableCell>${d.totalPrice}</TableCell>
                       <TableCell>
-                        <Button onClick={() => deleteCartItem(d._id)}>
+                        <Button
+                          variant="contained"
+                          style={{ backgroundColor: "#000000" }}
+                          onClick={() => deleteCartItem(d._id)}
+                        >
                           Delete
                         </Button>
                       </TableCell>
@@ -163,7 +167,11 @@ export default function Cart(props) {
 
         <ListItem>
           <div style={{ alignItems: "center" }}>
-            <Button variant="outlined" onClick={() => orderCart(props.custId)}>
+            <Button
+              style={{ backgroundColor: "#000000" }}
+              variant="contained"
+              onClick={() => orderCart(props.custId)}
+            >
               Check Out
             </Button>
           </div>

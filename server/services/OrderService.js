@@ -156,7 +156,7 @@ const createOrder = async (req, res) => {
   orderObj["tax"] = (sumTotal * 0.18).toFixed(2);
   orderObj["finalOrderPrice"] = (sumTotal * 1.18).toFixed(2);
   orderObj["dishes"] = orderDishArray;
-  orderObj["status"] = "Initialized";
+  orderObj["status"] = "Initialised";
   orderObj["createdAt"] = new Date();
   orderObj["updatedAt"] = new Date();
 
@@ -267,6 +267,35 @@ const getOrders = async (req, res) => {
     return orders;
   }
 };
+const placeOrder = async (req, res) => {
+  const { type, address, id, notes } = req.body;
+
+  console.log(req.body);
+  let newAddr = "";
+  if (type === "Pickup") {
+    newAddr = "Pickup From Restaurant";
+  } else {
+    newAddr = address;
+  }
+  try {
+    const updateOrder = await order.findOneAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(String(id)),
+      },
+      {
+        status: "Order Placed",
+        orderType: type,
+        address: newAddr,
+        updatedAt: new Date(),
+        notes,
+      }
+    );
+    return { message: "Order Placed" };
+  } catch (err) {
+    return { messagr: "Error" };
+  }
+};
+
 const getOrderById = async (req, res) => {
   const role = req.body.auth_user.type;
   const oid = req.params.oid;
@@ -360,4 +389,5 @@ module.exports = {
   updateOrder,
   getOrders,
   getOrderById,
+  placeOrder,
 };

@@ -10,14 +10,6 @@ const OrderService = require("../services/OrderService");
 const verify_token = require("../verifyToken").module;
 
 // var url = "http://localhost:5000";
-var connection = mysql.createPool({
-  host: constants.DB.host,
-  user: constants.DB.username,
-  password: constants.DB.password,
-  port: constants.DB.port,
-  database: constants.DB.database,
-  // connectionLimit: 50,
-});
 
 //Get API
 router.get("/get", verify_token, async function (req, res) {

@@ -56,6 +56,7 @@ export default function Cards(props) {
         {props.content === "restaurant" && (
           <CardActions>
             <Button
+              style={{ backgroundColor: "#000000" }}
               size="small"
               variant="contained"
               sx={2}
@@ -64,7 +65,12 @@ export default function Cards(props) {
             >
               Favourite
             </Button>
-            <Button size="small" variant="contained" onClick={handleLearnMore}>
+            <Button
+              style={{ backgroundColor: "#000000" }}
+              size="small"
+              variant="contained"
+              onClick={handleLearnMore}
+            >
               Learn More
             </Button>
           </CardActions>

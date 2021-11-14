@@ -65,7 +65,7 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar style={{ background: "#b26a00" }} xsx={{ m: 1 }}>
+          <Avatar style={{ background: "#000000" }} xsx={{ m: 1 }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -102,7 +102,7 @@ export default function Login() {
               </Grid>
             </Grid>
             <Button
-              style={{ background: "#b26a00" }}
+              style={{ background: "#000000" }}
               type="button"
               fullWidth
               variant="contained"

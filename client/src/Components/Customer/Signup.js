@@ -75,7 +75,7 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar style={{ background: "#b26a00" }} xsx={{ m: 1 }}>
+          <Avatar style={{ background: "#000000" }} xsx={{ m: 1 }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -169,6 +169,19 @@ export default function SignUp() {
                   }}
                 /> */}
               </Grid>
+              {/* <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  name="address"
+                  autoComplete="address"
+                  onChange={(e) => {
+                    setAddressReg(e.target.value);
+                  }}
+                />
+              </Grid> */}
 
               <Grid item xs={12}>
                 <TextField
@@ -219,7 +232,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
-              style={{ background: "#b26a00" }}
+              style={{ background: "#000000" }}
               type="submit"
               fullWidth
               variant="contained"

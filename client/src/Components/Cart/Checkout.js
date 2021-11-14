@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
@@ -23,6 +24,7 @@ import { Table } from "@mui/material";
 import { TableHead } from "@mui/material";
 import { TableRow } from "@mui/material";
 import { Paper } from "@mui/material";
+import { useHistory } from "react-router-dom";
 const theme = createTheme();
 
 export default function Checkout({ match }) {
@@ -33,6 +35,10 @@ export default function Checkout({ match }) {
   const [openCard, setOpenCard] = useState(false);
   const [address, setAddress] = useState("");
   const [resMode, setResMode] = useState("");
+  const [addresses, setAddresses] = useState([]);
+  const [notes, setNotes] = useState("");
+  const [delType, setDelType] = useState("");
+  const history = useHistory();
 
   const style = {
     position: "absolute",
@@ -61,12 +67,41 @@ export default function Checkout({ match }) {
       });
   };
 
+  const updateOrder = () => {
+    if (delType && address) {
+      Axios.put(Config.url + `/orderdetails/updateOrder`, {
+        type: delType,
+        address,
+        id: match.params.oid,
+        notes,
+      })
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+          history.push(`/checkout/${match.params.oid}`);
+        });
+
+      history.push("/order");
+    } else {
+      console.log("abc");
+      alert("Select All Details");
+    }
+  };
+  const getAddresses = () => {
+    Axios.get(Config.url + "/customer/getAddress")
+      .then((res) => {
+        setAddresses(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const addNewAddress = () => {
-    console.log("IN ADD ADDRESS");
-    console.log(address);
     Axios.put(Config.url + `/customer/addAddress`, { address })
       .then((res) => {
         console.log(res);
+        setOpenCard(false);
       })
       .catch((err) => {
         console.log(err);
@@ -74,7 +109,8 @@ export default function Checkout({ match }) {
   };
   useEffect(() => {
     getOrderDetails();
-  }, []);
+    getAddresses();
+  }, [addresses]);
 
   return (
     <div>
@@ -114,14 +150,19 @@ export default function Checkout({ match }) {
                     id="Address"
                     label="Address"
                     autoComplete="Address"
-                    nane="Address"
+                    name="Address"
                     fullWidth
                     required
-                    // onChange={(e) => {
-                    //   setCountryReg(e.target.value);
-                    // }}
+                    value={address ? address : null}
+                    onChange={(e) => {
+                      setAddress(e.target.value);
+                    }}
                   >
-                    <MenuItem value="Delivery"></MenuItem>
+                    {addresses?.length > 0
+                      ? addresses.map((add) => {
+                          return <MenuItem value={add}>{add}</MenuItem>;
+                        })
+                      : null}
                   </Select>
                 </Grid>
                 <Grid item xs={12}>
@@ -134,9 +175,9 @@ export default function Checkout({ match }) {
                     nane="DeliveryType"
                     fullWidth
                     required
-                    // onChange={(e) => {
-                    //   setCountryReg(e.target.value);
-                    // }}
+                    onChange={(e) => {
+                      setDelType(e.target.value);
+                    }}
                   >
                     {data?.delType === "Delivery" ? (
                       <MenuItem value="Delivery">Delivery</MenuItem>
@@ -160,15 +201,16 @@ export default function Checkout({ match }) {
                   label="Notes"
                   name="Notes"
                   autoComplete="Notes"
+                  onChange={(e) => setNotes(e.target.value)}
                 ></TextField>
 
                 <Button
-                  style={{ background: "#b26a00" }}
+                  style={{ background: "#000000" }}
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  //   onClick={signup}
+                  onClick={updateOrder}
                 >
                   Place Order
                 </Button>
@@ -207,7 +249,7 @@ export default function Checkout({ match }) {
                 ></TextField>
               </Box>
               <Button
-                style={{ background: "#b26a00" }}
+                style={{ background: "#000000" }}
                 fullWidth
                 variant="contained"
                 onClick={addNewAddress}

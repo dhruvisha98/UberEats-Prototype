@@ -1,3 +1,6 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
@@ -48,7 +51,6 @@ export default function RestaurantDetails(props) {
   const handleChange = (event, value) => {
     setPage(value);
   };
-  console.log("Props", props);
   const cancelOrder = (id) => {
     ///// Update Order status query
 
@@ -63,6 +65,11 @@ export default function RestaurantDetails(props) {
         console.log(err);
       });
   };
+
+  const placeOrder = (id) => {
+    history.push(`/checkout/${id}`);
+    ///// Update Order status query
+  };
   const style = {
     position: "absolute",
     top: "50%",
@@ -76,7 +83,6 @@ export default function RestaurantDetails(props) {
 
   const handlechange = (event) => {
     setStatus(event.target.value);
-    console.log(event.target.value);
     getFilteredOrderDetails(event.target.value);
     // Axios.get(Config.url + "/orderdetails/orderfilter", {
     //   params: {
@@ -130,14 +136,14 @@ export default function RestaurantDetails(props) {
   }, [limit, page]);
   const cardStyle = {
     display: "block",
-    width: "100%",
-    height: "100%",
+    width: "400px",
+    height: "470px  ",
     margin: "20px",
   };
 
   const openDialog = (id) => {
     setDispID(id);
-    const filtered = data.filter((item) => item._id == id);
+    const filtered = data.filter((item) => item._id === id);
     setDispOrder(filtered.length > 0 && filtered[0]);
     setOpenCard(true);
   };
@@ -145,45 +151,58 @@ export default function RestaurantDetails(props) {
   return (
     <div>
       <Navbardb />
-
       <div>
         <center>
-          <div>
-            <Stack spacing={2}>
-              <Typography>Page: {page}</Typography>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handleChange}
-              />
-            </Stack>
-          </div>
-          <Select
-            align="center"
-            labelId="limit"
-            id="limit"
-            value={limit}
-            onChange={(e) => {
-              setLimit(e.target.value);
-            }}
-          >
-            <MenuItem value="2">2</MenuItem>
-            <MenuItem value="5">5</MenuItem>
-            <MenuItem value="10">10</MenuItem>
-          </Select>
-          <label>Order Status :</label>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={status}
-            onChange={handlechange}
-          >
-            <MenuItem value="All Orders">All Orders</MenuItem>
-            <MenuItem value="Order Recieved">Order Recieved</MenuItem>
-            <MenuItem value="Preparing">Preparing</MenuItem>
-            <MenuItem value="On the way">On the way</MenuItem>
-            <MenuItem value="Pending">Pending</MenuItem>
-          </Select>
+          <table style={{ marginTop: "2%" }}>
+            <tr>
+              <td>
+                <Stack spacing={2}>
+                  {/* <Typography>Page: {page}</Typography> */}
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handleChange}
+                  />
+                </Stack>
+              </td>
+              <td>
+                <label>Page Limit :</label>
+
+                <Select
+                  align="center"
+                  labelId="limit"
+                  id="limit"
+                  value={limit}
+                  onChange={(e) => {
+                    setLimit(e.target.value);
+                  }}
+                >
+                  <MenuItem value="2">2</MenuItem>
+                  <MenuItem value="5">5</MenuItem>
+                  <MenuItem value="10">10</MenuItem>
+                </Select>
+              </td>
+              <td>
+                {" "}
+                <label>Order Status :</label>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={status}
+                  onChange={handlechange}
+                >
+                  <MenuItem value="All Orders">All Orders</MenuItem>
+                  <MenuItem value="Initialised">Initialised</MenuItem>
+                  <MenuItem value="Order Placed">Order Placed</MenuItem>
+                  <MenuItem value="Preparing">Preparing</MenuItem>
+                  <MenuItem value="On the way">On the way</MenuItem>
+                  <MenuItem value="Pending">Pending</MenuItem>
+                  <MenuItem value="Delivered">Delivered</MenuItem>
+                  <MenuItem value="Cancelled">Cancelled</MenuItem>
+                </Select>
+              </td>
+            </tr>
+          </table>
         </center>
 
         <h1>{props.restaurant_id}</h1>
@@ -196,7 +215,7 @@ export default function RestaurantDetails(props) {
                     <CardContent>
                       <img
                         src={d.restaurant.RestaurantImage}
-                        style={{ width: "280px", height: "150px" }}
+                        style={{ width: "350px", height: "175px" }}
                       />
                       <h2 style={{ textAlign: "center" }}>
                         {d?.restaurant.RestaurantName}
@@ -207,6 +226,9 @@ export default function RestaurantDetails(props) {
                       <Typography gutterBottom variant="h5" component="div">
                         Order Status:{d?.status}
                       </Typography>
+                      {/* <Typography gutterBottom variant="h5" component="div">
+                        Instructions:{d?.notes}
+                      </Typography> */}
                       <Typography gutterBottom variant="h5" component="div">
                         Order Time:{" "}
                         {d?.createdAt ? new Date(d.createdAt).getHours() : null}
@@ -219,17 +241,38 @@ export default function RestaurantDetails(props) {
                   </div>
 
                   <div>
-                    <center>
-                      {d?.status === "Order Recieved" ? (
-                        <Button
-                          variant="outlined"
-                          onClick={() => cancelOrder(d?._id)}
-                        >
-                          Cancel
-                        </Button>
-                      ) : null}
-                    </center>
+                    <Table>
+                      <center>
+                        <tr>
+                          <td>
+                            {d?.status === "Initialised" ||
+                            d?.status === "Order Placed" ? (
+                              <Button
+                                style={{ backgroundColor: "#000000" }}
+                                variant="contained"
+                                onClick={() => cancelOrder(d?._id)}
+                              >
+                                Cancel
+                              </Button>
+                            ) : null}
+                          </td>
+
+                          {d?.status === "Initialised" ? (
+                            <td style={{ marginLeft: "3%" }}>
+                              <Button
+                                style={{ backgroundColor: "#000000" }}
+                                variant="contained"
+                                onClick={() => placeOrder(d?._id)}
+                              >
+                                Place Order
+                              </Button>
+                            </td>
+                          ) : null}
+                        </tr>
+                      </center>
+                    </Table>
                   </div>
+                  <br />
                 </Card>
               </div>
               <Modal

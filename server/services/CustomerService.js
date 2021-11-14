@@ -72,8 +72,9 @@ const updateCustomerById = async (id, body) => {
   // console.log(query);
   return await CustomerDetails.findByIdAndUpdate(id, query);
 };
-const getAddress = (cust_id) => {
-  return CustomerDetails.findById(cust_id).exec();
+const getAddress = async (cust_id) => {
+  const custDetails = await CustomerDetails.findOne({ _id: cust_id });
+  return custDetails.CustomerAddress;
 };
 const addFavourite = (cust_id, rest_id) => {
   var query = CustomerDetails.updateOne(

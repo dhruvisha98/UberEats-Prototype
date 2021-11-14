@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-use-before-define */
-const crypto = require('crypto');
-const conn = require('./connection');
+const crypto = require("crypto");
+const conn = require("./connection");
 
-const TIMEOUT = 8000; // time to wait for response in ms
+const TIMEOUT = 15000; // time to wait for response in ms
 let self;
 
 exports = module.exports = KafkaRPC;
@@ -20,20 +20,19 @@ function KafkaRPC() {
 KafkaRPC.prototype.makeRequest = function (topic_name, content, callback) {
   self = this;
   // generate a unique correlation id for this call
-  const correlationId = crypto.randomBytes(16).toString('hex');
+  const correlationId = crypto.randomBytes(16).toString("hex");
 
   // create a timeout for what should happen if we don't get a response
   const tId = setTimeout(
     (corr_id) => {
       // if this ever gets called we didn't get a response in a
       // timely fashion
-      console.log('timeout');
       callback(new Error(`timeout ${corr_id}`), null);
       // delete the entry from hash
       delete self.requests[corr_id];
     },
     TIMEOUT,
-    correlationId,
+    correlationId
   );
 
   // create a request entry to store in a hash
@@ -54,7 +53,7 @@ KafkaRPC.prototype.makeRequest = function (topic_name, content, callback) {
         topic: topic_name,
         messages: JSON.stringify({
           correlationId,
-          replyTo: 'response_topic',
+          replyTo: "response_topic",
           data: content,
         }),
         partition: 0,
@@ -73,8 +72,8 @@ KafkaRPC.prototype.setupResponseQueue = function (producer, topic_name, next) {
   self = this;
 
   // subscribe to messages
-  const consumer = self.connection.getConsumer('response_topic');
-  consumer.on('message', (message) => {
+  const consumer = self.connection.getConsumer("response_topic");
+  consumer.on("message", (message) => {
     const data = JSON.parse(message.value);
     // get the correlationId
     const { correlationId } = data;

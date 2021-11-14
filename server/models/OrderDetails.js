@@ -30,7 +30,9 @@ var OrderDetailsSchema = new mongoose.Schema({
   status: {
     type: String,
   },
-
+  address: {
+    type: String,
+  },
   createdAt: {
     type: Date,
   },

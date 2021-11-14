@@ -19,7 +19,7 @@ export default function RDashboard() {
         setImage(res.data.RestaurantImage);
         setName(res.data.RestaurantName);
         setDetail(res.data);
-        console.log("Res DATA", res.data);
+        // console.log("Res DATA", res.data);
       })
       .catch((err) => {
         console.log(err);

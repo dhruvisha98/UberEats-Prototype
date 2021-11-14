@@ -25,6 +25,7 @@ router.post("/", (req, res) => {
   const country = req.body.country;
   const nickname = req.body.nickname;
   const phone = req.body.phone;
+  const address = req.body.address;
 
   CustomerService.createCustomer(
     (CustomerName = name),
@@ -35,7 +36,8 @@ router.post("/", (req, res) => {
     (CustomerPassword = password),
     (CustomerCity = city),
     (CustomerState = state),
-    (CustomerCountry = country)
+    (CustomerCountry = country),
+    (CustomerAddress = address)
   );
 });
 

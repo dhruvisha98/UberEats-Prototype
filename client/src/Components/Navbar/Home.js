@@ -9,8 +9,8 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
-import logo from "../Images/logo.svg";
-import image from "../Images/ubereats.png";
+import logo from "../Images/logo.jpeg";
+import image from "../Images/ubereats1.png";
 
 export default function Home() {
   const history = useHistory();
@@ -76,7 +76,7 @@ export default function Home() {
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar style={{ background: "#b26a00" }} position="static">
+        <AppBar style={{ background: "#000000" }} position="static">
           <Toolbar>
             {/* <IconButton
               size="large"
@@ -95,7 +95,12 @@ export default function Home() {
               component="div"
               sx={{ display: { xs: "block", sm: "block" } }}
             >
-              <img src={logo} alt="logo" onClick={handleHome} />
+              <img
+                src={logo}
+                style={{ width: "150px" }}
+                alt="logo"
+                onClick={handleHome}
+              />
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "block", md: "flex" } }}>
@@ -123,7 +128,13 @@ export default function Home() {
       </Box>
 
       <div>
-        <img src={image} alt="Logo" height="1100" width="1870" />
+        <img
+          src={image}
+          alt="Logo"
+          height="1000"
+          width="100%"
+          // style={{ objectFit: "contain" }}
+        />
       </div>
     </div>
   );

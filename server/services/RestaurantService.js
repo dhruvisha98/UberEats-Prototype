@@ -1,6 +1,6 @@
 const { RestaurantDetails } = require("../models/RestaurantDetails");
 const bcrypt = require("bcrypt");
-const { resolve } = require("path/posix");
+// const { resolve } = require("path/posix");
 const jwt = require("jsonwebtoken");
 var constants = require("../config.json");
 
@@ -128,18 +128,43 @@ const addDish = (
 const getDishList = (id) => {
   return RestaurantDetails.findById(id).exec();
 };
-const searchRestaurant = (query) => {
-  return RestaurantDetails.find({
-    $or: [
+const searchRestaurant = async (query, resmode, restype) => {
+  const checkProperties = (obj) => {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === null || obj[key] === "" || obj[key] === undefined) {
+        // eslint-disable-next-line no-param-reassign
+        delete obj[key];
+      }
+    });
+  };
+
+  const tempObj = {
+    RestaurantType: restype,
+    RestaurantDeliveryMode: resmode,
+  };
+
+  checkProperties(tempObj);
+  console.log("search", tempObj);
+  const rests = await RestaurantDetails.find({
+    $and: [
       {
-        RestaurantName: {
-          $regex: query,
-        },
+        $and: [tempObj],
       },
-      { RestaurantLocation: { $regex: query } },
-      { "RestaurantDishes.DishName": { $regex: query } },
+      {
+        $or: [
+          {
+            RestaurantName: {
+              $regex: query,
+            },
+          },
+          { RestaurantLocation: { $regex: query } },
+          { "RestaurantDishes.DishName": { $regex: query } },
+        ],
+      },
     ],
-  }).exec();
+  });
+
+  return rests;
 };
 
 const getRestaurantById = (id) => {

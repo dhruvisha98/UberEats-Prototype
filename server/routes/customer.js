@@ -28,6 +28,13 @@ router.put("/addAddress", verify_token, async function (req, res) {
   CustomerService.updateCustomerById(req.body.auth_user.id, req.body);
 });
 
+router.get("/getAddress", verify_token, async function (req, res) {
+  const customerAddress = await CustomerService.getAddress(
+    req.body.auth_user.id
+  );
+  res.status(200).send(customerAddress);
+});
+
 router.post("/", async function (req, res) {
   var body = req.body;
   console.log(req.body);

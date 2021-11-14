@@ -66,7 +66,7 @@ app.use("/cart", cart);
 const images = require("./routes/images");
 app.use("/images", images);
 
-createKafkaTopics();
+// createKafkaTopics();
 app.listen(port, () => console.log(`Sever listening on port ${port}`));
 
 module.exports = { app };

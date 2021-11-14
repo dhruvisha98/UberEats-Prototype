@@ -209,7 +209,7 @@ export default function Adddish() {
                   variant="contained"
                   fullWidth
                   onClick={singleFileUploadHandler}
-                  style={{ background: "#b26a00" }}
+                  style={{ background: "#000000" }}
                 >
                   Upload Image
                   <input type="file" hidden />
@@ -217,7 +217,7 @@ export default function Adddish() {
               </Grid>
             </Grid>
             <Button
-              style={{ background: "#b26a00" }}
+              style={{ background: "#000000" }}
               type="submit"
               fullWidth
               variant="contained"

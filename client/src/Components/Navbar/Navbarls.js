@@ -10,7 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 // import Grid from "@mui/material/Grid";
 // import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
-import logo from "../Images/logo.svg";
+import logo from "../Images/logo.jpeg";
 
 export default function Navbarls() {
   const history = useHistory();
@@ -64,7 +64,7 @@ export default function Navbarls() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar style={{ background: "#b26a00" }} position="static">
+      <AppBar style={{ background: "#000000" }} position="static">
         <Toolbar>
           {/* <IconButton
             size="large"
@@ -82,7 +82,12 @@ export default function Navbarls() {
             component="div"
             sx={{ display: { xs: "block", sm: "block" } }}
           >
-            <img src={logo} alt="logo" onClick={handleHome} />
+            <img
+              src={logo}
+              style={{ width: "150px" }}
+              alt="logo"
+              onClick={handleHome}
+            />
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}></Box>

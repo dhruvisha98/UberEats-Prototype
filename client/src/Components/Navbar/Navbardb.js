@@ -15,7 +15,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useHistory } from "react-router-dom";
-import logo from "../Images/logo.svg";
+import logo from "../Images/logo.jpeg";
 import { Button } from "@mui/material";
 import { Axios } from "../../axios";
 import Cart from "../Cart/Cart";
@@ -204,7 +204,7 @@ export default function PrimarySearchAppBar(props) {
   if (localStorage.getItem("user")) {
     return (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar style={{ background: "#b26a00" }} position="static">
+        <AppBar style={{ background: "#000000" }} position="static">
           <Toolbar>
             {/* <IconButton
               size="large"
@@ -222,7 +222,12 @@ export default function PrimarySearchAppBar(props) {
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             ></Typography>
-            <img src={logo} alt="logo" onClick={handleDashboard} />
+            <img
+              src={logo}
+              style={{ width: "150px" }}
+              alt="logo"
+              onClick={handleDashboard}
+            />
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -240,9 +245,18 @@ export default function PrimarySearchAppBar(props) {
               onChange={handleResType}
               sx={{ mr: 2 }}
             >
-              <ToggleButton value="Veg">Veg</ToggleButton>
-              <ToggleButton value="Non-Veg">Non-Veg</ToggleButton>
-              <ToggleButton value="Vegan">Vegan</ToggleButton>
+              <ToggleButton style={{ backgroundColor: "white" }} value="Veg">
+                Veg
+              </ToggleButton>
+              <ToggleButton
+                style={{ backgroundColor: "white" }}
+                value="Non-Veg"
+              >
+                Non-Veg
+              </ToggleButton>
+              <ToggleButton style={{ backgroundColor: "white" }} value="Vegan">
+                Vegan
+              </ToggleButton>
             </ToggleButtonGroup>
 
             <ToggleButtonGroup
@@ -250,8 +264,15 @@ export default function PrimarySearchAppBar(props) {
               exclusive
               onChange={handleResMode}
             >
-              <ToggleButton value="Pickup">Pickup</ToggleButton>
-              <ToggleButton value="Delivery">Delivery</ToggleButton>
+              <ToggleButton style={{ backgroundColor: "white" }} value="Pickup">
+                Pickup
+              </ToggleButton>
+              <ToggleButton
+                style={{ backgroundColor: "white", marginLeft: "2%x" }}
+                value="Delivery"
+              >
+                Delivery
+              </ToggleButton>
             </ToggleButtonGroup>
             {/* <label for="type">Type: &nbsp; </label> */}
 
@@ -336,7 +357,7 @@ export default function PrimarySearchAppBar(props) {
   } else {
     return (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar style={{ background: "#b26a00" }} position="static">
+        <AppBar style={{ background: "#000000" }} position="static">
           <Toolbar>
             {/* <IconButton
               size="large"

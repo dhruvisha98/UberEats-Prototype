@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -38,9 +39,17 @@ export default function RestaurantOrder(props) {
   const [dispID, setDispID] = useState(0);
   const [openCard, setOpenCard] = useState(false);
   const [dispOrder, setDispOrder] = useState({});
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState("");
   const [filter, setFilter] = useState("All Orders");
   const [limit, setLimit] = useState("5");
+  const [open, setOpen] = React.useState(false);
+  const [temp, settemp] = useState("");
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setFilter("All Orders");
+    setOpenCard(false);
+  };
 
   const style = {
     position: "absolute",
@@ -70,6 +79,7 @@ export default function RestaurantOrder(props) {
 
   const handlefilter = (e) => {
     setFilter(e.target.value);
+    console.log(e.target.value);
     getFilteredOrderDetails(e.target.value);
   };
 
@@ -84,7 +94,6 @@ export default function RestaurantOrder(props) {
       },
     })
       .then((res) => {
-        console.log("res", res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -107,8 +116,8 @@ export default function RestaurantOrder(props) {
 
   useEffect(() => {
     var resp_data = [];
-    getFilteredOrderDetails(status);
-  }, []);
+    getFilteredOrderDetails(filter);
+  }, [openCard]);
 
   // useEffect(() => {
   //   var resp_data = [];
@@ -130,10 +139,11 @@ export default function RestaurantOrder(props) {
   };
 
   const openDialog = (id, delStatus) => {
-    setDispID(id);
     setStatus(delStatus);
-    const filtered = data.filter((item) => item.order_id == id);
-    setDispOrder(filtered.length > 0 && filtered[0]);
+    console.log("dispid", id);
+    const filtered = data.filter((item) => item._id === id);
+    console.log(filtered);
+    setDispOrder(filtered.length > 0 ? filtered[0] : null);
     setOpenCard(true);
   };
 
@@ -150,101 +160,127 @@ export default function RestaurantOrder(props) {
             onChange={handlefilter}
           >
             <MenuItem value="All Orders">All Orders</MenuItem>
-            <MenuItem value="Order Recieved">Order Recieved</MenuItem>
+            <MenuItem value="Initialised">Order Recieved</MenuItem>
+            <MenuItem value="Order Placed">Order Placed</MenuItem>
             <MenuItem value="Preparing">Preparing</MenuItem>
             <MenuItem value="On the way">On the way</MenuItem>
             <MenuItem value="Pending">Pending</MenuItem>
+            <MenuItem value="Delivered">Delivered</MenuItem>
+            <MenuItem value="Cancelled">Cancelled</MenuItem>
           </Select>
         </center>
         <h1>{props.restaurant_id}</h1>
-        <Grid container>
-          {data.map((d) => (
-            <div>
-              <div style={{ marginLeft: "10%" }}>
-                <Card
-                  onClick={() => openDialog(d.order_id, d.delivery_status)}
-                  style={cardStyle}
-                >
-                  <CardContent>
-                    <div style={{ textAlign: "center" }}>
-                      <img
-                        src={d.customer.CustomerImage}
-                        style={{ width: "280px", height: "150px" }}
-                      />
-                      <h2>{d?.customer?.CustomerName}</h2>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                      <Typography gutterBottom variant="h5" component="div">
-                        Order Status: {d.status}
-                      </Typography>
-                      <Typography gutterBottom variant="h5" component="div">
-                        Order Price: ${d?.finalOrderPrice}
-                      </Typography>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-              <Modal
-                open={openCard}
-                onClose={() => {
-                  setOpenCard(false);
-                }}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <div style={{ textAlign: "center" }}>
-                    <h2>{dispOrder?.customer?.CustomerName}</h2>
-                  </div>
-                  <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <TableContainer component={Paper}>
-                      <Table aria-label="simple table">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Dish Name</TableCell>
-                            <TableCell>Dish Price</TableCell>
-                            <TableCell>Qty</TableCell>
-                            <TableCell>Total Price</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {dispOrder?.dishes?.map((row) => (
-                            <TableRow
-                              key={row.Dish_ID}
-                              sx={{
-                                "&:last-child td, &:last-child th": {
-                                  border: 0,
-                                },
-                              }}
-                            >
-                              <TableCell>{row?.name}</TableCell>
-                              <TableCell>{row?.totalPrice / row.qty}</TableCell>
-                              <TableCell>{row?.qty}</TableCell>
-                              <TableCell>{row?.totalPrice}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+        {/* <Grid container> */}
+        {data.map((d) => (
+          <div>
+            <Table style={{ marginLeft: "3%" }}>
+              <tr>
+                <td rowSpan="3" style={{ width: "20px", marginTop: "1%" }}>
+                  <img
+                    src={d.customer.CustomerImage}
+                    style={{ width: "280px", height: "150px" }}
+                  />
+                </td>
+                <div style={{ marginLeft: "5%", marginTop: "2%" }}>
+                  <td textAlign="left">
+                    {d?.customer?.CustomerName}
+                    <br />
+                    Order Status: {d.status}
+                    <br />
+                    Order Price: ${d?.finalOrderPrice}
+                    <br />
+                    <button
+                      onClick={() => {
+                        console.log("d", d._id);
+                        settemp(d?.customer?.CustomerName);
 
-                    <Select
-                      align="center"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={status}
-                      onChange={(e) => handleChange(e, dispOrder._id)}
+                        openDialog(d?._id, d.delivery_status);
+                      }}
                     >
-                      <MenuItem value="Order Recieved">Order Recieved</MenuItem>
-                      <MenuItem value="Preparing">Preparing</MenuItem>
-                      <MenuItem value="On the way">On the way</MenuItem>
-                      <MenuItem value="Pending">Pending</MenuItem>
-                    </Select>
-                  </Typography>
-                </Box>
-              </Modal>
-            </div>
-          ))}
-        </Grid>
+                      View Reciept
+                    </button>
+                  </td>
+                </div>
+              </tr>
+            </Table>
+
+            <Modal
+              open={openCard}
+              onClose={() => {
+                setOpenCard(false);
+              }}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <div style={{ textAlign: "center" }}>
+                  <h2> {temp}</h2>
+                </div>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Dish Name</TableCell>
+                          <TableCell>Dish Price</TableCell>
+                          <TableCell>Qty</TableCell>
+                          <TableCell>Total Price</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {dispOrder?.dishes?.map((row) => (
+                          <TableRow
+                            key={row.Dish_ID}
+                            sx={{
+                              "&:last-child td, &:last-child th": {
+                                border: 0,
+                              },
+                            }}
+                          >
+                            <TableCell>{row?.name}</TableCell>
+                            <TableCell>{row?.totalPrice / row.qty}</TableCell>
+                            <TableCell>{row?.qty}</TableCell>
+                            <TableCell>{row?.totalPrice}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+
+                  <Select
+                    align="center"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={status}
+                    onChange={(e) => handleChange(e, dispOrder._id)}
+                  >
+                    <MenuItem value="Order Recieved">Order Recieved</MenuItem>
+                    <MenuItem value="Preparing">Preparing</MenuItem>
+                    <MenuItem value="On the way">On the way</MenuItem>
+                    <MenuItem value="Pending">Pending</MenuItem>
+                    <MenuItem value="Delivered">Delivered</MenuItem>
+                  </Select>
+                </Typography>
+              </Box>
+            </Modal>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Text in a modal
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  {temp}
+                </Typography>
+              </Box>
+            </Modal>
+          </div>
+        ))}
+        {/* </Grid> */}
       </div>
     </div>
   );

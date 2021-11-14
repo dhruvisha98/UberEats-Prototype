@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -20,6 +20,8 @@ export default function Profiles() {
   if (localStorage["customer"]) customer = JSON.parse(localStorage["customer"]);
 
   console.log(customer);
+  const [addresses, setAddresses] = useState([]);
+
   const [country, setCountry] = useState(
     customer == null ? "" : customer.CustomerCountry
   );
@@ -35,13 +37,18 @@ export default function Profiles() {
   const [phone, setPhone] = useState(
     customer == null ? "" : customer.CustomerPhone
   );
-  const [city, setCity] = useState(customer == null ? "" : customer.Cust_City);
+  const [city, setCity] = useState(
+    customer == null ? "" : customer.CustomerCity
+  );
   const [state, setState] = useState(
     customer == null ? "" : customer.CustomerState
   );
   const [image, setImage] = useState(
     customer == null ? "" : customer.CustomerImage
   );
+  // const [address, setAddress] = useState(
+  //   customer == null ? "" : customer.CustomerAddress
+  // );
 
   const singleFileUploadHandler = () => {
     setTrial(selectedFile[0]);
@@ -108,6 +115,7 @@ export default function Profiles() {
         console.log(err);
       });
   };
+
   return (
     <div>
       <div>
@@ -215,6 +223,7 @@ export default function Profiles() {
                         }}
                       />
                     </Grid>
+
                     <Grid item xs={12}>
                       <TextField
                         required
@@ -278,7 +287,7 @@ export default function Profiles() {
                         variant="contained"
                         fullWidth
                         onClick={singleFileUploadHandler}
-                        style={{ background: "#b26a00" }}
+                        style={{ background: "#000000" }}
                       >
                         Upload Image
                         <input type="file" hidden />
@@ -287,7 +296,7 @@ export default function Profiles() {
                     <Grid item xs={12}>
                       <Button
                         onClick={handleSubmit}
-                        style={{ background: "#b26a00" }}
+                        style={{ background: "#000000" }}
                         type="submit"
                         fullWidth
                         variant="contained"

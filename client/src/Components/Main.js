@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./Customer/Login";
 import Signup from "./Customer/Signup";

@@ -9,6 +9,7 @@ const config = require("./config.json");
 // Restaurant topics
 const createRestaurant = require("./services/restaurants/create");
 const loginRestaurant = require("./services/restaurants/login");
+const updateOrder = require("./services/customer/updateOrder");
 
 async function handleTopicRequest(topic_name, fname) {
   await mongoose.connect(config.DB.host);
@@ -19,30 +20,23 @@ async function handleTopicRequest(topic_name, fname) {
     try {
       const data = JSON.parse(message.value);
       fname(data.data, (err, res) => {
-        let payloads = [];
+        const payloads = [
+          {
+            topic: "response_topic",
+            messages: JSON.stringify({
+              correlationId: data.correlationId,
+              data: res,
+            }),
+            partition: 0,
+          },
+        ];
         if (err) {
-          payloads = [
-            {
-              topic: "response_topic",
-              messages: JSON.stringify({
-                correlationId: data.correlationId,
-                data: err,
-              }),
-              partition: 0,
-            },
-          ];
-        } else {
-          payloads = [
-            {
-              topic: "response_topic",
-              messages: JSON.stringify({
-                correlationId: data.correlationId,
-                data: res,
-              }),
-              partition: 0,
-            },
-          ];
+          payloads[0].messages = JSON.stringify({
+            correlationId: data.correlationId,
+            data: err,
+          });
         }
+
         producer.send(payloads, (error) => {
           if (error) {
             console.log("Error from backend: ", JSON.stringify(error));
@@ -78,4 +72,5 @@ async function handleTopicRequest(topic_name, fname) {
 
 // Restaurant topic handlers
 handleTopicRequest("restaurant.create", createRestaurant);
+handleTopicRequest("customer.updateOrder", updateOrder);
 handleTopicRequest("restaurant.login", loginRestaurant);
