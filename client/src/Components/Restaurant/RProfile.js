@@ -224,20 +224,7 @@ export default function RProfile() {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        fullWidth
-                        id="time"
-                        label="Time"
-                        name="time"
-                        autoComplete="time"
-                        value={time}
-                        onChange={(e) => {
-                          setTime(e.target.value);
-                        }}
-                      />
-                    </Grid>
+
                     <Grid item xs={12}>
                       <TextField
                         required
@@ -252,20 +239,7 @@ export default function RProfile() {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        required
-                        fullWidth
-                        id="day"
-                        label="Day"
-                        name="day"
-                        autoComplete="day"
-                        value={day}
-                        onChange={(e) => {
-                          setDay(e.target.value);
-                        }}
-                      />
-                    </Grid>
+
                     <Grid item xs={12}>
                       <TextField
                         required

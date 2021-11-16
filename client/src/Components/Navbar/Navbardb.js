@@ -264,7 +264,10 @@ export default function PrimarySearchAppBar(props) {
               exclusive
               onChange={handleResMode}
             >
-              <ToggleButton style={{ backgroundColor: "white" }} value="Pickup">
+              <ToggleButton
+                style={{ backgroundColor: "white", height: "50px" }}
+                value="Pickup"
+              >
                 Pickup
               </ToggleButton>
               <ToggleButton
@@ -375,7 +378,12 @@ export default function PrimarySearchAppBar(props) {
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             ></Typography>
-            <img src={logo} alt="logo" onClick={handleDashboard} />
+            <img
+              src={logo}
+              style={{ width: "150px" }}
+              alt="logo"
+              onClick={handleDashboard}
+            />
 
             <Box sx={{ flexGrow: 1 }} />
             <IconButton

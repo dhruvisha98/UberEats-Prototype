@@ -160,7 +160,7 @@ export default function RestaurantOrder(props) {
             onChange={handlefilter}
           >
             <MenuItem value="All Orders">All Orders</MenuItem>
-            <MenuItem value="Initialised">Order Recieved</MenuItem>
+            <MenuItem value="Initialised">Initialised</MenuItem>
             <MenuItem value="Order Placed">Order Placed</MenuItem>
             <MenuItem value="Preparing">Preparing</MenuItem>
             <MenuItem value="On the way">On the way</MenuItem>

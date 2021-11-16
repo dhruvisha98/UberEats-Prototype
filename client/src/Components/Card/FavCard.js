@@ -46,7 +46,12 @@ export default function Favcards({ favourites }) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" variant="contained" onClick={handleLearnMore}>
+          <Button
+            size="small"
+            style={{ backgroundColor: "#000000" }}
+            variant="contained"
+            onClick={handleLearnMore}
+          >
             Learn More
           </Button>
         </CardActions>

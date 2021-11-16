@@ -324,6 +324,8 @@ export default function RestaurantDetails(props) {
                     </TableContainer>
                   </Typography>
                   <div style={{ textAlign: "right", marginTop: "3%" }}>
+                    Notes: {dispOrder?.notes}
+                    <br />
                     Tax : ${dispOrder?.tax} <br />
                     Final Price: ${dispOrder?.finalOrderPrice}
                   </div>

@@ -77,11 +77,20 @@ export default function Cards(props) {
         )}
         {props.content === "dish" && (
           <CardActions>
-            <Button size="small" variant="contained">
+            <Button
+              size="small"
+              style={{ backgroundColor: "#000000" }}
+              variant="contained"
+            >
               ${props.price}
             </Button>
             {props.user === "restaurant" && (
-              <Button size="small" variant="contained" sx={2}>
+              <Button
+                size="small"
+                style={{ backgroundColor: "#000000" }}
+                variant="contained"
+                sx={2}
+              >
                 <EditIcon onClick={() => edit(props.id)} />
               </Button>
             )}
@@ -103,7 +112,12 @@ export default function Cards(props) {
               </Select>
             )}
             {props.user === "customer" && (
-              <Button size="small" variant="contained" sx={2}>
+              <Button
+                style={{ backgroundColor: "#000000" }}
+                size="small"
+                variant="contained"
+                sx={2}
+              >
                 <AddShoppingCartIcon
                   onClick={(e) => {
                     props.addToCart(props.id, props.restId, qty);
